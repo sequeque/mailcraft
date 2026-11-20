@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MailCraft</title>
+<meta name="description" content="Desain email dengan drag & drop atau HTML, tes di inbox asli, lalu kirim langsung dari Gmail-mu.">
+<style>
+:root{--bb:#fff4d6;--bf:#92400e;--bd:#f59e0b;--bg:#fafafa;--panel:#fff;--text:#18181b;--muted:#71717a;--line:#e4e4e7;--acc:#0d9488;--acct:#fff;--soft:#e7f8f4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bb:#3b2a05;--bf:#fcd34d;--bd:#b45309;--bg:#0f0f11;--panel:#18181b;--text:#f4f4f5;--muted:#a1a1aa;--line:#2e2e33;--acc:#2dd4bf;--acct:#0f0f11;--soft:#12302d;color-scheme:dark}}
+:root[data-theme="dark"]{--bb:#3b2a05;--bf:#fcd34d;--bd:#b45309;--bg:#0f0f11;--panel:#18181b;--text:#f4f4f5;--muted:#a1a1aa;--line:#2e2e33;--acc:#2dd4bf;--acct:#0f0f11;--soft:#12302d;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(900px 480px at 88% -8%,rgba(14,165,233,.16),transparent 60%),radial-gradient(800px 420px at -6% 4%,rgba(34,197,94,.16),transparent 60%),radial-gradient(700px 380px at 50% 110%,rgba(251,191,36,.12),transparent 60%),var(--bg);background-attachment:fixed;color:var(--text);font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.tb{display:flex;gap:4px;margin-bottom:4px}.tb button{padding:3px 11px}
+.top{position:relative}.tools{margin-left:auto;display:flex;gap:2px;align-items:center}.chk{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--text);margin:14px 0 4px}.chk input{width:auto}.nodeco .deco{display:none!important}
+.rh{cursor:grab;padding:1px 9px;font-size:12px;background:#fff;color:#222;border:1px solid #d4d4d8;border-radius:8px;user-select:none;line-height:1.6}.rh:active{cursor:grabbing}
+#dlg{position:fixed;inset:0;background:rgba(0,0,0,.55);display:grid;place-items:center;z-index:100;padding:16px}.dlgbox{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;width:min(360px,100%);text-align:center}
+#dlg img{max-width:100%;max-height:150px;border-radius:8px;margin-bottom:12px;object-fit:contain;background:var(--bg)}button.danger{background:#dc2626;color:#fff;border-color:#dc2626;font-weight:600}
+.tpls{gap:22px}.tpl{width:260px;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;transition:.15s;text-align:left}
+.tpl:hover{border-color:var(--acc);transform:translateY(-3px);box-shadow:0 14px 30px rgba(0,0,0,.14)}
+.tth{height:300px;overflow:hidden;position:relative;background:var(--soft);border-bottom:1px solid var(--line)}
+.tth::after{content:"";position:absolute;left:0;right:0;bottom:0;height:56px;background:linear-gradient(transparent,var(--panel));pointer-events:none}
+.tth .tin{width:600px;transform:scale(.4);transform-origin:0 0;position:absolute;left:10px;top:10px;pointer-events:none;background:#fff;color:#222;font-family:Arial,Helvetica,sans-serif}
+.tplus{position:absolute;inset:16px;display:grid;place-items:center;border:2px dashed var(--line);border-radius:12px}
+.tplus svg{width:56px;height:56px;stroke:var(--acc);fill:none;stroke-width:1.6;stroke-linecap:round}
+.tpl .meta{padding:14px 16px}.tpl strong{display:block;font-size:16px;margin-bottom:2px}.tpl span{color:var(--muted);font-size:13px}#settings{position:absolute;right:20px;top:54px;z-index:50;width:310px;max-height:80vh;overflow:auto;box-shadow:0 12px 32px rgba(0,0,0,.18)}
+.deco{display:none;position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}.front .deco{display:block}
+.deco svg{position:absolute;left:0;right:0;bottom:0;width:100%;height:48vh}
+.blob{position:absolute;border-radius:50%;filter:blur(70px)}.b1{width:420px;height:420px;background:rgba(34,197,94,.24);top:-120px;left:-100px}.b2{width:480px;height:480px;background:rgba(14,165,233,.22);top:8%;right:-140px}.b3{width:360px;height:360px;background:rgba(251,191,36,.18);bottom:-80px;left:12%}
+.front .deco::before{content:"";position:absolute;inset:0;background-image:radial-gradient(var(--line) 1px,transparent 1px);background-size:22px 22px;-webkit-mask-image:linear-gradient(#000,transparent 65%);mask-image:linear-gradient(#000,transparent 65%)}
+.feat div,.home .opt{text-align:center}.feat b,.opt b{margin-left:auto;margin-right:auto}
+.lk{display:flex;gap:6px;align-items:center;margin-top:4px}.lk input{flex:1;min-width:0}.lk input[type=color]{flex:none;width:56px}
+.ar{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}.ar button{padding:3px 9px;font-size:12px}
+.hero{padding:48px 0 0}
+.badge{display:inline-block;padding:6px 16px;border-radius:999px;background:var(--bb);color:var(--bf);border:1px solid var(--bd);font-weight:700;font-size:13px;margin-bottom:18px;box-shadow:0 4px 14px rgba(245,158,11,.25)}
+.home .hero h1{font-size:clamp(32px,6vw,54px);line-height:1.1;letter-spacing:-.035em;margin:0 0 16px}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,#22c55e,#14b8a6 50%,#0ea5e9);-webkit-background-clip:text;background-clip:text;color:transparent}
+.home .hero p{max-width:580px;margin:0 auto 28px;font-size:16px}
+button.big{padding:13px 30px;font-size:16px;border-radius:999px;box-shadow:0 8px 24px rgba(34,197,94,.35)}
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:52px auto 0;max-width:980px;text-align:left}
+.feat div{padding:18px;border-radius:14px;background:var(--panel);border:1px solid var(--line)}
+.feat b{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:#16a34a;margin-bottom:10px;box-shadow:0 6px 14px rgba(0,0,0,.2)}.feat div:nth-child(2) b{background:#0284c7}.feat div:nth-child(3) b{background:#f59e0b}.feat div:nth-child(4) b{background:#dc2626}.feat b svg,.opt b svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.feat strong{display:block}.feat span{color:var(--muted);font-size:13px}
+@media(min-width:901px){#props{position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto}}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--panel);color:var(--text);padding:7px 14px;border-radius:8px}
+button:hover{border-color:var(--acc)}
+button.pri{background:linear-gradient(135deg,#22c55e,#14b8a6 50%,#0ea5e9);color:#fff;border-color:transparent;font-weight:600}button.pri:hover{filter:brightness(1.08)}
+button.ghost{border-color:transparent;background:none;color:var(--muted)}
+input,textarea,select{width:100%;font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+input:focus,textarea:focus{outline:2px solid var(--soft);border-color:var(--acc)}
+input[type=color]{padding:2px;height:34px}
+textarea{resize:vertical}
+label{display:block;font-size:12px;color:var(--muted);margin:12px 0 4px}
+h3{margin:14px 0 8px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+h3:first-child{margin-top:0}
+.top{display:flex;align-items:center;gap:16px;padding:12px 20px;border-bottom:1px solid var(--line);background:var(--panel);flex-wrap:wrap}
+.logo{font-weight:700;font-size:17px;letter-spacing:-.02em;cursor:pointer}.logo i{font-style:normal;background:linear-gradient(135deg,#f59e0b,#ef4444 45%,#16a34a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.steps{display:flex;gap:4px;margin:0}
+.steps button{border:0;background:none;color:var(--muted);padding:6px 12px;border-radius:999px}
+.steps button.on{background:linear-gradient(135deg,#22c55e,#14b8a6);color:#fff;font-weight:600}
+.hid{display:none!important}
+main{padding:20px;max-width:1360px;margin:0 auto}
+.home{text-align:center;padding:32px 0}
+.home h1{font-size:34px;letter-spacing:-.03em;margin:0 0 8px}
+.home p{color:var(--muted);margin:0 0 32px}
+.choice{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.opt{width:260px;text-align:left;padding:24px;border-radius:14px;background:var(--panel);border:1px solid var(--line);cursor:pointer;transition:.15s}
+.opt:hover{border-color:var(--acc);transform:translateY(-2px)}
+.opt b{display:grid;place-items:center;width:50px;height:50px;border-radius:14px;background:#16a34a;margin-bottom:10px;box-shadow:0 6px 14px rgba(0,0,0,.2)}.opt:nth-child(2) b{background:#ea580c}.opt strong{font-size:16px}.opt span{display:block;color:var(--muted);margin-top:4px}
+.dnd{display:grid;grid-template-columns:210px 1fr 280px;gap:16px;align-items:start}
+@media(max-width:900px){.dnd{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+.pal{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.pi{border:1px solid var(--line);border-radius:8px;padding:9px 4px;text-align:center;cursor:grab;font-size:12px;user-select:none;background:var(--bg)}
+.pi:hover{border-color:var(--acc);background:var(--soft)}
+.pi b{display:block;font-size:16px;font-weight:600}
+.lay{display:flex;gap:3px;justify-content:center;margin-bottom:4px}.lay u{display:block;height:14px;border:1.5px solid var(--muted);border-radius:2px;flex:1}
+.stage{background:linear-gradient(160deg,var(--soft),var(--bg) 65%);border:1px dashed var(--line);border-radius:12px;padding:20px;min-height:480px;overflow-x:auto}
+#canvas{margin:0 auto;background:#fff;color:#222;min-height:240px;box-shadow:0 2px 14px rgba(0,0,0,.12);border-radius:4px;overflow:hidden}
+.row{position:relative;outline:2px solid transparent;outline-offset:-2px}
+.row:hover{outline-color:#99f6e4}.row.sel{outline-color:var(--acc)}
+.rt{position:absolute;right:4px;top:4px;display:none;gap:2px;z-index:5}.row:hover>.rt,.row.sel>.rt{display:flex}
+.rt button,.bx{padding:1px 7px;font-size:12px;background:#fff;color:#222}
+.cols{display:flex}.cell{flex:1;min-width:0;min-height:44px;position:relative}
+.cell.over{background:#e7f8f4}
+.ph{margin:6px;padding:14px 6px;border:1px dashed #c4c4cc;border-radius:6px;text-align:center;color:#999;font-size:12px}
+.blk{position:relative;outline:2px solid transparent;outline-offset:-2px;cursor:grab}
+.blk:hover{outline-color:#5eead4}.blk.sel{outline-color:#0d9488}
+.bx{position:absolute;right:3px;top:3px;display:none;z-index:4}.blk:hover>.bx,.blk.sel>.bx{display:block}
+.ins-t::before,.ins-b::after{content:"";position:absolute;left:0;right:0;height:4px;background:#0d9488;z-index:6}
+.ins-t::before{top:0}.ins-b::after{bottom:0}
+.lib{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.lib div{position:relative;aspect-ratio:1;border:1px solid var(--line);border-radius:6px;overflow:hidden;cursor:pointer;background:var(--bg)}
+.lib img{width:100%;height:100%;object-fit:cover}
+.lib button{position:absolute;right:2px;bottom:2px;padding:0 5px;font-size:11px}
+.hint{font-size:12px;color:var(--muted);margin:6px 0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:900px){.two{grid-template-columns:1fr}}
+.code{font:12.5px/1.5 ui-monospace,Menlo,Consolas,monospace;min-height:520px;white-space:pre}
+.pv{display:flex;justify-content:center}
+.pv iframe{border:1px solid var(--line);border-radius:10px;background:#fff;height:640px;width:100%;max-width:700px}
+.pv iframe.m{max-width:375px}
+.row2{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}.seg button{border:0;border-radius:0}.seg .on{background:var(--soft);color:var(--acc)}
+.rc{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)}
+.rc span{overflow:hidden;text-overflow:ellipsis}.rc small{color:var(--muted)}
+.list{max-height:380px;overflow:auto}
+.note{font-size:12.5px;color:var(--muted);background:var(--soft);padding:10px 12px;border-radius:8px;margin:12px 0}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--text);color:var(--bg);padding:9px 16px;border-radius:999px;opacity:0;transition:.25s;pointer-events:none;z-index:99;max-width:90%}
+#toast.s{opacity:1}
+.gconn{border:1px solid var(--line);border-radius:10px;padding:12px;margin:10px 0 4px;background:var(--bg)}
+.gconn .who{display:flex;align-items:center;gap:8px;font-size:13px;flex-wrap:wrap}
+.gconn .dot{width:9px;height:9px;border-radius:50%;background:#22c55e;flex:none;box-shadow:0 0 0 3px rgba(34,197,94,.2)}
+.gconn .row2{margin-top:8px}
+.gbtn{display:inline-flex;align-items:center;gap:10px;font-weight:600;padding:9px 16px}
+.gbtn svg{width:18px;height:18px;flex:none}
+.st{font-size:11.5px;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.st.ok{background:rgba(34,197,94,.15);color:#16a34a}.st.err{background:rgba(220,38,38,.14);color:#dc2626;cursor:help}.st.run{background:var(--soft);color:var(--acc)}
+.prog{height:8px;border-radius:999px;background:var(--line);overflow:hidden;margin:10px 0 4px}.prog i{display:block;height:100%;background:linear-gradient(90deg,#22c55e,#14b8a6);transition:width .3s}
+.rc .acts{display:flex;gap:6px;align-items:center;flex:none}
+.ovl{position:fixed;inset:0;background:rgba(0,0,0,.55);display:grid;place-items:center;z-index:100;padding:16px}
+#setup .dlgbox{width:min(560px,100%);text-align:left;max-height:90vh;overflow:auto}
+#setup h3{margin:0 0 6px;font-size:17px;color:var(--text);text-transform:none;letter-spacing:0}
+#setup ol{padding-left:20px;font-size:13.5px;line-height:1.65;margin:10px 0}#setup li{margin-bottom:6px}#setup a{color:var(--acc)}
+code.k{background:var(--soft);color:var(--text);padding:2px 6px;border-radius:6px;word-break:break-all;font-size:12.5px}
+.foot{text-align:center;font-size:12px;color:var(--muted);margin:40px 0 0!important}.foot a{color:var(--muted)}
+button:disabled{opacity:.55;cursor:not-allowed}
+</style>
+<script src="config.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+<div class="deco" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i><svg viewBox="0 0 1440 320" preserveAspectRatio="none"><path fill="#14b8a6" fill-opacity=".14" d="M0,224L60,208C120,192,240,160,360,165C480,171,600,213,720,213C840,213,960,171,1080,154C1200,139,1320,149,1380,154L1440,160L1440,320L0,320Z"/><path fill="#0ea5e9" fill-opacity=".12" d="M0,256L80,240C160,224,320,192,480,197C640,203,800,245,960,250C1120,256,1280,224,1360,208L1440,192L1440,320L0,320Z"/><path fill="#22c55e" fill-opacity=".10" d="M0,288L120,277C240,267,480,245,720,250C960,256,1200,288,1320,298L1440,309L1440,320L0,320Z"/></svg></div>
+<div class="top">
+  <div class="logo" id="logo">Mail<i>Craft</i></div>
+  <div class="steps hid" id="steps"><button data-v="edit">1 · Desain</button><button data-v="prev">2 · Preview &amp; tes</button><button data-v="send">3 · Kirim</button></div>
+  <div class="tools"><button class="ghost" id="langBtn" title="Bahasa"></button><button class="ghost" id="themeBtn" title="Tema"></button><button class="ghost" id="gear" title="Pengaturan">⚙ Pengaturan</button></div>
+  <div class="card hid" id="settings"><h3>Pengaturan</h3>
+    <label>Bahasa</label><select id="setLang"><option value="id">Indonesia</option><option value="en">English</option></select>
+    <label>Tema</label><select id="setTheme"><option value="auto">Otomatis (ikuti perangkat)</option><option value="light">Terang</option><option value="dark">Gelap</option></select>
+    <label class="chk"><input type="checkbox" id="autoPrev">Preview HTML otomatis (live)</label>
+    <div class="hint">Jika aktif, preview di mode HTML langsung diperbarui saat kode diketik, tanpa menekan tombol Preview.</div>
+    <label>Perangkat preview bawaan</label><select id="setDev"><option value="d">Desktop</option><option value="m">Mobile</option></select>
+    <label>Font bawaan teks baru</label><select id="setFont"></select>
+    <label>Tanda tangan / footer otomatis</label><textarea id="setSig" rows="3" placeholder="Contoh: Dikirim oleh Budi · budi@gmail.com"></textarea>
+    <div class="hint">Ditambahkan di bagian bawah setiap email.</div>
+    <label>Google Client ID (Gmail API)</label><input id="setCid" placeholder="xxxx.apps.googleusercontent.com" spellcheck="false">
+    <div class="hint">Biasanya diisi di config.js. Isi di sini hanya untuk testing di browser ini.</div>
+    <label>Jeda antar email (detik)</label><input id="setDelay" type="number" min="1" max="60" step="1">
+    <div class="hint">Jeda saat “Kirim ke semua”. Makin besar, makin aman dari batas Gmail.</div>
+    <label class="chk"><input type="checkbox" id="setDeco">Hiasan latar halaman depan</label>
+    <div class="row2"><button id="setReset">Reset draf</button></div>
+  </div>
+</div>
+<main>
+<section id="v-home" class="home">
+  <div class="hero">
+    <span class="badge">⚡ Simpel, cepat, tanpa langganan</span>
+    <h1>Tulis email sendiri, <em>kirim langsung lewat Gmail</em></h1>
+    <p>Susun email dengan drag &amp; drop atau kode HTML, cek hasilnya lewat email tes, lalu kirim dari Gmail pribadimu ke siapa saja, tanpa akun perusahaan dan tanpa database besar.</p>
+    <button class="pri big" id="start">Buat Email Sekarang →</button>
+  </div>
+  <div class="feat">
+    <div><b><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></b><strong>Desain Tanpa Ribet</strong><span>Seret, lepas, selesai. Susun kolom, teks, tombol, dan frame gambar semudah main Canva.</span></div>
+    <div><b><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 9"/></svg></b><strong>Gambar Langsung Tayang</strong><span>Upload gambar, otomatis ikut terkirim di dalam email.</span></div>
+    <div><b><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/></svg></b><strong>Kirim ke Banyak Orang</strong><span>Upload daftar Nama &amp; Email dari Excel, lalu sapa tiap orang dengan {{nama}}.</span></div>
+    <div><b><svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></b><strong>Tes Dulu, Kirim Yakin</strong><span>Cek tampilan di inbox asli, lalu kirim langsung dari Gmail-mu.</span></div>
+  </div>
+  <p class="foot"><a href="privacy.html">Kebijakan Privasi</a> · <a href="terms.html">Ketentuan</a></p>
+</section>
+
+<section id="v-choose" class="home hid">
+  <p style="margin-bottom:8px"><button class="ghost" id="chooseBack">← Kembali</button></p>
+  <h1>Mau buat dengan cara apa?</h1>
+  <p>Pilih cara membuat emailmu.</p>
+  <div class="choice">
+    <div class="opt" data-m="dnd"><b><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></b><strong>Desain Visual</strong><span>Susun layout, gambar, teks, dan tombol dengan seret &amp; lepas. Hasilnya langsung terlihat.</span></div>
+    <div class="opt" data-m="html"><b><svg viewBox="0 0 24 24"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg></b><strong>Mode Kode</strong><span>Punya template sendiri? Tempel HTML-nya, preview, lalu kirim.</span></div>
+  </div>
+  <p id="resume" class="hid" style="margin-top:28px"><button id="resumeBtn">Lanjutkan draf terakhir</button></p>
+</section>
+
+<section id="v-tpl" class="home hid">
+  <p style="margin-bottom:8px"><button class="ghost" id="tplBack">← Kembali</button></p>
+  <h1>Mulai dari mana?</h1>
+  <p>Pilih template email marketing, atau mulai dari kanvas kosong.</p>
+  <div class="choice tpls" id="tpls"></div>
+  <p id="tplResume" class="hid" style="margin-top:28px"><button id="tplResumeBtn">Lanjutkan draf terakhir</button></p>
+</section>
+
+<section id="v-dnd" class="dnd hid">
+  <div class="card">
+    <h3>Layout</h3>
+    <div class="pal">
+      <div class="pi" draggable="true" data-lay="1"><div class="lay"><u></u></div>1 kolom</div>
+      <div class="pi" draggable="true" data-lay="2"><div class="lay"><u></u><u></u></div>2 kolom</div>
+      <div class="pi" draggable="true" data-lay="3"><div class="lay"><u></u><u></u><u></u></div>3 kolom</div>
+    </div>
+    <h3>Konten</h3>
+    <div class="pal" id="pal"></div>
+    <h3>Gambar saya</h3>
+    <button id="upBtn" style="width:100%">⬆ Upload gambar</button>
+    <input type="file" id="upIn" accept="image/*" multiple class="hid">
+    <div class="hint">Klik gambar untuk memakainya (mengisi gambar atau frame yang dipilih). 🔗 salin link, 🗑 hapus.</div>
+    <div class="lib" id="lib1"></div>
+  </div>
+  <div class="stage"><div id="canvas"></div></div>
+  <div class="card" id="props"></div>
+</section>
+
+<section id="v-html" class="hid">
+  <div class="two">
+    <div class="card">
+      <h3>Kode HTML</h3>
+      <textarea id="code" class="code" spellcheck="false" placeholder="Tempel HTML emailmu di sini"></textarea>
+      <div class="row2"><button class="pri" id="hPrev">👁 Preview</button><button id="hUp">⬆ Upload gambar</button><button id="hNext">Lanjut →</button></div>
+      <div class="hint">Upload gambar untuk mendapat link publik; klik gambar di bawah untuk menyisipkannya di posisi kursor.</div>
+      <div class="lib" id="lib2"></div>
+    </div>
+    <div class="card"><h3>Preview</h3><div class="pv"><iframe id="hFrame" title="Preview HTML"></iframe></div></div>
+  </div>
+</section>
+
+<section id="v-prev" class="hid">
+  <div class="two">
+    <div class="card"><div class="row2" style="margin:0 0 12px"><div class="seg"><button id="pd" class="on">🖥 Desktop</button><button id="pm">📱 Mobile</button></div></div><div class="pv"><iframe id="frame" title="Preview email"></iframe></div></div>
+    <div class="card" style="align-self:start">
+      <h3>Kirim email tes</h3>
+      <div class="hint">Lihat hasil wireframe di inbox asli sebelum dikirim ke penerima.</div>
+      <div id="gconn2" class="gconn"></div>
+      <label>From (akun Gmail pengirim)</label><input id="testFrom" type="email" list="accList" placeholder="kamu@gmail.com" autocomplete="email">
+      <label>Email tujuan tes</label><input id="testTo" type="email" placeholder="siapa@gmail.com">
+      <div class="row2"><button id="test">🧪 Kirim tes via Gmail</button></div>
+      <div class="row2" style="margin-top:24px"><button id="back">← Edit lagi</button><button class="pri" id="toSend">Lanjut ke pengiriman →</button></div>
+    </div>
+  </div>
+</section>
+
+<section id="v-send" class="hid">
+  <div class="two">
+    <div class="card">
+      <h3>Detail email</h3>
+      <label>Metode kirim</label><div class="seg" id="method"><button data-m="api">⚡ Langsung via Gmail</button><button data-m="manual">📋 Buka Gmail &amp; tempel</button></div>
+      <div id="gconn" class="gconn"></div>
+      <div id="fromWrap"><label>From (akun Gmail pengirim)</label><input id="from" type="email" list="accList" placeholder="kamu@gmail.com" autocomplete="email"><div class="hint" id="fromHint"></div></div><datalist id="accList"></datalist>
+      <label>To (pisahkan dengan koma)</label><textarea id="to" rows="3" placeholder="budi@gmail.com, Siti &lt;siti@yahoo.com&gt;"></textarea>
+      <div class="row2"><button id="xlBtn">📄 Upload Excel</button><button id="xlTpl">⬇ Template Excel</button><button class="ghost" id="xlClr">Hapus hasil upload</button></div>
+      <input type="file" id="xlIn" accept=".xlsx,.xls,.csv" class="hid">
+      <label>Subject</label><input id="subj" placeholder="Judul email">
+      <div class="note">Tulis {{nama}} di teks atau subject untuk menyapa tiap penerima dengan namanya dari Excel. Kolom yang dibaca: Nama dan Email.</div>
+    </div>
+    <div class="card">
+      <h3>Penerima <span id="cnt" style="font-weight:400"></span></h3>
+      <div class="row2" style="margin:0 0 6px" id="sendActs"></div>
+      <div id="sendProg"></div>
+      <div class="list" id="rcpt"></div>
+      <div class="note" id="sendNote"></div>
+    </div>
+  </div>
+</section>
+</main>
+<div id="dlg" class="hid"><div class="dlgbox"><img id="dlgImg" alt=""><h3 style="margin:0 0 6px;font-size:16px;text-transform:none;letter-spacing:0;color:var(--text)">Hapus gambar ini?</h3><p id="dlgMsg" style="margin:0 0 16px;color:var(--muted);font-size:13px"></p><div class="row2" style="justify-content:center;margin:0"><button id="dlgNo">Batal</button><button class="danger" id="dlgYes">Hapus</button></div></div></div>
+<div id="toast"></div>
+
+<script>
+const $=s=>document.querySelector(s),KEY='mailcraft-v2',enc=encodeURIComponent;
+let S={view:'home',mode:null,rows:[],html:'',sel:null,bg:'#f4f4f5',w:600,from:'',to:'',subj:'',testTo:'',upl:[],lib:[]};
+let uid=1,assets=null,drag='';
+const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+const attr=t=>String(t).replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+const txa=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('s');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('s'),2800)}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){if(!save.w){save.w=1;toast('Penyimpanan draf di browser penuh. Hapus beberapa gambar di “Gambar saya”.')}}}
+function load(){try{const o=JSON.parse(localStorage.getItem(KEY));if(o&&o.rows){S=Object.assign(S,o);S.view='home';uid=1+Math.max(0,...S.rows.flatMap(r=>[r.id,...r.cols.flat().map(b=>b.id)]))}}catch(e){}}
+try{if(window.claude&&claude.use)claude.use('assets').then(a=>{assets=a;renderLib()},()=>{})}catch(e){}
+
+const T={
+ heading:{n:'Judul',i:'H',d:{text:'Judul email',size:28,color:'#18181b',align:'center',link:''}},
+ text:{n:'Teks',i:'¶',d:{text:'Tulis isi emailmu di sini.',size:16,color:'#3f3f46',align:'left',link:''}},
+ image:{n:'Gambar',i:'🖼',d:{src:'',link:'',alt:'Gambar',width:100}},
+ button:{n:'Tombol',i:'🔘',d:{text:'Klik di sini',url:'https://',bg:'#0d9488',color:'#ffffff',align:'center'}},
+ divider:{n:'Garis',i:'—',d:{color:'#e4e4e7'}},
+ spacer:{n:'Spasi',i:'↕',d:{h:30}},
+ html:{n:'HTML',i:'</>',d:{code:'<p style="padding:12px 24px;margin:0">HTML kustom</p>'}}
+};
+const F={
+ heading:[['text','Teks','text'],['link','Link (opsional)','text'],['size','Ukuran','num'],['color','Warna','color'],['align','Rata','align']],
+ text:[['text','Teks','area'],['link','Link (opsional)','text'],['size','Ukuran','num'],['color','Warna','color'],['align','Rata','align']],
+ image:[['img','','img'],['link','Link saat gambar diklik','text'],['alt','Alt text','text'],['width','Lebar (%)','num']],
+ button:[['text','Teks tombol','text'],['url','Link tujuan','text'],['bg','Warna tombol','color'],['color','Warna teks','color'],['align','Rata','align']],
+ divider:[['color','Warna','color']],
+ spacer:[['h','Tinggi (px)','num']],
+ html:[['code','Kode HTML','area']]
+};
+const FF=[['Arial,Helvetica,sans-serif','Arial'],['Georgia,serif','Georgia'],['Verdana,sans-serif','Verdana'],['Trebuchet MS,sans-serif','Trebuchet'],['Tahoma,sans-serif','Tahoma'],['Courier New,monospace','Courier']];
+const AL=[['left','Kiri'],['center','Tengah'],['right','Kanan']];
+const BGF=['ob','Warna latar blok (opsional)','opt'],PAD=[['py','Jarak atas & bawah (px)','num'],['px','Jarak kiri & kanan (px)','num']];
+const txtF=[['text','Teks','rich'],['size','Ukuran (px)','num'],['color','Warna teks','color'],['lc','Warna link','color'],['align','Rata','align'],['fw','Ketebalan','sel',[['normal','Normal'],['bold','Tebal']]],['ff','Font','sel',FF],['lh','Tinggi baris','num'],['ls','Jarak huruf (px)','num'],BGF,...PAD];
+Object.assign(T.heading.d,{ff:FF[0][0],fw:'bold',lh:1.25,ls:0,lc:'#0d9488',ob:'',py:14,px:24});
+Object.assign(T.text.d,{ff:FF[0][0],fw:'normal',lh:1.6,ls:0,lc:'#0d9488',ob:'',py:10,px:24});
+F.heading=txtF;F.text=txtF;
+Object.assign(T.image.d,{align:'center',radius:0,ratio:'auto',ob:'',py:10,px:24});
+F.image=[['img','','img'],['link','Link saat diklik','text'],['alt','Alt text','text'],['ratio','Rasio gambar','sel',[['auto','Asli'],['1:1','1:1 (persegi)'],['4:3','4:3'],['3:2','3:2'],['16:9','16:9'],['2:1','2:1'],['3:1','3:1 (banner)']]],['radius','Sudut (px)','num'],BGF,...PAD];
+T.frame={n:'Frame',i:'▣',d:{src:'',w:600,h:338,fit:'cover',link:'',alt:'Gambar',radius:0,align:'center',ob:'',py:8,px:0}};
+F.frame=[['img','','img'],['frm','','frm'],['fit','Cara gambar mengisi frame','sel',[['cover','Potong agar penuh (crop)'],['contain','Tampilkan utuh']]],['link','Link saat diklik','text'],['alt','Alt text','text'],['radius','Sudut (px)','num'],['align','Rata','align'],BGF,...PAD];
+Object.assign(T.button.d,{bg2:'',fs:16,fw:'bold',radius:6,bpx:28,bpy:12,full:'auto',ob:'',py:14,px:24});
+F.button=[['text','Teks tombol','text'],['url','Link tujuan','text'],['bg','Warna tombol','color'],['bg2','Gradien ke warna (opsional)','opt'],['color','Warna teks','color'],['fs','Ukuran teks','num'],['fw','Ketebalan','sel',[['bold','Tebal'],['normal','Normal']]],['radius','Sudut (px)','num'],['bpx','Padding tombol kiri/kanan','num'],['bpy','Padding tombol atas/bawah','num'],['full','Lebar tombol','sel',[['auto','Otomatis'],['full','Penuh']]],['align','Rata','align'],BGF,...PAD];
+Object.assign(T.divider.d,{th:1,st:'solid',dw:100,ob:'',py:10,px:24});
+F.divider=[['color','Warna','color'],['th','Ketebalan (px)','num'],['st','Jenis garis','sel',[['solid','Solid'],['dashed','Putus'],['dotted','Titik']]],['dw','Panjang garis (%)','num'],BGF,['py','Jarak atas & bawah (px)','num']];
+T.spacer.d.ob='';F.spacer=[['h','Tinggi (px)','num'],BGF];
+T.social={n:'Tautan',i:'🔗',d:{text:'Instagram|https://instagram.com\nWebsite|https://example.com',align:'center',color:'#0d9488',size:14,ob:'',py:12,px:24}};
+F.social=[['text','Tautan (satu per baris: Label|URL)','area'],['size','Ukuran (px)','num'],['color','Warna','color'],['align','Rata','align'],BGF,...PAD];
+const ratioTxt=p=>{const w=Math.round(+p.w||0),h=Math.round(+p.h||0),gc=(a,b)=>b?gc(b,a%b):a,d=gc(w,h)||1;return w&&h?`${w/d}:${h/d}`:'-'};
+const rbg=r=>r.g2?`background:${r.bg};background-image:linear-gradient(135deg,${r.bg},${r.g2})`:`background:${r.bg}`;
+const frameUi=b=>`<label>Ukuran frame (px): lebar × tinggi</label><div class="lk"><input data-k="w" type="number" value="${b.p.w}"><span>×</span><input data-k="h" type="number" value="${b.p.h}"></div><div class="ar">${['1:1','4:3','16:9','3:1','9:16'].map(a=>`<button data-ar="${a}">${a}</button>`).join('')}</div><div class="lk"><input id="cr" placeholder="Rasio kustom, mis. 13:5"><button id="crb">Terapkan</button></div><div class="hint"><span>Rasio sekarang:</span> <b id="rt">${ratioTxt(b.p)}</b></div>`;
+const mk=(type,o)=>{const d=T[type].d;return{id:uid++,type,p:Object.assign({},d,d.text?{text:tx(d.text)}:{},S.font&&d.ff?{ff:S.font}:{},type==='frame'&&!(o&&o.w)?{w:S.w,h:Math.round(S.w*9/16)}:{},o||{})}};
+const newRow=n=>({id:uid++,bg:'#ffffff',pad:8,cols:Array.from({length:n},()=>[])});
+
+const fmt=(t,lc)=>esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\*(.+?)\*/g,'<i>$1</i>').replace(/\+\+(.+?)\+\+/g,'<u>$1</u>').replace(/\[([^\]]+)\]\(([^)\s]+)\)/g,(m,t,u)=>`<a href="${u.replace(/"/g,'%22')}" style="color:${lc};text-decoration:underline">${t}</a>`);
+function blockHtml(b,edit){
+ const p=b.p,D=T[b.type].d,g=k=>p[k]??D[k],px=g('px'),py=g('py'),pad=`padding:${py}px ${px}px`;
+ const W=h=>g('ob')?`<div style="background:${attr(g('ob'))}">${h}</div>`:h;
+ switch(b.type){
+  case'heading':case'text':{const tag=b.type==='heading'?'h1':'div';
+   return W(`<${tag} style="margin:0;${pad};font-family:${attr(g('ff'))};font-size:${+g('size')||16}px;font-weight:${g('fw')};color:${attr(g('color'))};text-align:${g('align')};line-height:${+g('lh')||1.5};letter-spacing:${+g('ls')||0}px">${fmt(p.text,g('lc'))}</${tag}>`)}
+  case'image':case'frame':{
+   const fr=b.type==='frame',w=+g('w')||600,h=+g('h')||338,rd=+g('radius')||0;
+   if(!p.src)return edit?W(`<div style="margin:${py}px auto;width:calc(100% - ${2*px}px);${fr?`max-width:${w}px;aspect-ratio:${w}/${h};`:'padding:36px 10px;'}display:flex;align-items:center;justify-content:center;background:#f4f4f5;color:#999;border:1px dashed #ccc;border-radius:${rd}px;font-size:13px">${fr?`▣ Frame ${w} × ${h} px`:`🖼 ${tx('Pilih atau upload gambar')}`}</div>`):'';
+   const st=fr?`width:100%;max-width:${w}px;height:auto;aspect-ratio:${w}/${h};object-fit:${g('fit')};`:`width:100%;max-width:100%;height:auto;${g('ratio')&&g('ratio')!=='auto'?`aspect-ratio:${g('ratio').replace(':','/')};object-fit:cover;`:''}`;
+   const mg=g('align')==='left'?'0':g('align')==='right'?'0 0 0 auto':'0 auto';
+   const im=`<img src="${attr(p.src)}" alt="${attr(p.alt)}"${fr?` width="${w}" height="${h}"`:''} style="${st}border:0;display:block;border-radius:${rd}px;margin:${mg}">`;
+   return W(`<div style="${pad}">${p.link?`<a href="${attr(p.link)}">${im}</a>`:im}</div>`)}
+  case'button':{
+   const full=g('full')==='full',gr=g('bg2')?`background-image:linear-gradient(135deg,${attr(g('bg'))},${attr(g('bg2'))});`:'';
+   return W(`<div style="${pad};text-align:${g('align')}"><a href="${attr(p.url)}" style="display:${full?'block;text-align:center':'inline-block'};background:${attr(g('bg'))};${gr}color:${attr(g('color'))};padding:${+g('bpy')||0}px ${+g('bpx')||0}px;border-radius:${+g('radius')||0}px;text-decoration:none;font-weight:${g('fw')};font-size:${+g('fs')||16}px">${esc(p.text)}</a></div>`)}
+  case'divider':return W(`<div style="${pad}"><hr style="border:0;border-top:${+g('th')||1}px ${g('st')} ${attr(g('color'))};margin:0 auto;width:${+g('dw')||100}%"></div>`);
+  case'spacer':return W(`<div style="height:${+g('h')||20}px;line-height:${+g('h')||20}px">&nbsp;</div>`);
+  case'social':{const ls=String(p.text).split('\n').map(l=>l.split('|')).filter(a=>a[0].trim()).map(a=>a[1]?`<a href="${attr(a[1].trim())}" style="color:${attr(g('color'))};text-decoration:underline">${esc(a[0].trim())}</a>`:esc(a[0].trim()));
+   return W(`<div style="${pad};text-align:${g('align')};font-size:${+g('size')||14}px;line-height:1.8">${ls.join('&nbsp;&nbsp;·&nbsp;&nbsp;')}</div>`)}
+  case'html':return p.code;
+ }
+}
+function toEmail(){
+ const rows=S.rows.map(r=>{const n=r.cols.length,w=(100/n).toFixed(2);
+  return `<tr><td bgcolor="${r.bg}" style="${rbg(r)};padding:${r.pad}px 0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>${r.cols.map(c=>`<td class="col" valign="top" width="${w}%" style="width:${w}%">${c.map(b=>blockHtml(b)).join('')}</td>`).join('')}</tr></table></td></tr>`}).join('\n');
+ return `<!DOCTYPE html>\n<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>@media(max-width:480px){.col{display:block!important;width:100%!important}}</style></head>\n<body style="margin:0;padding:24px 0;background:${S.bg};font-family:Arial,Helvetica,sans-serif">\n<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">\n<table role="presentation" width="${S.w}" cellpadding="0" cellspacing="0" style="width:100%;max-width:${S.w}px;background:#ffffff">\n${rows}\n${sigHtml()?`<tr><td style="padding:0">${sigHtml()}</td></tr>`:''}</table>\n</td></tr></table>\n</body></html>`;
+}
+const sigHtml=()=>S.sig&&S.sig.trim()?`<div style="padding:16px 24px;font-size:12px;color:#888888;text-align:center;line-height:1.6;font-family:Arial,Helvetica,sans-serif">${fmt(S.sig,'#0d9488')}</div>`:'';
+const getHtml=()=>{if(S.mode!=='html')return toEmail();const g=sigHtml();return !g?S.html:/<\/body>/i.test(S.html)?S.html.replace(/<\/body>/i,()=>g+'</body>'):S.html+g};
+const pz=(s,n)=>s.replace(/\{\{\s*(nama|name)\s*\}\}/gi,n||'teman');
+
+/* ---------- views + router (tombol back/forward browser) ---------- */
+const ROUTE={home:'',choose:'pilih',tpl:'template',dnd:'desain',html:'kode',prev:'preview',send:'kirim'};
+function routeView(){const m=location.hash.match(/^#\/?([\w-]*)/),k=m?m[1]:'';return Object.keys(ROUTE).find(v=>ROUTE[v]===k)||'home'}
+function closeOverlays(){$('#settings').classList.add('hid');$('#dlg').classList.add('hid');closeSetup()}
+function go(v,o={}){
+ if(v==='edit')v=S.mode==='html'?'html':'dnd';
+ if(['dnd','html','prev','send'].includes(v)&&!S.mode){v='choose';o.fix=true}
+ if(v==='dnd'&&S.mode==='html'){if(S.rows.length){S.mode='dnd';S.sel=null;renderAll()}else{v='html';o.fix=true}}
+ else if(v==='html'&&S.mode==='dnd'){if(S.html)S.mode='html';else{v='dnd';o.fix=true}}
+ const from=S.view;
+ S.view=v;
+ ['home','choose','tpl','dnd','html','prev','send'].forEach(n=>$('#v-'+n).classList.toggle('hid',n!==v));
+ $('#steps').classList.toggle('hid',v==='home'||v==='choose'||v==='tpl');document.body.classList.toggle('front',v==='home'||v==='choose'||v==='tpl');
+ document.querySelectorAll('#steps button').forEach(b=>b.classList.toggle('on',(b.dataset.v==='edit'&&(v==='dnd'||v==='html'))||b.dataset.v===v));
+ if(v==='prev'){$('#frame').srcdoc=pz(getHtml(),'Nama');(S.devD==='m'?$('#pm'):$('#pd')).click()}
+ if(v==='send')renderRcpt();
+ if(v==='html'){$('#code').value=S.html;if(S.autoPrev)$('#hFrame').srcdoc=pz(S.html,'Nama')}
+ // catat di riwayat browser supaya tombol back/forward browser berfungsi
+ const url=v==='home'?location.pathname+location.search:'#/'+ROUTE[v],cur=history.state&&history.state.mc?history.state:null;
+ if(o.pop){if(o.fix)history.replaceState(Object.assign({},cur||{mc:1,d:1},{v}),'',url)}
+ else if(o.replace||o.fix||(cur&&cur.v===v))history.replaceState({mc:1,v,p:cur?cur.p:null,d:cur?cur.d:1},'',url);
+ else history.pushState({mc:1,v,p:from,d:(cur?cur.d:0)+1},'',url);
+ if(from!==v)scrollTo(0,0);
+ save();
+}
+// tombol "Kembali" di halaman = back browser bila halaman sebelumnya memang tujuan itu
+function navBack(t){const s=history.state;if(s&&s.mc&&s.d>1&&s.p&&(s.p===t||(t==='edit'&&(s.p==='dnd'||s.p==='html'))))history.back();else go(t)}
+addEventListener('popstate',()=>{closeOverlays();go(routeView(),{pop:true})});
+$('#logo').onclick=()=>go('home');
+$('#steps').onclick=e=>{const b=e.target.closest('button');if(b)go(b.dataset.v)};
+document.querySelectorAll('.opt').forEach(o=>o.onclick=()=>{
+ const m=o.dataset.m;if(m==='dnd'){showTpl();return}
+ if(S.mode!==m){S.mode=m;S.sel=null}
+ if(m==='dnd'&&!S.rows.length)seed();
+ if(m==='html'&&!S.html)S.html=`<!DOCTYPE html>\n<html><body style="margin:0;background:#f4f4f5;font-family:Arial,sans-serif">\n<div style="max-width:600px;margin:24px auto;background:#fff;padding:32px;text-align:center">\n<h1>${tx('Halo {{nama}}!')}</h1>\n<p>${tx('Tulis isi emailmu di sini.')}</p>\n<a href="https://example.com" style="display:inline-block;background:#0d9488;color:#fff;padding:12px 28px;border-radius:6px;text-decoration:none">${tx('Klik di sini')}</a>\n</div></body></html>`;
+ renderAll();go('edit');
+});
+$('#resumeBtn').onclick=()=>go('edit');$('#start').onclick=()=>go('choose');$('#chooseBack').onclick=()=>navBack('home');
+function seed(){const r=newRow(1);r.cols[0]=[mk('heading',{text:tx('Halo {{nama}}!')}),mk('text',{text:tx('Ini contoh email buatanmu. Seret blok dari kiri, lalu ubah isinya di panel kanan. Blok sebagian teks untuk memberi [link](https://example.com).')}),mk('button',{text:tx('Baca selengkapnya')})];S.rows=[r]}
+
+/* ---------- drag & drop builder ---------- */
+$('#pal').innerHTML=Object.entries(T).map(([k,v])=>`<div class="pi" draggable="true" data-new="${k}"><b>${v.i}</b>${v.n}</div>`).join('');
+const findB=id=>{for(const r of S.rows)for(const c of r.cols){const i=c.findIndex(b=>b.id===id);if(i>=0)return{r,c,i,b:c[i]}}};
+const isSel=(t,id)=>S.sel&&S.sel.t===t&&S.sel.id===id;
+function renderCanvas(){
+ const c=$('#canvas');c.style.maxWidth=S.w+'px';
+ if(!S.rows.length){c.innerHTML='<div class="ph" style="margin:40px">Seret layout ke sini untuk memulai</div>';return}
+ c.innerHTML=S.rows.map(r=>`<div class="row${isSel('r',r.id)?' sel':''}" data-r="${r.id}" style="${rbg(r)};padding:${r.pad}px 0"><div class="rt"><span class="rh" draggable="true" data-id="${r.id}" title="Seret untuk memindah baris">⠿ Seret</span><button data-a="rdel" data-id="${r.id}">✕</button></div><div class="cols">${r.cols.map((col,ci)=>`<div class="cell" data-r="${r.id}" data-c="${ci}">${col.length?col.map(b=>`<div class="blk${isSel('b',b.id)?' sel':''}" draggable="true" data-id="${b.id}"><button class="bx" data-a="bdel" data-id="${b.id}">✕</button>${blockHtml(b,1)}</div>`).join(''):'<div class="ph">Seret konten ke sini</div>'}</div>`).join('')}</div></div>`).join('');
+}
+function renderProps(){
+ const el=$('#props');
+ if(S.mode!=='dnd'){return}
+ const sb=S.sel&&S.sel.t==='b'&&findB(S.sel.id),sr=S.sel&&S.sel.t==='r'&&S.rows.find(r=>r.id===S.sel.id);
+ if(sb){
+  const b=sb.b;let h=`<h3>${T[b.type].n}</h3>`;
+  F[b.type].forEach(([k,l,t,o])=>{const val=b.p[k]??T[b.type].d[k]??'';
+   if(t==='img'){h+=`<label>URL gambar</label><input data-k="src" value="${attr(b.p.src.startsWith('data:')?'(gambar tertanam)':b.p.src)}" ${b.p.src.startsWith('data:')?'readonly':''} placeholder="https://… atau upload"><div class="row2" style="margin-top:6px"><button id="pUp">⬆ Upload</button>${b.p.src?'<button id="pCp">🔗 Salin link</button>':''}</div><div class="hint">Atau pilih dari “Gambar saya” di kiri.</div>`;return}
+   if(t==='frm'){h+=frameUi(b);return}
+   h+=`<label>${l}</label>`;
+   if(t==='rich')h+=`<div class="tb"><button data-f="**"><b>B</b></button><button data-f="*"><i>I</i></button><button data-f="++"><u>U</u></button></div><textarea data-k="${k}" rows="5">${txa(val)}</textarea><div class="lk"><input id="lu" placeholder="https://… untuk teks yang diblok"><button id="lbtn">🔗 Pasang link</button></div><div class="hint">Blok sebagian teks, tekan Ctrl+K (⌘K di Mac), tempel URL, lalu Enter. Hanya bagian itu yang jadi hyperlink. Pintasan lain: Ctrl+B tebal, Ctrl+I miring, Ctrl+U garis bawah.</div>`;
+   else if(t==='opt')h+=`<div class="lk"><input data-k="${k}" type="color" value="${val||'#ffffff'}"><button data-rs="${k}">Reset</button></div>`;
+   else if(t==='text')h+=`<input data-k="${k}" value="${attr(val)}">`;
+   else if(t==='num')h+=`<input data-k="${k}" type="number" step="any" value="${val}">`;
+   else if(t==='color')h+=`<input data-k="${k}" type="color" value="${val}">`;
+   else if(t==='area')h+=`<textarea data-k="${k}" rows="${b.type==='html'?10:5}">${txa(val)}</textarea>`;
+   else h+=`<select data-k="${k}">${(t==='align'?AL:o).map(([v,n])=>`<option value="${v}"${val===v?' selected':''}>${n}</option>`).join('')}</select>`;
+  h+=hp(k);
+  });
+  h+=`<div class="row2"><button id="dup">Duplikat</button><button id="del">Hapus</button></div>`;
+  el.innerHTML=h;
+  el.querySelectorAll('[data-k]').forEach(i=>i.oninput=()=>{b.p[i.dataset.k]=i.type==='number'?+i.value:i.value;const rt=$('#rt');if(rt)rt.textContent=ratioTxt(b.p);renderCanvas();save()});
+  const u=$('#pUp');if(u)u.onclick=()=>{$('#upIn').dataset.t=b.id;$('#upIn').click()};
+  const cp=$('#pCp');if(cp)cp.onclick=()=>copyText(b.p.src);
+  el.querySelectorAll('[data-rs]').forEach(x=>x.onclick=()=>{b.p[x.dataset.rs]='';renderAll()});
+  el.querySelectorAll('[data-ar]').forEach(x=>x.onclick=()=>{const[a,c]=x.dataset.ar.split(':').map(Number);b.p.h=Math.round((+b.p.w||600)*c/a);renderAll()});
+  const crb=$('#crb');if(crb)crb.onclick=()=>{const[a,c]=$('#cr').value.split(/[:x\/]/).map(Number);if(!(a>0&&c>0)){toast('Format rasio: lebar:tinggi, mis. 13:5');return}b.p.h=Math.round((+b.p.w||600)*c/a);renderAll()};
+  const ta=el.querySelector('textarea[data-k=text]');
+  if(ta&&$('#lbtn')){
+   const ins=(a,z)=>{const s=ta.selectionStart,e=ta.selectionEnd;if(s===e){toast('Blok dulu teks yang ingin diubah');return}ta.setRangeText(a+ta.value.slice(s,e)+z,s,e,'end');ta.dispatchEvent(new Event('input'));ta.focus()};
+   el.querySelectorAll('[data-f]').forEach(x=>x.onclick=()=>ins(x.dataset.f,x.dataset.f));
+   $('#lbtn').onclick=()=>{const u=$('#lu').value.trim();if(!/^(https?:\/\/|mailto:)/i.test(u)){toast('Isi URL lengkap, contoh https://…');return}ins('[',`](${u})`);$('#lu').value=''};
+   ta.addEventListener('keydown',e=>{if(!(e.ctrlKey||e.metaKey))return;const k=e.key.toLowerCase();
+    if(k==='k'){e.preventDefault();if(ta.selectionStart===ta.selectionEnd){toast('Blok dulu teks yang mau dijadikan link');return}$('#lu').focus()}
+    else if(k==='b'||k==='i'||k==='u'){e.preventDefault();const m={b:'**',i:'*',u:'++'}[k];ins(m,m)}});
+   $('#lu').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('#lbtn').click()}});
+  }
+  $('#dup').onclick=()=>{const n=mk(b.type,b.p);sb.c.splice(sb.i+1,0,n);S.sel={t:'b',id:n.id};renderAll()};
+  $('#del').onclick=()=>delB(b.id);
+ }else if(sr){
+  el.innerHTML=`<h3>Baris</h3><div class="hint">${L('Satu lajur horizontal di email yang berisi 1 sampai 3 kolom. Pindahkan dengan menyeret “⠿ Seret” di pojok kanan atas baris.','One horizontal strip of the email that holds 1 to 3 columns. Move it by dragging “⠿ Drag” at the top right of the row.')}</div><label>Warna latar</label><input type="color" id="rbg" value="${sr.bg}"><label>Jarak atas &amp; bawah (px)</label><input type="number" id="rpd" value="${sr.pad}" min="0" max="80">${hp('py')}<label>Gradien ke warna (opsional)</label><div class="lk"><input type="color" id="rg2" value="${sr.g2||'#0ea5e9'}"><button id="rgx">Reset</button></div>${hp('bg2')}<div class="row2"><button id="rdup">Duplikat</button><button id="rdel">Hapus baris</button></div>`;
+  $('#rbg').oninput=e=>{sr.bg=e.target.value;renderCanvas();save()};
+  $('#rpd').oninput=e=>{sr.pad=+e.target.value||0;renderCanvas();save()};
+  $('#rdel').onclick=()=>{S.rows=S.rows.filter(r=>r!==sr);S.sel=null;renderAll()};
+  $('#rg2').oninput=e=>{sr.g2=e.target.value;renderCanvas();save()};
+  $('#rgx').onclick=()=>{sr.g2='';renderAll()};
+  $('#rdup').onclick=()=>{const n=JSON.parse(JSON.stringify(sr));n.id=uid++;n.cols.forEach(c=>c.forEach(x=>x.id=uid++));S.rows.splice(S.rows.indexOf(sr)+1,0,n);S.sel={t:'r',id:n.id};renderAll()};
+ }else{
+  el.innerHTML=`<h3>Pengaturan email</h3><label>Warna latar luar</label><input type="color" id="gbg" value="${S.bg}">${hp('outer')}<label>Lebar email (px)</label><input type="number" id="gw" value="${S.w}" min="320" max="800">${hp('ew')}<div class="note">Klik baris atau konten di kanvas untuk mengubahnya. Seret konten untuk memindah, bahkan antar kolom.</div><div class="row2"><button class="pri" id="dNext">Lanjut: Preview →</button></div>`;
+  $('#gbg').oninput=e=>{S.bg=e.target.value;save()};
+  $('#gw').oninput=e=>{S.w=Math.min(800,Math.max(320,+e.target.value||600));renderCanvas();save()};
+  $('#dNext').onclick=()=>go('prev');
+ }
+}
+function renderAll(){renderCanvas();renderProps();renderLib();save()}
+function delB(id){const f=findB(id);if(f)f.c.splice(f.i,1);if(isSel('b',id))S.sel=null;renderAll()}
+function addBlock(type,src){
+ let cell;const f=S.sel&&(S.sel.t==='b'?findB(S.sel.id):null);
+ if(f)cell=f.c;else{if(!S.rows.length)S.rows.push(newRow(1));cell=S.rows[S.rows.length-1].cols[0]}
+ const b=mk(type,src?{src}:null);cell.push(b);S.sel={t:'b',id:b.id};renderAll();
+}
+$('#v-dnd').addEventListener('click',e=>{const p=e.target.closest('[data-new],[data-lay]');if(!p)return;
+ if(p.dataset.lay){const r=newRow(+p.dataset.lay);S.rows.push(r);S.sel={t:'r',id:r.id};renderAll()}else addBlock(p.dataset.new)});
+$('#v-dnd').addEventListener('dragstart',e=>{
+ const rh=e.target.closest&&e.target.closest('.rh');
+ if(rh){drag='row';e.dataTransfer.setData('text/plain','rowmv:'+rh.dataset.id);const rw=rh.closest('.row');if(rw)e.dataTransfer.setDragImage(rw,24,16);return}
+ const p=e.target.closest('[data-new],[data-lay],.blk');if(!p)return;
+ if(p.dataset.lay){drag='lay';e.dataTransfer.setData('text/plain','lay:'+p.dataset.lay)}
+ else if(p.dataset.new){drag='new';e.dataTransfer.setData('text/plain','new:'+p.dataset.new)}
+ else{drag='blk';e.dataTransfer.setData('text/plain','move:'+p.dataset.id)}
+});
+const cv=$('#canvas');
+const clr=()=>cv.querySelectorAll('.ins-t,.ins-b,.over').forEach(x=>x.classList.remove('ins-t','ins-b','over'));
+const half=(e,el)=>{const r=el.getBoundingClientRect();return e.clientY<r.top+r.height/2};
+cv.addEventListener('dragover',e=>{e.preventDefault();clr();
+ const bl=e.target.closest('.blk'),ce=e.target.closest('.cell'),rw=e.target.closest('.row');
+ if(drag==='lay'||drag==='row'){if(rw)rw.classList.add(half(e,rw)?'ins-t':'ins-b')}
+ else if(bl)bl.classList.add(half(e,bl)?'ins-t':'ins-b');else if(ce)ce.classList.add('over');
+});
+cv.addEventListener('dragleave',e=>{if(!cv.contains(e.relatedTarget))clr()});
+document.addEventListener('dragend',()=>{drag='';clr()});
+cv.addEventListener('drop',e=>{
+ e.preventDefault();clr();
+ const d=e.dataTransfer.getData('text/plain'),bl=e.target.closest('.blk'),ce=e.target.closest('.cell'),rw=e.target.closest('.row');
+ if(d.startsWith('rowmv:')){
+  const id=+d.slice(6),from=S.rows.findIndex(r=>r.id===id);if(from<0)return;
+  if(rw&&+rw.dataset.r===id)return;
+  const[r]=S.rows.splice(from,1);let i=S.rows.length;
+  if(rw){const k=S.rows.findIndex(x=>x.id===+rw.dataset.r);if(k>=0)i=half(e,rw)?k:k+1}
+  S.rows.splice(i,0,r);S.sel={t:'r',id};renderAll();return}
+ if(d.startsWith('lay:')){
+  const r=newRow(+d.slice(4));let i=S.rows.length;
+  if(rw){const k=S.rows.findIndex(x=>x.id===+rw.dataset.r);i=half(e,rw)?k:k+1}
+  S.rows.splice(i,0,r);S.sel={t:'r',id:r.id};renderAll();return}
+ let b;
+ if(d.startsWith('new:'))b=mk(d.slice(4));
+ else if(d.startsWith('move:')){const f=findB(+d.slice(5));if(!f)return;b=f.b}
+ else return;
+ let cell;
+ if(ce)cell=S.rows.find(r=>r.id===+ce.dataset.r).cols[+ce.dataset.c];
+ else if(rw)cell=S.rows.find(r=>r.id===+rw.dataset.r).cols[0];
+ else{if(!S.rows.length)S.rows.push(newRow(1));cell=S.rows[S.rows.length-1].cols[0]}
+ const old=findB(b.id);let top=false,tid=bl&&+bl.dataset.id;
+ if(bl)top=half(e,bl);
+ if(old)old.c.splice(old.i,1);
+ let i=cell.length;
+ if(bl&&tid!==b.id){const k=cell.findIndex(x=>x.id===tid);if(k>=0)i=top?k:k+1}
+ cell.splice(i,0,b);S.sel={t:'b',id:b.id};renderAll();
+});
+cv.addEventListener('click',e=>{
+ const a=e.target.closest('[data-a]');
+ if(a){const id=+a.dataset.id,k=S.rows.findIndex(r=>r.id===id);
+  if(a.dataset.a==='bdel')delB(id);
+  else if(a.dataset.a==='rdel'){S.rows.splice(k,1);S.sel=null;renderAll()}
+  
+  return}
+ e.preventDefault();
+ const bl=e.target.closest('.blk'),rw=e.target.closest('.row');
+ S.sel=bl?{t:'b',id:+bl.dataset.id}:rw?{t:'r',id:+rw.dataset.r}:null;renderCanvas();renderProps();
+});
+
+/* ---------- images ---------- */
+async function upImg(f,ar){
+ const blob=await new Promise(res=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{
+  const sc=Math.min(1,1200/im.width),c=document.createElement('canvas');c.width=ar?ar.ow:Math.round(im.width*sc);c.height=ar?ar.oh:Math.round(im.height*sc);
+  const x=c.getContext('2d'),png=/png|gif|webp/.test(f.type);if(!png){x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height)}
+  if(ar){const s=Math.max(c.width/im.width,c.height/im.height),dw=im.width*s,dh=im.height*s;x.drawImage(im,(c.width-dw)/2,(c.height-dh)/2,dw,dh)}else x.drawImage(im,0,0,c.width,c.height);c.toBlob(res,png?'image/png':'image/jpeg',.85)};im.src=r.result};r.readAsDataURL(f)});
+ let url,id;
+ if(assets){try{const o=await assets.upload(blob);url=new URL(o.url,location.href).href;id=o.id}catch(e){}}
+ if(!url){url=await new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(blob)});toast('Gambar disimpan di draf dan ikut terkirim di dalam email.')}
+ S.lib.unshift({url,id,name:f.name});S.lib=S.lib.slice(0,24);renderLib();save();return url;
+}
+async function handleUp(files){
+ for(const f of files){const t=+$('#upIn').dataset.t,fb=t&&findB(t),q=fb&&files.length===1?fb.b:null;let ar=null;
+  if(q&&q.type==='frame'){const w=+q.p.w||600,h=+q.p.h||338,ow=Math.min(w*2,1600);ar={ow,oh:Math.round(ow*h/w)}}
+  else if(q&&q.type==='image'&&q.p.ratio&&q.p.ratio!=='auto'){const[a,c]=q.p.ratio.split(':').map(Number);ar={ow:1200,oh:Math.round(1200*c/a)}}
+  const u=await upImg(f,ar);
+  if(S.mode==='dnd'){const f2=t&&findB(t);if(f2&&(f2.b.type==='image'||f2.b.type==='frame')&&files.length===1){f2.b.p.src=u;renderAll()}else addBlock('image',u)}
+  else toast('Gambar diunggah. Klik gambar untuk menyisipkan.')}
+ $('#upIn').dataset.t='';$('#upIn').value='';
+}
+$('#upBtn').onclick=()=>{$('#upIn').dataset.t='';$('#upIn').click()};
+$('#hUp').onclick=()=>{$('#upIn').dataset.t='';$('#upIn').click()};
+$('#upIn').onchange=e=>handleUp([...e.target.files]);
+function renderLib(){
+ const h=S.lib.length?S.lib.map((l,i)=>`<div data-i="${i}" title="${attr(l.name)}"><img src="${attr(l.url)}" alt=""><button data-cp="${i}" title="Salin link">🔗</button><button data-rm="${i}" title="Hapus gambar" style="right:auto;left:2px;bottom:auto;top:2px">🗑</button></div>`).join(''):'<div class="hint" style="grid-column:1/-1;aspect-ratio:auto;border:0">Belum ada gambar</div>';
+ $('#lib1').innerHTML=h;$('#lib2').innerHTML=h;
+}
+function libClick(e){
+ const c=e.target.closest('[data-cp]'),d=e.target.closest('[data-i]');if(!d)return;
+ const l=S.lib[+d.dataset.i];
+ if(e.target.closest('[data-rm]'))return rmImg(+d.dataset.i);
+ if(c)return copyText(l.url);
+ if(S.mode==='dnd'){const f=S.sel&&S.sel.t==='b'&&findB(S.sel.id);if(f&&(f.b.type==='image'||f.b.type==='frame')){f.b.p.src=l.url;renderAll()}else addBlock('image',l.url)}
+ else{const ta=$('#code'),s=`<img src="${l.url}" alt="" style="max-width:100%;height:auto;display:block">`;ta.setRangeText(s,ta.selectionStart,ta.selectionEnd,'end');S.html=ta.value;save();toast('Gambar disisipkan')}
+}
+$('#lib1').onclick=libClick;$('#lib2').onclick=libClick;
+let rmIdx=-1;
+function rmImg(i){
+ const l=S.lib[i];if(!l)return;rmIdx=i;
+ const used=JSON.stringify(S.rows).includes(l.url)||S.html.includes(l.url);
+ $('#dlgImg').src=l.url;
+ $('#dlgMsg').textContent=used?'Gambar ini masih dipakai di desain. Jika dihapus, gambar tersebut juga hilang dari email.':'Gambar akan dihapus dari “Gambar saya” dan tidak bisa dikembalikan.';
+ $('#dlg').classList.remove('hid');
+}
+$('#dlgNo').onclick=()=>$('#dlg').classList.add('hid');
+$('#dlg').onclick=e=>{if(e.target.id==='dlg')$('#dlg').classList.add('hid')};
+$('#dlgYes').onclick=async()=>{
+ const l=S.lib[rmIdx];$('#dlg').classList.add('hid');if(!l)return;
+ S.rows.forEach(r=>r.cols.forEach(c=>c.forEach(b=>{if(b.p&&b.p.src===l.url)b.p.src=''})));
+ if(l.id&&assets){try{await assets.delete(l.id)}catch(e){}}
+ const k=S.lib.indexOf(l);if(k>=0)S.lib.splice(k,1);
+ renderAll();toast('Gambar dihapus');
+};
+function copyText(t){navigator.clipboard.writeText(t).then(()=>toast('Link disalin'),()=>{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();toast('Link disalin')})}
+
+/* ---------- HTML mode ---------- */
+let apT;$('#code').oninput=e=>{S.html=e.target.value;save();if(S.autoPrev){clearTimeout(apT);apT=setTimeout(()=>{$('#hFrame').srcdoc=pz(S.html,'Nama')},300)}};
+$('#hPrev').onclick=()=>{$('#hFrame').srcdoc=pz(S.html,'Nama')};
+$('#hNext').onclick=()=>go('prev');
+
+/* ---------- preview & tes ---------- */
+$('#pd').onclick=()=>{$('#frame').className='';$('#pd').classList.add('on');$('#pm').classList.remove('on')};
+$('#pm').onclick=()=>{$('#frame').className='m';$('#pm').classList.add('on');$('#pd').classList.remove('on')};
+$('#back').onclick=()=>navBack('edit');$('#toSend').onclick=()=>go('send');
+$('#testTo').oninput=e=>{S.testTo=e.target.value;save()};
+$('#test').onclick=async()=>{
+ const to=S.testTo.trim()||S.from.trim();
+ if(!/^\S+@\S+\.\S+$/.test(to)){toast('Isi email tujuan tes dulu');return}
+ const subj='[TES] '+pz(S.subj||'Tanpa subject','Nama'),html=pz(getHtml(),'Nama');
+ if(!useApi()){gmail({to,subj,html});return}
+ if(!await needApi())return;
+ const b=$('#test');b.disabled=true;b.textContent=L('Mengirim…','Sending…');
+ try{await gSend({to,subj,html});toast(L('Email tes terkirim ke ','Test email sent to ')+to+L('. Cek inbox (atau tab Promosi/Spam).','. Check the inbox (or Promotions/Spam).'))}
+ catch(e){toast(e.message)}
+ finally{b.disabled=false;renderConn()}
+};
+
+/* ---------- kirim ---------- */
+['to','subj'].forEach(k=>$('#'+k).addEventListener('input',e=>{S[k]=e.target.value;if(S.view==='send')renderRcpt();save()}));
+['#from','#testFrom'].forEach(id=>$(id).addEventListener('input',e=>{S.from=e.target.value;['#from','#testFrom'].forEach(o=>{if(o!==id)$(o).value=S.from});renderConn();save()}));
+function contacts(){
+ const m=new Map(),add=(n,e)=>{e=String(e||'').trim().toLowerCase();if(/^\S+@\S+\.\S+$/.test(e)&&!m.has(e))m.set(e,{name:String(n||'').trim(),email:e})};
+ S.upl.forEach(c=>add(c.name,c.email));
+ S.to.split(/[,;\n]+/).forEach(x=>{const k=x.match(/^\s*(.*?)\s*<(.+)>\s*$/);k?add(k[1],k[2]):add('',x)});
+ return[...m.values()];
+}
+function renderRcpt(){
+ const c=contacts(),api=useApi(),st=x=>job.st[x.email]||'';$('#cnt').textContent=c.length?`(${c.length})`:'';
+ const done=c.filter(x=>st(x)==='ok').length,fail=c.filter(x=>st(x).startsWith('err')).length,left=c.length-done,dis=!c.length||job.run?' disabled':'';
+ $('#sendActs').innerHTML=api
+  ?`<button class="pri" id="oneBtn"${dis}>✉ ${L('Kirim email','Send email')}</button>`+(c.length>1?`<button id="seqBtn"${dis||(!left?' disabled':'')}>${job.arm?L('Yakin? Klik lagi untuk kirim','Sure? Click again to send'):'👤 '+(done&&left?L('Satu per satu ke sisa','One by one to remaining')+` (${left})`:L('Satu per satu','One by one')+` (${c.length})`)}</button><button id="bccBtn"${dis}>${L('Sekaligus (BCC)','All at once (BCC)')}</button>`:'')+(job.run?`<button class="danger" id="stopBtn">■ ${L('Berhenti','Stop')}</button>`:'')+((done||fail)&&!job.run?`<button class="ghost" id="rstBtn">${L('Reset status','Reset status')}</button>`:'')
+  :`<button class="pri" id="oneBtn"${!c.length?' disabled':''}>✉ ${L('Buka di Gmail','Open in Gmail')}</button>`+(c.length>1?`<button id="bccBtn">${L('Sekaligus (BCC)','All at once (BCC)')}</button>`:'');
+ $('#sendProg').innerHTML=api&&c.length&&(job.run||done||fail)?`<div class="prog"><i style="width:${Math.round(done/c.length*100)}%"></i></div><div class="hint">${L('Terkirim','Sent')} ${done}/${c.length}${fail?` · ${fail} ${L('gagal','failed')}`:''}${job.run?' · '+L('jangan tutup tab ini','keep this tab open'):''}</div>`:'';
+ const chip=x=>{const v=st(x);return v==='ok'?`<span class="st ok">✓ ${L('Terkirim','Sent')}</span>`:v==='run'?`<span class="st run">${L('Mengirim…','Sending…')}</span>`:v.startsWith('err')?`<span class="st err" title="${attr(v.slice(4))}">✗ ${L('Gagal','Failed')}</span>`:''};
+ $('#rcpt').innerHTML=c.length?c.map((x,i)=>`<div class="rc"><span>${esc(x.name||'—')} <small>${esc(x.email)}</small></span><span class="acts">${api?chip(x):''}<button data-i="${i}"${api&&(job.run||st(x)==='run')?' disabled':''}>${api?(st(x)==='ok'?L('Kirim lagi','Send again'):L('Kirim','Send')):L('Buka di Gmail','Open in Gmail')}</button></span></div>`).join(''):`<div class="hint">${L('Isi kolom To atau upload Excel.','Fill in the To field or upload Excel.')}</div>`;
+ $('#sendNote').textContent=api
+  ?L('“Kirim email” mengirim 1 email biasa dari akun From ke semua alamat di To (penerima saling melihat). Jika penerima lebih dari satu: “Satu per satu” mengirim email terpisah yang menyapa tiap orang dengan namanya, “Sekaligus (BCC)” mengirim 1 email tanpa saling melihat. Batas Gmail pribadi ±500 penerima/hari.','“Send email” sends 1 normal email from the From account to every address in To (recipients see each other). With several recipients: “One by one” sends separate emails greeting each person by name, “All at once (BCC)” sends 1 email where nobody sees the others. Personal Gmail allows about 500 recipients/day.')
+  :L('Gmail terbuka dengan penerima dan subject terisi, dan desain sudah disalin otomatis. Tempel dengan Ctrl+V di badan email, lalu kirim. Pastikan sudah login ke akun From. “Buka di Gmail” per orang menyapa dengan namanya.','Gmail opens with the recipients and subject filled in, and the design is copied automatically. Paste it with Ctrl+V into the email body, then send. Make sure you are signed in to the From account. “Open in Gmail” per person greets them by name.');
+}
+$('#xlBtn').onclick=()=>$('#xlIn').click();
+$('#xlTpl').onclick=async()=>{
+ if(typeof XLSX==='undefined'){toast('Modul Excel gagal dimuat. Muat ulang halaman.');return}
+ try{
+  const dl=await claude.use('downloads');if(!dl){toast('Unduhan tidak tersedia di tampilan ini.');return}
+  const ws=XLSX.utils.aoa_to_sheet([['Nama','Email'],['Budi Santoso','budi@gmail.com'],['Siti Aminah','siti@yahoo.com']]);ws['!cols']=[{wch:26},{wch:34}];
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Penerima');
+  await dl.save({filename:'template-penerima.xlsx',data:XLSX.write(wb,{bookType:'xlsx',type:'array'})});
+ }catch(e){if(!e||e.code!=='declined')toast('Template gagal dibuat')}
+};
+$('#xlClr').onclick=()=>{S.upl=[];renderRcpt();save()};
+$('#xlIn').onchange=async e=>{
+ const f=e.target.files[0];if(!f)return;
+ if(typeof XLSX==='undefined'){toast('Pembaca Excel gagal dimuat. Coba muat ulang halaman.');return}
+ try{
+  const wb=XLSX.read(await f.arrayBuffer()),rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''});
+  const get=(r,re)=>{const k=Object.keys(r).find(k=>re.test(k.trim()));return k?r[k]:''};
+  const list=rows.map(r=>({name:get(r,/^(nama|name)$/i),email:get(r,/^(e-?mail|email)$/i)})).filter(x=>x.email);
+  S.upl=list;renderRcpt();save();toast(list.length?`${list.length} kontak dibaca`:'Kolom “Email” tidak ditemukan');
+ }catch(err){toast('File tidak bisa dibaca')}
+ e.target.value='';
+};
+$('#v-send').addEventListener('click',async e=>{
+ const b=e.target.closest('button');if(!b||b.disabled)return;
+ if(b.closest('#rcpt')){
+  const c=contacts()[+b.dataset.i];if(!c)return;
+  if(!useApi()){if(!checkFrom())return;gmail({to:c.email,subj:pz(S.subj||'Tanpa subject',c.name),html:pz(getHtml(),esc(c.name))});b.textContent=L('✓ Dibuka','✓ Opened');return}
+  if(!await needApi())return;
+  job.st[c.email]='run';renderRcpt();
+  try{await gSend({to:addr(c),subj:pz(S.subj||'Tanpa subject',c.name),html:pz(getHtml(),esc(c.name))});job.st[c.email]='ok';toast(L('Terkirim ke ','Sent to ')+c.email)}
+  catch(err){job.st[c.email]='err:'+err.message;toast(err.message)}
+  renderRcpt();return}
+ if(b.id==='seqBtn'){if(!job.arm){job.arm=1;renderRcpt();clearTimeout(job.at);job.at=setTimeout(()=>{job.arm=0;renderRcpt()},4000);return}job.arm=0;clearTimeout(job.at);runSeq()}
+ else if(b.id==='bccBtn')runBcc();
+ else if(b.id==='oneBtn')runOne();
+ else if(b.id==='stopBtn'){job.stop=true;b.disabled=true;b.textContent=L('Menghentikan…','Stopping…')}
+ else if(b.id==='rstBtn'){job.st={};renderRcpt()}
+});
+$('#method').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.method=b.dataset.m;save();renderConn()};
+addEventListener('beforeunload',e=>{if(job.run){e.preventDefault();e.returnValue=''}});
+const checkFrom=()=>/\S+@\S+\.\S+/.test(S.from)||(toast('Isi email From dulu'),false);
+function copyRich(html){
+ const body=new DOMParser().parseFromString(html,'text/html').body.innerHTML;
+ const fb=()=>{const d=document.createElement('div');d.contentEditable='true';d.style.cssText='position:fixed;left:-9999px;top:0';d.innerHTML=body;document.body.appendChild(d);const r=document.createRange();r.selectNodeContents(d);const s=getSelection();s.removeAllRanges();s.addRange(r);let ok=false;try{ok=document.execCommand('copy')}catch(e){}s.removeAllRanges();d.remove();return ok};
+ try{return navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([body],{type:'text/html'}),'text/plain':new Blob([body.replace(/<[^>]+>/g,' ')],{type:'text/plain'})})]).then(()=>true,()=>fb())}catch(e){return Promise.resolve(fb())}
+}
+function gmail({to,bcc,subj,html}){
+ const f=S.from.trim();
+ window.open('https://mail.google.com/mail/?view=cm&fs=1&to='+enc(to)+(bcc?'&bcc='+enc(bcc):'')+'&su='+enc(subj)+(f?'&authuser='+enc(f):''),'_blank','noopener');
+ copyRich(html).then(ok=>toast(ok?'Desain disalin. Tempel (Ctrl+V) di badan email Gmail.':'Gagal menyalin otomatis. Salin dari tab preview lalu tempel.'));
+}
+
+/* ---------- Gmail API: login Google + kirim langsung ---------- */
+const CFG=window.MAILCRAFT_CONFIG||{};
+const G_SEND='https://www.googleapis.com/auth/gmail.send';
+const G_SCOPE=G_SEND+' https://www.googleapis.com/auth/userinfo.email openid';
+const GK='mailcraft-gmail';
+let GA={},job={st:{},run:false,stop:false,arm:0};// GA: akun Gmail yang terhubung {email:{tok,exp}}
+try{GA=JSON.parse(sessionStorage.getItem(GK))||{};if(GA.email)GA={}}catch(e){}
+const gCid=()=>String(S.gcid||CFG.googleClientId||'').trim();
+const fromAcc=()=>String(S.from||'').trim().toLowerCase();
+const accOn=e=>!!(GA[e]&&GA[e].tok&&GA[e].exp>Date.now());
+const gOn=()=>accOn(fromAcc());
+const setFrom=v=>{S.from=v;$('#from').value=v;$('#testFrom').value=v;save()};
+const useApi=()=>(S.method||'api')==='api';
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function gSave(){try{sessionStorage.setItem(GK,JSON.stringify(GA))}catch(e){}}
+let gsiP=null,tc=null,tcCid='',tcCb=null;
+function loadGsi(){
+ if(window.google&&google.accounts&&google.accounts.oauth2)return Promise.resolve();
+ return gsiP||(gsiP=new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';s.async=true;s.onload=res;s.onerror=()=>{gsiP=null;s.remove();rej(new Error(L('Gagal memuat login Google. Cek koneksi internet.','Could not load Google sign-in. Check your connection.')))};document.head.appendChild(s)}));
+}
+function gConnect(hint,pick){
+ if(!gCid()){showSetup();return Promise.reject(new Error('setup'))}
+ if(location.protocol==='file:'){toast(L('Login Google tidak bisa dari file lokal. Buka lewat http://localhost atau domain live.','Google sign-in does not work from a local file. Open it via http://localhost or your live domain.'));return Promise.reject(new Error('file'))}
+ return loadGsi().then(()=>new Promise((res,rej)=>{
+  if(!tc||tcCid!==gCid()){tcCid=gCid();tc=google.accounts.oauth2.initTokenClient({client_id:tcCid,scope:G_SCOPE,callback:r=>tcCb&&tcCb(r),error_callback:e=>tcCb&&tcCb({error:e&&e.type||'unknown'})})}
+  tcCb=async r=>{tcCb=null;
+   if(r.error){rej(new Error(r.error==='popup_closed'?L('Login dibatalkan.','Sign-in cancelled.'):r.error==='popup_failed_to_open'?L('Popup login diblokir browser. Izinkan popup untuk situs ini.','The sign-in popup was blocked. Allow popups for this site.'):r.error==='access_denied'?L('Akses ditolak. Pastikan akunmu terdaftar sebagai test user.','Access denied. Make sure your account is listed as a test user.'):L('Login Google gagal: ','Google sign-in failed: ')+(r.error_description||r.error)));return}
+   if(!google.accounts.oauth2.hasGrantedAllScopes(r,G_SEND)){rej(new Error(L('Izin “Kirim email” belum dicentang. Hubungkan lagi dan centang izinnya.','The “Send email” permission was not ticked. Connect again and tick it.')));return}
+   let em='';try{const u=await(await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+r.access_token}})).json();em=String(u.email||'').toLowerCase()}catch(e){}
+   if(!em){rej(new Error(L('Tidak bisa membaca alamat akun Google. Coba lagi.','Could not read the Google account address. Try again.')));return}
+   GA[em]={tok:r.access_token,exp:Date.now()+((+r.expires_in||3600)-60)*1000};gSave();setFrom(em);renderConn();
+   if(hint&&hint!==em){const e=new Error(L(`Kamu login sebagai ${em}, bukan ${hint}. From diganti ke ${em}. Cek lalu klik kirim lagi.`,`You signed in as ${em}, not ${hint}. From was changed to ${em}. Check it, then click send again.`));e.mismatch=1;rej(e);return}
+   res(em)};
+  tc.requestAccessToken(Object.assign({prompt:pick||!hint?'select_account':''},hint?{login_hint:hint}:{}));
+ }));
+}
+function gDisconnect(em){
+ const t=GA[em]&&GA[em].tok;delete GA[em];gSave();
+ if(t&&window.google&&google.accounts&&google.accounts.oauth2)try{google.accounts.oauth2.revoke(t,()=>{})}catch(e){}
+ renderConn();toast(L('Gmail diputus.','Gmail disconnected.'));
+}
+async function needApi(){
+ const f=fromAcc();
+ if(f&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f)){toast(L('Alamat From tidak valid.','The From address is not valid.'));return false}
+ if(accOn(f))return true;
+ try{await gConnect(f,!f);return true}catch(e){if(!/^(setup|file)$/.test(e.message))toast(e.message);return false}
+}
+
+/* MIME: HTML + teks biasa + gambar base64 jadi lampiran inline (cid:) agar tampil di Gmail */
+function b64(s){const u=typeof s==='string'?new TextEncoder().encode(s):s;let o='';for(let i=0;i<u.length;i+=0x8000)o+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(o)}
+const wrap76=s=>s.replace(/.{1,76}/g,'$&\r\n');
+function hEnc(s){
+ s=String(s).replace(/[\r\n]+/g,' ');if(/^[\x20-\x7e]*$/.test(s))return s;
+ const te=new TextEncoder(),out=[];let cur='';
+ for(const ch of s){if(te.encode(cur+ch).length>45){out.push(cur);cur=''}cur+=ch}
+ if(cur)out.push(cur);return out.map(p=>'=?UTF-8?B?'+b64(p)+'?=').join('\r\n ');
+}
+function addr(c){const n=String(c.name||'').replace(/["\\<>\r\n]/g,'').trim();return n?(/^[\x20-\x7e]*$/.test(n)?'"'+n+'"':hEnc(n))+' <'+c.email+'>':c.email}
+function toText(html){
+ const d=new DOMParser().parseFromString(html.replace(/<(br|\/p|\/div|\/tr|\/h[1-6]|\/li|\/table)\b[^>]*>/gi,'$&\n'),'text/html');
+ d.querySelectorAll('style,script,title').forEach(n=>n.remove());
+ d.querySelectorAll('a[href]').forEach(a=>{const h=a.getAttribute('href'),t=a.textContent.trim();if(/^https?:/i.test(h)&&t&&t!==h)a.append(' ('+h+')')});
+ return(d.body?d.body.textContent:'').replace(/[ \t\u00a0]+/g,' ').replace(/ *\n */g,'\n').replace(/\n{3,}/g,'\n\n').trim();
+}
+function buildMime({from,to,bcc,subj,html}){
+ const imgs=[],seen=new Map(),N='\r\n',tag=Date.now().toString(36);
+ html=html.replace(/data:(image\/[a-z0-9.+-]+);base64,([a-z0-9+/=\s]+)/gi,(m,t,d)=>{d=d.replace(/\s+/g,'');let id=seen.get(d);if(!id){id='img'+(imgs.length+1)+'.'+tag+'@mailcraft';seen.set(d,id);imgs.push({t:t.toLowerCase(),d,id})}return 'cid:'+id});
+ const bd=()=>'=_mc_'+Math.random().toString(36).slice(2)+tag,A=bd(),R=bd();
+ const part=(type,data)=>'Content-Type: '+type+'; charset=UTF-8'+N+'Content-Transfer-Encoding: base64'+N+N+wrap76(b64(data));
+ const htmlPart=!imgs.length?part('text/html',html):'Content-Type: multipart/related; boundary="'+R+'"'+N+N+'--'+R+N+part('text/html',html)
+  +imgs.map((m,i)=>{const ext=m.t.split('/')[1].replace('jpeg','jpg').replace(/\+.*/,''),fn='gambar'+(i+1)+'.'+ext;
+   return '--'+R+N+'Content-Type: '+m.t+'; name="'+fn+'"'+N+'Content-Transfer-Encoding: base64'+N+'Content-ID: <'+m.id+'>'+N+'Content-Disposition: inline; filename="'+fn+'"'+N+N+wrap76(m.d)}).join('')+'--'+R+'--'+N;
+ return['From: '+from,'To: '+to,bcc?'Bcc: '+bcc:'','Subject: '+hEnc(subj),'MIME-Version: 1.0','X-Mailer: MailCraft','Content-Type: multipart/alternative; boundary="'+A+'"'].filter(Boolean).join(N)
+  +N+N+'--'+A+N+part('text/plain',toText(html))+'--'+A+N+htmlPart+'--'+A+'--'+N;
+}
+const authErr=()=>{delete GA[fromAcc()];gSave();renderConn();const e=new Error(L('Sesi Gmail habis. Klik “Hubungkan ulang”, lalu lanjutkan.','Gmail session expired. Click “Reconnect”, then continue.'));e.auth=1;return e};
+async function gSend(m){
+ const acc=fromAcc(),raw=buildMime(Object.assign({from:addr({email:acc})},m));
+ for(let a=0;;a++){
+  if(!accOn(acc))throw authErr();
+  let r;
+  try{r=await fetch('https://gmail.googleapis.com/upload/gmail/v1/users/me/messages/send?uploadType=media',{method:'POST',headers:{Authorization:'Bearer '+(GA[acc]||{}).tok,'Content-Type':'message/rfc822'},body:raw})}
+  catch(e){if(a<3){await sleep(2000*(a+1));continue}throw new Error(L('Koneksi internet bermasalah.','Network problem.'))}
+  if(r.ok)return r.json();
+  let j={};try{j=await r.json()}catch(e){}
+  const msg=(j.error&&j.error.message)||('HTTP '+r.status);
+  if(r.status===401)throw authErr();
+  if((r.status===429||r.status>=500)&&a<3){const ra=+r.headers.get('Retry-After');await sleep(ra>0&&ra<=60?ra*1000:4000*2**a);continue}
+  if(r.status===403&&/insufficient/i.test(msg))throw authErr();
+  const e=new Error(/has not been used|is disabled|accessNotConfigured/i.test(msg)?L('Gmail API belum diaktifkan di Google Cloud project (lihat panduan langkah 2).','Gmail API is not enabled in the Google Cloud project (see setup step 2).')
+   :/invalid to header|invalid.*address|recipient address/i.test(msg)?L('Alamat email penerima tidak valid.','Invalid recipient address.')
+   :r.status===429||/limit/i.test(msg)?L('Batas kirim Gmail tercapai. Coba lagi nanti (batas harian akun pribadi ±500 penerima).','Gmail sending limit reached. Try again later (personal accounts allow about 500 recipients/day).'):msg);
+  if(r.status===429||/limit/i.test(msg))e.stop=1;
+  throw e;
+ }
+}
+async function runSeq(){
+ const list=contacts().filter(x=>job.st[x.email]!=='ok');if(!list.length)return;
+ if(!await needApi())return;
+ const subj=S.subj||'Tanpa subject',html=getHtml(),gap=Math.max(1,+S.delay||2)*1000;
+ job.run=true;job.stop=false;let ok=0,bad=0;renderRcpt();
+ for(let i=0;i<list.length&&!job.stop;i++){
+  const x=list[i];job.st[x.email]='run';renderRcpt();
+  try{await gSend({to:addr(x),subj:pz(subj,x.name),html:pz(html,esc(x.name))});job.st[x.email]='ok';ok++}
+  catch(e){job.st[x.email]='err:'+e.message;bad++;if(e.auth||e.stop){job.stop=true;toast(e.message)}}
+  renderRcpt();
+  if(i<list.length-1&&!job.stop)await sleep(gap);
+ }
+ const stopped=job.stop;job.run=false;job.stop=false;renderRcpt();
+ if(!stopped||ok)toast(L(`Selesai: ${ok} terkirim`,`Done: ${ok} sent`)+(bad?L(`, ${bad} gagal`,`, ${bad} failed`):''));
+}
+async function runOne(){
+ const c=contacts();if(!c.length){toast(L('Isi kolom To dulu.','Fill in the To field first.'));return}
+ const nm=c.length===1?c[0].name:'',subj=pz(S.subj||'Tanpa subject',nm),html=pz(getHtml(),esc(nm));
+ if(!useApi()){if(!checkFrom())return;gmail({to:c.map(x=>x.email).join(','),subj,html});return}
+ if(!await needApi())return;
+ job.run=true;c.forEach(x=>job.st[x.email]='run');renderRcpt();
+ try{await gSend({to:c.map(addr).join(', '),subj,html});c.forEach(x=>job.st[x.email]='ok');toast(L('Email terkirim dari ','Email sent from ')+fromAcc())}
+ catch(e){c.forEach(x=>job.st[x.email]='err:'+e.message);toast(e.message)}
+ job.run=false;renderRcpt();
+}
+async function runBcc(){
+ const c=contacts();if(!c.length){toast('Belum ada penerima');return}
+ if(!useApi()){if(!checkFrom())return;gmail({to:S.from.trim(),bcc:c.map(x=>x.email).join(','),subj:pz(S.subj||'Tanpa subject',''),html:pz(getHtml(),'')});return}
+ if(!await needApi())return;
+ const subj=pz(S.subj||'Tanpa subject',''),html=pz(getHtml(),''),N=90;
+ job.run=true;renderRcpt();let ok=0;
+ for(let i=0;i<c.length;i+=N){
+  const ch=c.slice(i,i+N);ch.forEach(x=>job.st[x.email]='run');renderRcpt();
+  try{await gSend({to:addr({email:fromAcc()}),bcc:ch.map(x=>x.email).join(', '),subj,html});ch.forEach(x=>job.st[x.email]='ok');ok+=ch.length}
+  catch(e){ch.forEach(x=>job.st[x.email]='err:'+e.message);toast(e.message);if(e.auth||e.stop)break}
+  renderRcpt();if(i+N<c.length)await sleep(Math.max(1,+S.delay||2)*1000);
+ }
+ job.run=false;renderRcpt();if(ok)toast(L(`Terkirim ke ${ok} penerima (BCC)`,`Sent to ${ok} recipients (BCC)`));
+}
+
+const GICON='<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>';
+function renderConn(){
+ const api=useApi(),on=gOn();
+ document.querySelectorAll('#method button').forEach(b=>b.classList.toggle('on',(b.dataset.m==='api')===api));
+ let h;
+ if(!api)h=`<div class="hint" style="margin:0">${L('Mode manual: Gmail terbuka di tab baru dengan penerima & subject terisi, desain disalin otomatis, lalu kamu tempel (Ctrl+V) dan klik Kirim di Gmail.','Manual mode: Gmail opens in a new tab with recipients & subject filled in, the design is copied automatically, then you paste (Ctrl+V) and click Send in Gmail.')}</div>`;
+ else if(!gCid())h=`<div class="who">⚠ ${L('Koneksi Gmail belum disiapkan untuk situs ini.','The Gmail connection is not set up for this site yet.')}</div><div class="row2"><button class="pri" data-g="setup">${L('Siapkan koneksi Gmail','Set up Gmail connection')}</button></div>`;
+ else{
+  const f=fromAcc(),acc=Object.keys(GA).filter(accOn);
+  h=acc.map(e=>`<div class="who" style="margin-bottom:6px"><i class="dot"></i><b>${esc(e)}</b>${e===f?` <span class="st ok">${L('dipakai sebagai From','used as From')}</span>`:`<button class="ghost" data-g="use" data-e="${attr(e)}">${L('Pakai','Use')}</button>`}<button class="ghost" data-g="out" data-e="${attr(e)}">${L('Putuskan','Disconnect')}</button></div>`).join('')
+   +`<button class="gbtn" data-g="in">${GICON}${acc.length?L('Tambah akun Gmail lain','Add another Gmail account'):L('Hubungkan Gmail','Connect Gmail')}</button>`
+   +(acc.length?'':`<div class="hint">${L('Login dengan akun Google-mu. MailCraft hanya meminta izin mengirim email, tidak bisa membaca inbox, dan tidak menyimpan password.','Sign in with your Google account. MailCraft only asks permission to send email, cannot read your inbox, and never stores your password.')}</div>`);
+ }
+ ['#gconn','#gconn2'].forEach(s=>{const el=$(s);if(el)el.innerHTML=h});
+ $('#gconn2').classList.toggle('hid',!api);
+ const t=$('#test');if(!t.disabled)t.textContent=api?L('🧪 Kirim email tes','🧪 Send test email'):L('🧪 Buka tes di Gmail','🧪 Open test in Gmail');
+ $('#accList').innerHTML=Object.keys(GA).map(e=>`<option value="${attr(e)}">`).join('');
+ const f=fromAcc();
+ $('#fromHint').textContent=!api?L('Pastikan browser sudah login ke akun ini di Gmail.','Make sure this account is signed in to Gmail in this browser.')
+  :!f?L('Isi akun Gmail mana pun yang mau dipakai mengirim.','Enter any Gmail account you want to send from.')
+  :accOn(f)?L('✓ Akun ini sudah terhubung.','✓ This account is connected.')
+  :L('Akun ini belum terhubung. Saat klik kirim, Google akan meminta login akun ini.','This account is not connected yet. When you click send, Google will ask you to sign in to it.');
+ if(S.view==='send')renderRcpt();
+}
+document.addEventListener('click',e=>{
+ const b=e.target.closest('[data-g]');if(!b)return;const g=b.dataset.g;
+ if(g==='setup')showSetup();
+ else if(g==='out')gDisconnect(b.dataset.e);
+ else if(g==='use'){setFrom(b.dataset.e);renderConn()}
+ else gConnect('',true).then(em=>toast(L('Gmail terhubung: ','Gmail connected: ')+em),er=>{if(!/^(setup|file)$/.test(er.message))toast(er.message)});
+});
+function closeSetup(){const d=$('#setup');if(d)d.remove()}
+function showSetup(){
+ closeSetup();
+ const o=location.protocol==='file:'?'http://localhost:8080':location.origin,d=document.createElement('div');
+ d.id='setup';d.className='ovl';
+ d.innerHTML=`<div class="dlgbox" role="dialog" aria-modal="true"><h3>${L('Hubungkan MailCraft ke Gmail','Connect MailCraft to Gmail')}</h3>
+ <div class="hint">${L('Sekali saja, sekitar 10 menit, gratis. Lakukan dengan akun Google pemilik situs.','One time only, about 10 minutes, free. Do this with the site owner’s Google account.')}</div>
+ <ol>
+ <li>${L('Buka','Open')} <a href="https://console.cloud.google.com/projectcreate" target="_blank" rel="noopener">Google Cloud Console</a> ${L('dan buat project baru, misalnya “MailCraft”.','and create a new project, e.g. “MailCraft”.')}</li>
+ <li>${L('Aktifkan','Enable')} <a href="https://console.cloud.google.com/apis/library/gmail.googleapis.com" target="_blank" rel="noopener">Gmail API</a> ${L('untuk project itu.','for that project.')}</li>
+ <li>${L('Buka','Open')} <a href="https://console.cloud.google.com/auth/overview" target="_blank" rel="noopener">Google Auth Platform</a>${L(': isi nama app & email dukungan, pilih Audience “External”. Di menu Audience, tambahkan email Gmail yang boleh mencoba (test users, maks. 100).',': fill in the app name & support email, choose Audience “External”. Under Audience, add the Gmail addresses allowed to try it (test users, max 100).')}</li>
+ <li>${L('Di menu Data Access, klik “Add or remove scopes” dan tambahkan','Under Data Access, click “Add or remove scopes” and add')} <code class="k">${G_SEND}</code>.</li>
+ <li>${L('Di menu Clients, buat client tipe','Under Clients, create a client of type')} <b>Web application</b>. ${L('Isi “Authorized JavaScript origins” dengan alamat situs ini:','Put this site’s address under “Authorized JavaScript origins”:')}<br><code class="k">${esc(o)}</code> <button class="ghost" data-copy="${attr(o)}">${L('Salin','Copy')}</button></li>
+ <li>${L('Salin Client ID-nya. Tempel di config.js agar berlaku untuk semua pengunjung, atau tempel di bawah untuk mencoba di browser ini saja.','Copy the Client ID. Put it in config.js so it works for every visitor, or paste it below to try it in this browser only.')}</li>
+ </ol>
+ <label>Google Client ID</label><input id="cidIn" spellcheck="false" placeholder="1234567890-abc.apps.googleusercontent.com" value="${attr(S.gcid||'')}">
+ <div class="row2" style="justify-content:flex-end"><button class="ghost" data-x="1">${L('Tutup','Close')}</button><button class="pri" id="cidSave">${L('Simpan & hubungkan','Save & connect')}</button></div></div>`;
+ document.body.appendChild(d);
+ d.addEventListener('click',e=>{
+  if(e.target===d||e.target.closest('[data-x]')){closeSetup();return}
+  const c=e.target.closest('[data-copy]');if(c){navigator.clipboard.writeText(c.dataset.copy).then(()=>toast(L('Disalin','Copied')),()=>{})}
+ });
+ $('#cidSave').onclick=()=>{
+  const v=$('#cidIn').value.trim();
+  if(!/^[\w-]+\.apps\.googleusercontent\.com$/.test(v)){toast(L('Client ID harus berakhiran .apps.googleusercontent.com','The Client ID must end with .apps.googleusercontent.com'));return}
+  S.gcid=v;tc=null;save();$('#setCid').value=v;closeSetup();renderConn();
+  gConnect(fromAcc(),!fromAcc()).then(em=>toast(L('Gmail terhubung: ','Gmail connected: ')+em),er=>{if(!/^(setup|file)$/.test(er.message))toast(er.message)});
+ };
+}
+
+/* templates */
+const L=(a,b)=>S.lang==='en'?b:a;
+const H=(t,o)=>mk('heading',Object.assign({text:t},o)),P=(t,o)=>mk('text',Object.assign({text:t},o)),BT=(t,o)=>mk('button',Object.assign({text:t},o)),FR=(w,h,o)=>mk('frame',Object.assign({w,h},o));
+const RW=(cols,o)=>{const r=newRow(cols.length);cols.forEach((c,i)=>r.cols[i]=c);return Object.assign(r,o)};
+const SOC=()=>mk('social',{text:'Instagram|https://instagram.com\nWebsite|https://example.com'});
+const TPL={
+ blank:()=>[newRow(1)],
+ promo:()=>[
+  RW([[P(L('Halo {{nama}},','Hi {{nama}},'),{color:'#d1fae5',align:'center',size:15,py:4}),H(L('Diskon 50% Akhir Pekan Ini!','50% Off This Weekend!'),{color:'#ffffff',size:36,py:6}),P(L('Berlaku sampai Minggu malam. Stok terbatas, jangan sampai kehabisan.','Valid until Sunday night. Limited stock, do not miss out.'),{color:'#ecfeff',align:'center',size:16}),BT(L('Belanja Sekarang','Shop Now'),{bg:'#ffffff',color:'#0f766e',radius:999,bpx:34,py:18})]],{bg:'#0d9488',g2:'#0ea5e9',pad:28}),
+  RW([[FR(600,300,{px:0,py:0})]],{pad:0}),
+  RW([[H(L('Gratis Ongkir','Free Shipping'),{size:18,py:6}),P(L('Untuk semua pesanan di atas Rp100.000.','On all orders over $10.'),{align:'center',size:14})],[H(L('Garansi 30 Hari','30-Day Guarantee'),{size:18,py:6}),P(L('Tidak puas? Uang kembali, tanpa ribet.','Not happy? Money back, no hassle.'),{align:'center',size:14})],[H(L('Bayar di Tempat','Cash on Delivery'),{size:18,py:6}),P(L('Pilih metode bayar yang paling nyaman.','Pick the payment method that suits you.'),{align:'center',size:14})]],{pad:20}),
+  RW([[BT(L('Lihat Semua Produk','See All Products'),{bg:'#0d9488',bg2:'#0ea5e9'})]],{pad:8}),
+  RW([[mk('divider'),SOC(),P(L('Kamu menerima email ini karena terdaftar di daftar kami.','You are receiving this email because you are on our list.'),{size:12,color:'#71717a',align:'center'})]],{bg:'#fafafa',pad:12})
+ ],
+ news:()=>[
+  RW([[H('Newsletter',{size:22,align:'left',color:'#0d9488'})],[P(L('Edisi bulan ini','This month’s edition'),{align:'right',size:13,color:'#71717a',py:22})]],{pad:6}),
+  RW([[FR(600,260,{px:0,py:0})]],{pad:0}),
+  RW([[H(L('Halo {{nama}}, ini kabar terbaru kami','Hi {{nama}}, here is our latest news'),{size:26,align:'left'}),P(L('Tulis pembuka singkat di sini: apa yang baru bulan ini dan kenapa perlu dibaca. [Lihat ringkasannya](https://example.com).','Write a short intro here: what is new this month and why it is worth reading. [See the summary](https://example.com).'))]],{pad:12}),
+  RW([[FR(280,190,{px:12})],[H(L('Artikel Pilihan #1','Featured Story #1'),{size:18,align:'left',py:6}),P(L('Ringkasan dua kalimat tentang artikel ini. [Baca selengkapnya →](https://example.com)','A two-sentence summary of this story. [Read more →](https://example.com)'),{size:14})]],{pad:8}),
+  RW([[H(L('Artikel Pilihan #2','Featured Story #2'),{size:18,align:'left',py:6}),P(L('Ringkasan dua kalimat tentang artikel kedua. [Baca selengkapnya →](https://example.com)','A two-sentence summary of the second story. [Read more →](https://example.com)'),{size:14})],[FR(280,190,{px:12})]],{pad:8}),
+  RW([[H(L('Punya cerita untuk dibagikan?','Have a story to share?'),{size:20}),P(L('Balas email ini dan ceritakan padaku.','Reply to this email and tell me about it.'),{align:'center'}),BT(L('Balas Sekarang','Reply Now'),{bg:'#ea580c'})]],{bg:'#fef3c7',pad:16}),
+  RW([[SOC(),P(L('Kamu menerima email ini karena berlangganan newsletter kami.','You are receiving this because you subscribed to our newsletter.'),{size:12,color:'#71717a',align:'center'})]],{bg:'#fafafa',pad:12})
+ ]
+};
+const HELP={
+alt:['Deskripsi singkat gambar. Tampil saat gambar gagal dimuat, dan dibacakan oleh screen reader.','Short description of the image. Shown when the image fails to load and read aloud by screen readers.'],
+link:['Alamat tujuan jika gambar diklik. Kosongkan jika tidak perlu.','Where to go when the image is clicked. Leave empty if not needed.'],
+fit:['Dipakai jika rasio gambar beda dari frame. “Potong”: sisi gambar terpotong agar frame penuh. “Utuh”: seluruh gambar tampil, ada ruang kosong.','Used when the image ratio differs from the frame. “Crop”: edges are trimmed to fill the frame. “Whole”: the full image shows, with empty space.'],
+ratio:['Memotong gambar ke bentuk tertentu, misalnya 1:1 persegi atau 16:9 lebar. “Asli” berarti tidak dipotong.','Crops the image to a set shape, such as 1:1 square or 16:9 wide. “Original” means no cropping.'],
+ob:['Warna di belakang blok ini saja (selebar email). Klik Reset untuk transparan.','Color behind this block only (full email width). Click Reset for transparent.'],
+bg2:['Isi untuk membuat warna bergradasi dari warna utama ke warna ini. Reset untuk warna polos.','Fill in to blend from the main color to this one. Reset for a flat color.'],
+px:['Ruang kosong di kiri dan kanan. Isi 0 agar isi blok (misalnya gambar) menempel penuh sampai tepi email.','Empty space on the left and right. Enter 0 so the content (such as an image) reaches the edges of the email.'],
+py:['Ruang kosong di atas dan bawah isi blok.','Empty space above and below the block content.'],
+lc:['Warna untuk bagian teks yang diberi hyperlink.','Color for the parts of the text that have a hyperlink.'],
+lh:['Jarak antar baris teks. Angka 1.5 sampai 1.6 nyaman dibaca.','Space between lines of text. 1.5 to 1.6 is comfortable to read.'],
+ls:['Jarak antar huruf. 0 berarti normal.','Space between letters. 0 means normal.'],
+bpx:['Ruang di dalam tombol, di kiri dan kanan tulisan.','Space inside the button, to the left and right of the label.'],
+bpy:['Ruang di dalam tombol, di atas dan bawah tulisan.','Space inside the button, above and below the label.'],
+radius:['Membulatkan sudut. 0 berarti siku.','Rounds the corners. 0 means square corners.'],
+h:['Ruang kosong vertikal di antara dua blok.','Vertical empty space between two blocks.'],
+outer:['Warna di sekeliling kotak email.','Color around the email box.'],
+ew:['Standarnya 600. Di atas 700 sering terpotong di HP dan aplikasi email.','600 is standard. Above 700 it is often cut off on phones and email apps.']
+};
+const hp=k=>HELP[k]?`<div class="hint" style="margin:4px 0 0">${HELP[k][S.lang==='en'?1:0]}</div>`:'';
+const thumbHtml=rows=>rows.map(r=>`<div style="${rbg(r)};padding:${r.pad}px 0"><div style="display:flex">${r.cols.map(c=>`<div style="flex:1;min-width:0">${c.map(b=>blockHtml(b,true)).join('')}</div>`).join('')}</div></div>`).join('');
+function renderTpls(){
+ const it=[['blank',L('Kosong','Blank'),L('Mulai dari kanvas kosong dan bangun emailmu dari nol.','Start from an empty canvas and build your email from scratch.')],['promo',L('Promo & Diskon','Promo & Sale'),L('Hero berwarna, tombol ajakan beli, dan tiga keunggulan produk.','A colorful hero, a buy button, and three product highlights.')],['news','Newsletter',L('Cerita utama, dua artikel pilihan, dan ajakan di bagian bawah.','A lead story, two featured articles, and a call-to-action at the bottom.')]];
+ $('#tpls').innerHTML=it.map(([k,n,d])=>`<div class="tpl" data-t="${k}"><div class="tth">${k==='blank'?'<div class="tplus"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>':`<div class="tin">${thumbHtml(TPL[k]())}</div>`}</div><div class="meta"><strong>${esc(n)}</strong><span>${esc(d)}</span></div></div>`).join('');
+}
+function showTpl(){renderTpls();$('#tplResume').classList.toggle('hid',!S.rows.some(r=>r.cols.some(c=>c.length)));go('tpl')}
+function applyTpl(k){S.mode='dnd';S.rows=TPL[k]();S.sel=null;renderAll();go('edit')}
+$('#tpls').onclick=e=>{const c=e.target.closest('.tpl');if(c)applyTpl(c.dataset.t)};
+$('#tplBack').onclick=()=>navBack('choose');
+$('#tplResumeBtn').onclick=()=>{S.mode='dnd';renderAll();go('edit')};
+/* i18n + settings */
+const EN={
+'Metode kirim':'Sending method','⚡ Langsung via Gmail':'⚡ Directly via Gmail','📋 Buka Gmail & tempel':'📋 Open Gmail & paste',
+'Google Client ID (Gmail API)':'Google Client ID (Gmail API)','Biasanya diisi di config.js. Isi di sini hanya untuk testing di browser ini.':'Usually set in config.js. Fill it here only to test in this browser.',
+'Jeda antar email (detik)':'Delay between emails (seconds)','Jeda saat “Kirim ke semua”. Makin besar, makin aman dari batas Gmail.':'Delay used by “Send to all”. Longer is safer against Gmail limits.',
+'Kebijakan Privasi':'Privacy Policy','Ketentuan':'Terms',
+'Penyimpanan draf di browser penuh. Hapus beberapa gambar di “Gambar saya”.':'Browser draft storage is full. Delete some images in “My images”.',
+'1 · Desain':'1 · Design','2 · Preview & tes':'2 · Preview & test','3 · Kirim':'3 · Send',
+'⚙ Pengaturan':'⚙ Settings','Pengaturan':'Settings','Tema':'Theme','Bahasa':'Language',
+'Otomatis (ikuti perangkat)':'Auto (follow device)','Terang':'Light','Gelap':'Dark',
+'Preview HTML otomatis (live)':'Auto-preview HTML (live)',
+'Jika aktif, preview di mode HTML langsung diperbarui saat kode diketik, tanpa menekan tombol Preview.':'When on, the preview in HTML mode updates as you type, without pressing Preview.',
+'Perangkat preview bawaan':'Default preview device','Font bawaan teks baru':'Default font for new text','Bawaan':'Default',
+'Tanda tangan / footer otomatis':'Signature / automatic footer','Contoh: Dikirim oleh Budi · budi@gmail.com':'Example: Sent by Budi · budi@gmail.com',
+'Ditambahkan di bagian bawah setiap email.':'Added to the bottom of every email.','Hiasan latar halaman depan':'Decorative background on the front page',
+'Reset draf':'Reset draft','Klik lagi untuk konfirmasi':'Click again to confirm','Draf direset':'Draft reset',
+'⚡ Simpel, cepat, tanpa langganan':'⚡ Simple, fast, no subscription',
+'Tulis email sendiri,':'Write your own emails,','kirim langsung lewat Gmail':'send them straight through Gmail',
+'Susun email dengan drag & drop atau kode HTML, cek hasilnya lewat email tes, lalu kirim dari Gmail pribadimu ke siapa saja, tanpa akun perusahaan dan tanpa database besar.':'Build emails with drag & drop or HTML code, check the result with a test email, then send from your personal Gmail to anyone, with no company account and no big database.',
+'Buat Email Sekarang →':'Create Email Now →',
+'Desain Tanpa Ribet':'Effortless Design','Seret, lepas, selesai. Susun kolom, teks, tombol, dan frame gambar semudah main Canva.':'Drag, drop, done. Build columns, text, buttons, and image frames as easily as in Canva.',
+'Gambar Langsung Tayang':'Images Go Live Instantly','Upload gambar, otomatis ikut terkirim di dalam email.':'Upload images and they are sent right inside your email.',
+'Kirim ke Banyak Orang':'Reach Many People','Upload daftar Nama & Email dari Excel, lalu sapa tiap orang dengan {{nama}}.':'Upload a Name & Email list from Excel, then greet everyone with {{nama}}.',
+'Tes Dulu, Kirim Yakin':'Test First, Send With Confidence','Cek tampilan di inbox asli, lalu kirim langsung dari Gmail-mu.':'Check how it looks in a real inbox, then send straight from your Gmail.',
+'← Kembali':'← Back','⠿ Seret':'⠿ Drag','Seret untuk memindah baris':'Drag to move row','Hapus gambar ini?':'Delete this image?','Gambar akan dihapus dari “Gambar saya” dan tidak bisa dikembalikan.':'The image will be removed from “My images” and cannot be restored.','Gambar ini masih dipakai di desain. Jika dihapus, gambar tersebut juga hilang dari email.':'This image is still used in your design. If deleted, it will also disappear from the email.','Batal':'Cancel','Cara gambar mengisi frame':'How the image fills the frame','Potong agar penuh (crop)':'Crop to fill','Tampilkan utuh':'Show whole image','Panjang garis (%)':'Line length (%)','Jenis garis':'Line style','↔ Penuhi lebar email':'↔ Fill email width','Mulai dari mana?':'Where do you want to start?','Pilih template email marketing, atau mulai dari kanvas kosong.':'Pick a marketing email template, or start from a blank canvas.','Mau buat dengan cara apa?':'How do you want to build it?','Pilih cara membuat emailmu.':'Pick how you want to create your email.',
+'Desain Visual':'Visual Designer','Susun layout, gambar, teks, dan tombol dengan seret & lepas. Hasilnya langsung terlihat.':'Arrange layouts, images, text, and buttons by dragging and dropping. See the result instantly.',
+'Mode Kode':'Code Mode','Punya template sendiri? Tempel HTML-nya, preview, lalu kirim.':'Got your own template? Paste the HTML, preview it, and send.',
+'Lanjutkan draf terakhir':'Resume last draft',
+'1 kolom':'1 column','2 kolom':'2 columns','3 kolom':'3 columns','Konten':'Content','Gambar saya':'My images','⬆ Upload gambar':'⬆ Upload images',
+'Klik gambar untuk memakainya (mengisi gambar atau frame yang dipilih). 🔗 salin link, 🗑 hapus.':'Click an image to use it (fills the selected image or frame). 🔗 copy link, 🗑 delete.',
+'Judul':'Heading','Teks':'Text','Gambar':'Image','Tombol':'Button','Garis':'Divider','Spasi':'Spacer','Tautan':'Links',
+'Pengaturan email':'Email settings','Warna latar luar':'Outer background color','Lebar email (px)':'Email width (px)',
+'Klik baris atau konten di kanvas untuk mengubahnya. Seret konten untuk memindah, bahkan antar kolom.':'Click a row or content on the canvas to edit it. Drag content to move it, even between columns.',
+'Lanjut: Preview →':'Next: Preview →','Baris':'Row','Warna latar':'Background color','Hapus baris':'Delete row',
+'Ukuran (px)':'Size (px)','Warna teks':'Text color','Warna link':'Link color','Rata':'Align','Ketebalan':'Weight','Tinggi baris':'Line height','Jarak huruf (px)':'Letter spacing (px)',
+'Warna latar blok (opsional)':'Block background (optional)','Jarak atas & bawah (px)':'Top & bottom spacing (px)','Jarak kiri & kanan (px)':'Left & right spacing (px)',
+'Link saat diklik':'Link when clicked','Teks alternatif':'Alt text','Rasio gambar':'Image ratio','Sudut (px)':'Corner radius (px)','Isi frame':'Frame fill',
+'Teks tombol':'Button text','Link tujuan':'Destination link','Warna tombol':'Button color','Gradien ke warna (opsional)':'Gradient to color (optional)','Ukuran teks':'Text size',
+'Padding tombol kiri/kanan':'Button padding left/right','Padding tombol atas/bawah':'Button padding top/bottom','Lebar tombol':'Button width',
+'Warna':'Color','Ketebalan (px)':'Thickness (px)','Gaya':'Style','Tinggi (px)':'Height (px)','Tautan (satu per baris: Label|URL)':'Links (one per line: Label|URL)','Kode HTML':'HTML code',
+'URL gambar':'Image URL','Ukuran frame (px): lebar × tinggi':'Frame size (px): width × height',
+'Kiri':'Left','Tengah':'Center','Kanan':'Right','Tebal':'Bold','Putus':'Dashed','Titik':'Dotted','Otomatis':'Auto','Penuh':'Full','Asli':'Original','1:1 (persegi)':'1:1 (square)','Penuhi (crop)':'Fill (crop)','Muat utuh':'Fit whole',
+'🔗 Salin link':'🔗 Copy link','Duplikat':'Duplicate','Hapus':'Delete','Terapkan':'Apply','🔗 Pasang link':'🔗 Add link',
+'Atau pilih dari “Gambar saya” di kiri.':'Or pick from “My images” on the left.',
+'Blok sebagian teks, tekan Ctrl+K (⌘K di Mac), tempel URL, lalu Enter. Hanya bagian itu yang jadi hyperlink. Pintasan lain: Ctrl+B tebal, Ctrl+I miring, Ctrl+U garis bawah.':'Select part of the text, press Ctrl+K (⌘K on Mac), paste the URL, then press Enter. Only that part becomes a hyperlink. Other shortcuts: Ctrl+B bold, Ctrl+I italic, Ctrl+U underline.',
+'Rasio sekarang:':'Current ratio:','Tombol rasio dan Terapkan mengubah tinggi mengikuti lebar. Gambar yang diupload langsung ke frame ini di-crop persis sesuai ukuran.':'The ratio buttons and Apply change the height to match the width. Images uploaded straight into this frame are cropped to exactly this size.',
+'https://… atau upload':'https://… or upload','https://… untuk teks yang diblok':'https://… for the selected text','Rasio kustom, mis. 13:5':'Custom ratio, e.g. 13:5',
+'Seret layout ke sini untuk memulai':'Drag a layout here to start','Seret konten ke sini':'Drag content here','Belum ada gambar':'No images yet','Pilih atau upload gambar':'Choose or upload an image',
+'Tempel HTML emailmu di sini':'Paste your email HTML here','Upload gambar untuk mendapat link publik; klik gambar di bawah untuk menyisipkannya di posisi kursor.':'Upload an image to get a public link; click an image below to insert it at the cursor.',
+'Preview HTML':'HTML preview','Preview email':'Email preview','Lanjut →':'Next →',
+'Kirim email tes':'Send a test email','Lihat hasil wireframe di inbox asli sebelum dikirim ke penerima.':'See your layout in a real inbox before sending to recipients.','Email tujuan tes':'Test recipient email',
+'🧪 Kirim tes via Gmail':'🧪 Send test via Gmail','← Edit lagi':'← Edit again','Lanjut ke pengiriman →':'Continue to sending →',
+'Detail email':'Email details','From (akun Gmail pengirim)':'From (sender Gmail account)','To (pisahkan dengan koma)':'To (separate with commas)','⬇ Template Excel':'⬇ Excel template','Hapus hasil upload':'Clear uploaded list',
+'Tulis {{nama}} di teks atau subject untuk menyapa tiap penerima dengan namanya dari Excel. Kolom yang dibaca: Nama dan Email.':'Write {{nama}} in the text or subject to greet each recipient by the name in your Excel file. Columns read: Nama and Email.',
+'Penerima':'Recipients','Kirim sekaligus (BCC)':'Send all at once (BCC)','Satu per satu':'One by one','Isi kolom To atau upload Excel.':'Fill in the To field or upload Excel.','✓ Dibuka':'✓ Opened',
+'Gmail terbuka dengan penerima dan subject terisi, dan desain sudah disalin otomatis. Tempel dengan Ctrl+V di badan email, lalu kirim. Pastikan sudah login ke akun From. “Satu per satu” menyapa dengan nama tiap orang.':'Gmail opens with the recipients and subject filled in, and the design is copied automatically. Paste it with Ctrl+V in the email body, then send. Make sure you are logged in to the From account. “One by one” greets each person by name.',
+'Judul email':'Email title','Tulis isi emailmu di sini.':'Write your email content here.','Klik di sini':'Click here','Halo {{nama}}!':'Hello {{nama}}!','Baca selengkapnya':'Read more',
+'Ini contoh email buatanmu. Seret blok dari kiri, lalu ubah isinya di panel kanan. Blok sebagian teks untuk memberi [link](https://example.com).':'This is a sample email. Drag blocks from the left, then edit them in the right panel. Select part of the text to add a [link](https://example.com).',
+'Hapus gambar':'Delete image','Salin link':'Copy link',
+'Link disalin':'Link copied','Gambar dihapus':'Image deleted','Gambar masih dipakai di desain. Lepas dulu dari desain.':'This image is still used in your design. Remove it from the design first.',
+'Gambar disimpan di draf dan ikut terkirim di dalam email.':'Image saved in your draft and sent inside the email.','Gambar diunggah. Klik gambar untuk menyisipkan.':'Image uploaded. Click it to insert.','Gambar disisipkan':'Image inserted',
+'Isi email tujuan tes dulu':'Enter a test recipient email first','Isi email From dulu':'Enter the From email first','Belum ada penerima':'No recipients yet',
+'Pembaca Excel gagal dimuat. Coba muat ulang halaman.':'The Excel reader failed to load. Try reloading the page.','Modul Excel gagal dimuat. Muat ulang halaman.':'The Excel module failed to load. Reload the page.',
+'Unduhan tidak tersedia di tampilan ini.':'Downloads are not available in this view.','Template gagal dibuat':'Could not create the template','File tidak bisa dibaca':'The file could not be read','Kolom “Email” tidak ditemukan':'Column “Email” not found',
+'Blok dulu teks yang ingin diubah':'Select the text you want to change first','Blok dulu teks yang mau dijadikan link':'Select the text you want to turn into a link first',
+'Isi URL lengkap, contoh https://…':'Enter a full URL, e.g. https://…','Format rasio: lebar:tinggi, mis. 13:5':'Ratio format: width:height, e.g. 13:5',
+'Desain disalin. Tempel (Ctrl+V) di badan email Gmail.':'Design copied. Paste (Ctrl+V) into the Gmail email body.','Gagal menyalin otomatis. Salin dari tab preview lalu tempel.':'Automatic copy failed. Copy from the preview tab, then paste.'
+};
+const ENRE=[[/^(\d+) kontak dibaca$/,'$1 contacts loaded']];
+const tx=s=>S.lang==='en'&&EN[s]!==undefined?EN[s]:s;
+const orig=new WeakMap(),oa=new WeakMap();
+function trs(s){const t=s.trim();if(!t)return s;let r=EN[t];if(r===undefined)for(const[re,rep]of ENRE)if(re.test(t)){r=t.replace(re,rep);break}return r===undefined?s:s.replace(t,()=>r)}
+function visit(n){
+ if(n.nodeType===3){const p=n.parentElement;if(!p||/^(SCRIPT|STYLE|TEXTAREA)$/.test(p.tagName)||p.closest('.blk'))return;
+  if(S.lang==='en'){if(!orig.has(n))orig.set(n,n.data);const r=trs(orig.get(n));if(n.data!==r)n.data=r}
+  else if(orig.has(n)&&n.data!==orig.get(n))n.data=orig.get(n)}
+ else if(n.nodeType===1){for(const a of['placeholder','title']){const v=n.getAttribute(a);if(v==null)continue;let o=oa.get(n);if(!o)oa.set(n,o={});
+  if(S.lang==='en'){if(!(a in o))o[a]=v;const r=trs(o[a]);if(v!==r)n.setAttribute(a,r)}else if(a in o&&v!==o[a])n.setAttribute(a,o[a])}}
+}
+function trAll(r){visit(r);const w=document.createTreeWalker(r,NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode())visit(n)}
+new MutationObserver(ms=>{if(S.lang!=='en')return;for(const m of ms){if(m.type==='childList')m.addedNodes.forEach(n=>trAll(n));else visit(m.target)}}).observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['placeholder','title']});
+function applyTheme(){
+ const t=S.theme||'auto',r=document.documentElement;
+ if(t==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',t);
+ const dk=t==='dark'||(t==='auto'&&matchMedia('(prefers-color-scheme:dark)').matches);
+ $('#themeBtn').textContent=dk?'☀':'☾';$('#setTheme').value=t;
+}
+function setLang(l){
+ S.lang=l;document.documentElement.lang=l;$('#langBtn').textContent=l==='en'?'ID':'EN';$('#setLang').value=l;
+ trAll(document.body);renderTpls();renderCanvas();renderProps();renderLib();renderConn();save();
+}
+function initSettings(){
+ $('#setFont').innerHTML='<option value="">Bawaan</option>'+FF.map(([v,n])=>`<option value="${attr(v)}">${n}</option>`).join('');
+ $('#setFont').value=S.font||'';$('#setDev').value=S.devD||'d';$('#setSig').value=S.sig||'';$('#setDeco').checked=S.deco!==false;$('#autoPrev').checked=!!S.autoPrev;
+ document.body.classList.toggle('nodeco',S.deco===false);
+ $('#setLang').onchange=e=>setLang(e.target.value);
+ $('#langBtn').onclick=()=>setLang(S.lang==='en'?'id':'en');
+ $('#setTheme').onchange=e=>{S.theme=e.target.value;applyTheme();save()};
+ $('#themeBtn').onclick=()=>{const a=document.documentElement.getAttribute('data-theme'),dk=a==='dark'||(!a&&matchMedia('(prefers-color-scheme:dark)').matches);S.theme=dk?'light':'dark';applyTheme();save()};
+ $('#setDev').onchange=e=>{S.devD=e.target.value;save()};
+ $('#setFont').onchange=e=>{S.font=e.target.value;save()};
+ $('#setSig').oninput=e=>{S.sig=e.target.value;save()};
+ $('#setCid').value=S.gcid||'';$('#setCid').onchange=e=>{S.gcid=e.target.value.trim();tc=null;save();renderConn()};
+ $('#setDelay').value=S.delay||2;$('#setDelay').onchange=e=>{S.delay=Math.min(60,Math.max(1,Math.round(+e.target.value)||2));e.target.value=S.delay;save()};
+ $('#setDeco').onchange=e=>{S.deco=e.target.checked;document.body.classList.toggle('nodeco',!e.target.checked);save()};
+ $('#setReset').onclick=function(){
+  if(!this.dataset.c){this.dataset.c=1;this.textContent='Klik lagi untuk konfirmasi';setTimeout(()=>{delete this.dataset.c;this.textContent='Reset draf'},4000);return}
+  S.rows=[];S.html='';S.mode=null;S.sel=null;S.upl=[];S.to='';S.subj='';$('#to').value='';$('#subj').value='';job.st={};
+  $('#resume').classList.add('hid');renderAll();go('home');toast('Draf direset');
+ };
+ applyTheme();setLang(S.lang||'id');
+}
+/* init */
+load();
+['from','to','subj','testTo'].forEach(k=>{const el=$('#'+k);if(el)el.value=S[k]||''});$('#testFrom').value=S.from||'';
+if(S.mode&&(S.rows.length||S.html))$('#resume').classList.remove('hid');
+initSettings();
+$('#gear').onclick=e=>{e.stopPropagation();$('#settings').classList.toggle('hid')};
+document.addEventListener('click',e=>{if(!e.target.closest('#settings'))$('#settings').classList.add('hid')});
+$('#autoPrev').onchange=e=>{S.autoPrev=e.target.checked;save();if(S.autoPrev&&S.view==='html')$('#hFrame').srcdoc=pz(S.html,'Nama')};
+try{history.scrollRestoration='manual'}catch(e){}
+renderLib();renderConn();go(routeView(),{replace:true});
+if(gCid()&&location.protocol!=='file:')loadGsi().catch(()=>{});
+</script>
+</body>
+</html>
