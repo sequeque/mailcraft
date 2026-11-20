@@ -132,6 +132,10 @@ main{padding:20px;max-width:1360px;margin:0 auto}
 .st.ok{background:rgba(34,197,94,.15);color:#16a34a}.st.err{background:rgba(220,38,38,.14);color:#dc2626;cursor:help}.st.run{background:var(--soft);color:var(--acc)}
 .prog{height:8px;border-radius:999px;background:var(--line);overflow:hidden;margin:10px 0 4px}.prog i{display:block;height:100%;background:linear-gradient(90deg,#22c55e,#14b8a6);transition:width .3s}
 .rc .acts{display:flex;gap:6px;align-items:center;flex:none}
+.xlbar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:8px 10px;margin:6px 0 4px;border:1px solid var(--line);border-radius:8px;background:var(--bg);font-size:13px}
+.xlbar b{word-break:break-all}.xlbar.undo{background:var(--soft)}
+.src{display:inline-block;font-size:10.5px;font-weight:600;padding:0 6px;border-radius:999px;background:var(--soft);color:var(--acc);margin-left:4px;vertical-align:1px}
+.rc .del{padding:5px 8px;line-height:1}
 .ovl{position:fixed;inset:0;background:rgba(0,0,0,.55);display:grid;place-items:center;z-index:100;padding:16px}
 .foot{text-align:center;font-size:12px;color:var(--muted);margin:40px 0 0!important}.foot a{color:var(--muted)}
 button:disabled{opacity:.55;cursor:not-allowed}
@@ -264,7 +268,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
       <div id="fromWrap"><label>From (akun Gmail pengirim)</label><input id="from" type="email" placeholder="kamu@gmail.com" autocomplete="email"><div class="hint">Opsional. Jika diisi, Gmail dibuka dengan akun ini (harus sudah login di browser).</div></div>
       <label>To (pisahkan dengan koma)</label><textarea id="to" rows="3" placeholder="Budi &lt;budi@gmail.com&gt;, Siti &lt;siti@yahoo.com&gt;"></textarea>
       <div class="hint">Agar &lt;&lt;nama&gt;&gt; terisi tanpa Excel, tulis: <b>Nama &lt;email&gt;</b>, contoh <i>Budi &lt;budi@gmail.com&gt;</i>. Tanpa nama, &lt;&lt;nama&gt;&gt; diganti “teman”.</div>
-      <div class="row2"><button id="xlBtn">📄 Upload Excel</button><button id="xlTpl">⬇ Template Excel</button><button class="ghost" id="xlClr">Hapus hasil upload</button></div>
+      <div class="row2"><button id="xlBtn">📄 Upload Excel</button><button id="xlTpl">⬇ Template Excel</button></div>
       <input type="file" id="xlIn" accept=".xlsx,.xls,.csv" class="hid">
       <label>Subject</label><input id="subj" placeholder="Judul email">
       <div class="note">Tulis &lt;&lt;nama&gt;&gt; di teks atau subject untuk menyapa tiap penerima dengan namanya dari Excel. Kolom yang dibaca: Nama dan Email.</div>
@@ -273,6 +277,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
       <h3>Penerima <span id="cnt" style="font-weight:400"></span></h3>
       <div class="row2" style="margin:0 0 6px" id="sendActs"></div>
       <div id="sendProg"></div>
+      <div id="xlBar"></div>
       <div class="list" id="rcpt"></div>
       <div class="note" id="sendNote"></div>
     </div>
@@ -669,16 +674,19 @@ $('#test').onclick=()=>{
 ['to','subj'].forEach(k=>$('#'+k).addEventListener('input',e=>{S[k]=e.target.value;if(S.view==='send')renderRcpt();save()}));
 ['#from','#testFrom'].forEach(id=>$(id).addEventListener('input',e=>{S.from=e.target.value;['#from','#testFrom'].forEach(o=>{if(o!==id)$(o).value=S.from});save()}));
 function contacts(){
- const m=new Map(),add=(n,e)=>{e=String(e||'').trim().toLowerCase();if(/^\S+@\S+\.\S+$/.test(e)&&!m.has(e))m.set(e,{name:String(n||'').trim(),email:e})};
- S.upl.forEach(c=>add(c.name,c.email));
- S.to.split(/[,;\n]+/).forEach(x=>{const k=x.match(/^\s*(.*?)\s*<(.+)>\s*$/);k?add(k[1],k[2]):add('',x)});
+ const m=new Map(),add=(n,e,src)=>{e=String(e||'').trim().toLowerCase();if(/^\S+@\S+\.\S+$/.test(e)&&!m.has(e))m.set(e,{name:String(n||'').trim(),email:e,src})};
+ S.upl.forEach(c=>add(c.name,c.email,'xl'));
+ S.to.split(/[,;\n]+/).forEach(x=>{const k=x.match(/^\s*(.*?)\s*<(.+)>\s*$/);k?add(k[1],k[2],'to'):add('',x,'to')});
  return[...m.values()];
 }
 function renderRcpt(){
  const c=contacts();$('#cnt').textContent=c.length?`(${c.length})`:'';
  $('#sendActs').innerHTML=`<button class="pri" id="oneBtn"${!c.length?' disabled':''}>✉ ${L('Buka di Gmail','Open in Gmail')}</button>`+(c.length>1?`<button id="bccBtn">${L('Sekaligus (BCC)','All at once (BCC)')}</button>`:'');
  $('#sendProg').innerHTML='';
- $('#rcpt').innerHTML=c.length?c.map((x,i)=>`<div class="rc"><span>${x.name?esc(x.name):`<i style="color:var(--muted)">${L('tanpa nama → “teman”','no name → “teman”')}</i>`} <small>${esc(x.email)}</small></span><span class="acts"><button data-i="${i}">${L('Buka di Gmail','Open in Gmail')}</button></span></div>`).join(''):`<div class="hint">${L('Isi kolom To atau upload Excel.','Fill in the To field or upload Excel.')}</div>`;
+ const n=S.upl.length;
+ $('#xlBar').innerHTML=n?`<div class="xlbar"><span>📄 <b>${esc(S.uplName||'File Excel')}</b> · ${n} ${L('kontak','contacts')}</span><button class="ghost" id="xlDel" title="${attr(L('Hapus file Excel ini dari daftar penerima','Remove this Excel file from the recipients'))}">🗑 ${L('Hapus file','Remove file')}</button></div>`
+  :xlUndo?`<div class="xlbar undo"><span>${L('File Excel dihapus. Penerima manual di kolom To tetap ada.','Excel file removed. Manual recipients in the To field are kept.')}</span><button class="ghost" id="xlUndo">${L('Batalkan','Undo')}</button></div>`:'';
+ $('#rcpt').innerHTML=c.length?c.map((x,i)=>`<div class="rc"><span>${x.name?esc(x.name):`<i style="color:var(--muted)">${L('tanpa nama → “teman”','no name → “teman”')}</i>`} <small>${esc(x.email)}</small>${x.src==='xl'?'<span class="src">Excel</span>':''}</span><span class="acts"><button data-i="${i}">${L('Buka di Gmail','Open in Gmail')}</button><button class="ghost del" data-del="${i}" title="${attr(L('Hapus penerima ini','Remove this recipient'))}" aria-label="${attr(L('Hapus penerima ini','Remove this recipient'))}">🗑</button></span></div>`).join(''):`<div class="hint">${L('Isi kolom To atau upload Excel.','Fill in the To field or upload Excel.')}</div>`;
  $('#sendNote').textContent=L('“Buka di Gmail” (atas) membuka 1 email ke semua alamat di To. Tombol per orang membuka email terpisah yang menyapa namanya (<<nama>>). “Sekaligus (BCC)” membuka 1 email tanpa penerima saling melihat. Desain disalin otomatis, lalu tempel dengan Ctrl+V di badan email Gmail.','“Open in Gmail” (top) opens 1 email to every address in To. The per-person button opens a separate email greeting them by name (<<nama>>). “All at once (BCC)” opens 1 email where recipients cannot see each other. The design is copied automatically; paste it with Ctrl+V into the Gmail body.');
 }
 $('#xlBtn').onclick=()=>$('#xlIn').click();
@@ -692,7 +700,13 @@ $('#xlTpl').onclick=async()=>{
   toast(L('Template Excel diunduh. Isi kolom Nama & Email, lalu klik Upload Excel.','Excel template downloaded. Fill in Name & Email, then click Upload Excel.'));
  }catch(e){toast('Template gagal dibuat')}
 };
-$('#xlClr').onclick=()=>{S.upl=[];renderRcpt();save()};
+let xlUndo=null,xlUndoT;
+function removeXl(){if(!S.upl.length)return;xlUndo={upl:S.upl,name:S.uplName};S.upl=[];S.uplName='';$('#xlIn').value='';save();renderRcpt();clearTimeout(xlUndoT);xlUndoT=setTimeout(()=>{xlUndo=null;if(S.view==='send')renderRcpt()},8000)}
+function removeRcpt(c){
+ if(c.src==='xl'){S.upl=S.upl.filter(x=>String(x.email).trim().toLowerCase()!==c.email);if(!S.upl.length)S.uplName=''}
+ else{S.to=S.to.split(/[,;\n]+/).filter(x=>{const k=x.match(/<(.+)>/);return String(k?k[1]:x).trim().toLowerCase()!==c.email}).map(x=>x.trim()).filter(Boolean).join(', ');$('#to').value=S.to}
+ save();renderRcpt();toast(L('Penerima dihapus: ','Recipient removed: ')+c.email);
+}
 $('#xlIn').onchange=async e=>{
  const f=e.target.files[0];if(!f)return;
  if(typeof XLSX==='undefined'){toast('Pembaca Excel gagal dimuat. Coba muat ulang halaman.');return}
@@ -700,13 +714,16 @@ $('#xlIn').onchange=async e=>{
   const wb=XLSX.read(await f.arrayBuffer()),rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''});
   const get=(r,re)=>{const k=Object.keys(r).find(k=>re.test(k.trim()));return k?r[k]:''};
   const list=rows.map(r=>({name:get(r,/^(nama|name)$/i),email:get(r,/^(e-?mail|email)$/i)})).filter(x=>x.email);
-  S.upl=list;renderRcpt();save();toast(list.length?`${list.length} kontak dibaca`:'Kolom “Email” tidak ditemukan');
+  S.upl=list;S.uplName=f.name;xlUndo=null;renderRcpt();save();toast(list.length?`${list.length} kontak dibaca`:'Kolom “Email” tidak ditemukan');
  }catch(err){toast('File tidak bisa dibaca')}
  e.target.value='';
 };
 $('#v-send').addEventListener('click',e=>{
  const b=e.target.closest('button');if(!b||b.disabled)return;
  const subj=S.subj||'Tanpa subject';
+ if(b.id==='xlDel'){removeXl();return}
+ if(b.id==='xlUndo'){if(xlUndo){S.upl=xlUndo.upl;S.uplName=xlUndo.name;xlUndo=null;save();renderRcpt();toast(L('File Excel dikembalikan','Excel file restored'))}return}
+ if(b.dataset.del!=null){const c=contacts()[+b.dataset.del];if(c)removeRcpt(c);return}
  if(b.closest('#rcpt')){const c=contacts()[+b.dataset.i];if(!c||!checkFrom())return;gmail({to:c.email,subj:pz(subj,c.name),html:pz(getHtml(),esc(c.name))});return}
  if(b.id!=='oneBtn'&&b.id!=='bccBtn')return;
  const c=contacts();if(!c.length){toast('Belum ada penerima');return}if(!checkFrom())return;
