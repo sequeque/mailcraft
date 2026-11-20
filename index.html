@@ -337,7 +337,7 @@ T.social={n:'Tautan',i:'🔗',d:{text:'Instagram|https://instagram.com\nWebsite|
 F.social=[['text','Tautan (satu per baris: Label|URL)','area'],['size','Ukuran (px)','num'],['color','Warna','color'],['align','Rata','align'],BGF,...PAD];
 const ratioTxt=p=>{const w=Math.round(+p.w||0),h=Math.round(+p.h||0),gc=(a,b)=>b?gc(b,a%b):a,d=gc(w,h)||1;return w&&h?`${w/d}:${h/d}`:'-'};
 const rbg=r=>r.g2?`background:${r.bg};background-image:linear-gradient(135deg,${r.bg},${r.g2})`:`background:${r.bg}`;
-const frameUi=b=>`<label>Ukuran frame (px): lebar × tinggi</label><div class="lk"><input data-k="w" type="number" value="${b.p.w}"><span>×</span><input data-k="h" type="number" value="${b.p.h}"></div><div class="ar">${['1:1','4:3','16:9','3:1','9:16'].map(a=>`<button data-ar="${a}">${a}</button>`).join('')}</div><div class="lk"><input id="cr" placeholder="Rasio kustom, mis. 13:5"><button id="crb">Terapkan</button></div><div class="hint"><span>Rasio sekarang:</span> <b id="rt">${ratioTxt(b.p)}</b></div>`;
+const frameUi=b=>{const r=frameReal(b);return `<label>Ukuran frame (px): lebar × tinggi</label><div class="lk"><input data-k="w" type="number" value="${b.p.w}"><span>×</span><input data-k="h" type="number" value="${b.p.h}"></div><div class="ar">${['1:1','4:3','16:9','3:1','9:16'].map(a=>`<button data-ar="${a}">${a}</button>`).join('')}</div><div class="lk"><input id="cr" placeholder="Rasio kustom, mis. 13:5"><button id="crb">Terapkan</button></div><div class="hint"><span>Rasio sekarang:</span> <b id="rt">${ratioTxt(b.p)}</b></div>`+(r.fits?`<div class="note" style="margin:8px 0">✓ ${tx('Ukuran nyata di email')}: <b>${r.w} × ${r.h} px</b> (${tx('lebar kolom tersedia')} ${r.av} px)</div>`:`<div class="note" style="margin:8px 0;background:var(--bb);color:var(--bf)">⚠ ${tx('Kolom ini hanya muat')} <b>${r.av} px</b>. ${tx('Frame akan tampil')} <b>${r.rw} × ${r.rh} px</b> ${tx('di email (rasio tetap).')}<div class="row2" style="margin-top:8px"><button id="useReal">${tx('Pakai ukuran nyata')} (${r.rw} × ${r.rh})</button></div></div>`)};
 const mk=(type,o)=>{const d=T[type].d;return{id:uid++,type,p:Object.assign({},d,d.text?{text:tx(d.text)}:{},S.font&&d.ff?{ff:S.font}:{},type==='frame'&&!(o&&o.w)?{w:S.w,h:Math.round(S.w*9/16)}:{},o||{})}};
 const newRow=n=>({id:uid++,bg:'#ffffff',pad:8,cols:Array.from({length:n},()=>[])});
 
@@ -350,7 +350,7 @@ function blockHtml(b,edit){
    return W(`<${tag} style="margin:0;${pad};font-family:${attr(g('ff'))};font-size:${+g('size')||16}px;font-weight:${g('fw')};color:${attr(g('color'))};text-align:${g('align')};line-height:${+g('lh')||1.5};letter-spacing:${+g('ls')||0}px">${fmt(p.text,g('lc'))}</${tag}>`)}
   case'image':case'frame':{
    const fr=b.type==='frame',w=+g('w')||600,h=+g('h')||338,rd=+g('radius')||0;
-   if(!p.src)return edit?W(`<div style="margin:${py}px auto;width:calc(100% - ${2*px}px);${fr?`max-width:${w}px;aspect-ratio:${w}/${h};`:'padding:36px 10px;'}display:flex;align-items:center;justify-content:center;background:#f4f4f5;color:#999;border:1px dashed #ccc;border-radius:${rd}px;font-size:13px">${fr?`▣ Frame ${w} × ${h} px`:`🖼 ${tx('Pilih atau upload gambar')}`}</div>`):'';
+   if(!p.src)return edit?W(`<div style="margin:${py}px auto;width:calc(100% - ${2*px}px);${fr?`max-width:${w}px;aspect-ratio:${w}/${h};`:'padding:36px 10px;'}display:flex;align-items:center;justify-content:center;background:#f4f4f5;color:#999;border:1px dashed #ccc;border-radius:${rd}px;font-size:13px">${fr?(()=>{const r=frameReal(b);return `▣ Frame ${w} × ${h} px`+(r.fits?'':`<br><small style="color:#b45309">${tx('tampil')} ${r.rw} × ${r.rh} px</small>`)})():`🖼 ${tx('Pilih atau upload gambar')}`}</div>`):'';
    const st=fr?`width:100%;max-width:${w}px;height:auto;aspect-ratio:${w}/${h};object-fit:${g('fit')};`:`width:100%;max-width:100%;height:auto;${g('ratio')&&g('ratio')!=='auto'?`aspect-ratio:${g('ratio').replace(':','/')};object-fit:cover;`:''}`;
    const mg=g('align')==='left'?'0':g('align')==='right'?'0 0 0 auto':'0 auto';
    const im=`<img src="${attr(p.src)}" alt="${attr(p.alt)}"${fr?` width="${w}" height="${h}"`:''} style="${st}border:0;display:block;border-radius:${rd}px;margin:${mg}">`;
@@ -391,6 +391,7 @@ function go(v,o={}){
  document.querySelectorAll('#steps button').forEach(b=>b.classList.toggle('on',(b.dataset.v==='edit'&&(v==='dnd'||v==='html'))||b.dataset.v===v));
  if(v==='prev'){$('#frame').srcdoc=pz(getHtml(),'Nama');(S.devD==='m'?$('#pm'):$('#pd')).click()}
  if(v==='send')renderRcpt();
+ if(v==='dnd')requestAnimationFrame(fitCanvas);
  if(v==='html'){setCode(S.html);if(S.autoPrev)$('#hFrame').srcdoc=pz(S.html,'Nama')}
  // catat di riwayat browser supaya tombol back/forward browser berfungsi
  const url=v==='home'?location.pathname+location.search:'#/'+ROUTE[v],cur=history.state&&history.state.mc?history.state:null;
@@ -424,10 +425,16 @@ $('#pal').innerHTML=Object.entries(T).map(([k,v])=>`<div class="pi" draggable="t
 const findB=id=>{for(const r of S.rows)for(const c of r.cols){const i=c.findIndex(b=>b.id===id);if(i>=0)return{r,c,i,b:c[i]}}};
 const isSel=(t,id)=>S.sel&&S.sel.t===t&&S.sel.id===id;
 function renderCanvas(){
- const c=$('#canvas');c.style.maxWidth=S.w+'px';
+ const c=$('#canvas');c.style.maxWidth='none';c.style.width=S.w+'px';fitCanvas();
  if(!S.rows.length){c.innerHTML='<div class="ph" style="margin:40px">Seret layout ke sini untuk memulai</div>';return}
  c.innerHTML=S.rows.map(r=>`<div class="row${isSel('r',r.id)?' sel':''}" data-r="${r.id}" style="${rbg(r)};padding:${r.pad}px 0"><div class="rt"><span class="rh" draggable="true" data-id="${r.id}" title="Seret untuk memindah baris">⠿ Seret</span><button data-a="rdel" data-id="${r.id}">✕</button></div><div class="cols">${r.cols.map((col,ci)=>`<div class="cell" data-r="${r.id}" data-c="${ci}">${col.length?col.map(b=>`<div class="blk${isSel('b',b.id)?' sel':''}" draggable="true" data-id="${b.id}"><button class="bx" data-a="bdel" data-id="${b.id}">✕</button>${blockHtml(b,1)}</div>`).join(''):'<div class="ph">Seret konten ke sini</div>'}</div>`).join('')}</div></div>`).join('');
 }
+// kanvas selalu selebar email asli (mis. 600px); jika layar lebih sempit, diperkecil dengan zoom agar bentuk & proporsi tetap sama
+function fitCanvas(){const c=$('#canvas'),st=c&&c.parentElement;if(!st||!st.clientWidth)return;const cs=getComputedStyle(st),av=st.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);c.style.zoom=Math.min(1,av/(+S.w||600)).toFixed(4)}
+try{new ResizeObserver(()=>fitCanvas()).observe(document.querySelector('.stage'))}catch(e){addEventListener('resize',fitCanvas)}
+// ukuran frame yang benar-benar tampil di email (dibatasi lebar kolom)
+function frameReal(b){const f=findB(b.id),n=f?f.r.cols.length:1,px=+(b.p.px??T.frame.d.px)||0,w=+b.p.w||600,h=+b.p.h||338,av=Math.floor((+S.w||600)/n-2*px),rw=Math.min(w,av);return{w,h,av,rw,rh:Math.round(rw*h/w),fits:w<=av}}
+let rpT;
 function renderProps(){
  const el=$('#props');
  if(S.mode!=='dnd'){return}
@@ -435,7 +442,7 @@ function renderProps(){
  if(sb){
   const b=sb.b;let h=`<h3>${T[b.type].n}</h3>`;
   F[b.type].forEach(([k,l,t,o])=>{const val=b.p[k]??T[b.type].d[k]??'';
-   if(t==='img'){h+=`<label>URL gambar</label><input data-k="src" value="${attr(b.p.src.startsWith('data:')?'(gambar tertanam)':b.p.src)}" ${b.p.src.startsWith('data:')?'readonly':''} placeholder="https://… atau upload"><div class="row2" style="margin-top:6px"><button id="pUp">⬆ Upload</button>${b.p.src?'<button id="pCp">🔗 Salin link</button>':''}</div><div class="hint">Atau pilih dari “Gambar saya” di kiri.</div>`;return}
+   if(t==='img'){const sv=b.type==='frame'&&b.p.orig?b.p.orig:b.p.src,emb=sv.startsWith('data:');h+=`<label>URL gambar</label><input data-k="src" value="${attr(emb?'(gambar tertanam)':sv)}" ${emb?'readonly':''} placeholder="https://… atau upload"><div class="row2" style="margin-top:6px"><button id="pUp">⬆ Upload</button>${b.p.src?'<button id="pCp">🔗 Salin link</button>':''}</div><div class="hint">Atau pilih dari “Gambar saya” di kiri.</div>${b.type==='frame'?`<div class="hint">✂ ${tx('Gambar otomatis dipotong pas ukuran frame. Jika ukurannya sudah sama, link dipakai apa adanya.')}</div>`:''}`;return}
    if(t==='frm'){h+=frameUi(b);return}
    h+=`<label>${l}</label>`;
    if(t==='rich')h+=`<div class="tb"><button data-f="**"><b>B</b></button><button data-f="*"><i>I</i></button><button data-f="++"><u>U</u></button></div><textarea data-k="${k}" rows="5">${txa(val)}</textarea><div class="lk"><input id="lu" placeholder="https://… untuk teks yang diblok"><button id="lbtn">🔗 Pasang link</button></div><div class="hint">Blok sebagian teks, tekan Ctrl+K (⌘K di Mac), tempel URL, lalu Enter. Hanya bagian itu yang jadi hyperlink. Pintasan lain: Ctrl+B tebal, Ctrl+I miring, Ctrl+U garis bawah.</div>`;
@@ -449,12 +456,13 @@ function renderProps(){
   });
   h+=`<div class="row2"><button id="dup">Duplikat</button><button id="del">Hapus</button></div>`;
   el.innerHTML=h;
-  el.querySelectorAll('[data-k]').forEach(i=>i.oninput=()=>{b.p[i.dataset.k]=i.type==='number'?+i.value:i.value;const rt=$('#rt');if(rt)rt.textContent=ratioTxt(b.p);renderCanvas();save()});
+  el.querySelectorAll('[data-k]').forEach(i=>i.oninput=()=>{const k=i.dataset.k;b.p[k]=i.type==='number'?+i.value:i.value;if(b.type==='frame'&&k==='src')b.p.orig=i.value;const rt=$('#rt');if(rt)rt.textContent=ratioTxt(b.p);renderCanvas();save();if(b.type==='frame'&&/^(src|w|h|fit)$/.test(k)&&b.p.orig){scheduleFit(b,k==='src'?700:500);if(k!=='src')clearTimeout(rpT),rpT=setTimeout(()=>{if(S.sel&&S.sel.id===b.id)renderProps()},600)}});
+  const ur=$('#useReal');if(ur)ur.onclick=()=>{const r=frameReal(b);b.p.w=r.rw;b.p.h=r.rh;renderAll();if(b.p.orig)fitToFrame(b);toast(tx('Ukuran frame diubah ke ukuran nyata')+` ${r.rw} × ${r.rh} px`)};
   const u=$('#pUp');if(u)u.onclick=()=>{$('#upIn').dataset.t=b.id;$('#upIn').click()};
   const cp=$('#pCp');if(cp)cp.onclick=()=>copyText(b.p.src);
   el.querySelectorAll('[data-rs]').forEach(x=>x.onclick=()=>{b.p[x.dataset.rs]='';renderAll()});
-  el.querySelectorAll('[data-ar]').forEach(x=>x.onclick=()=>{const[a,c]=x.dataset.ar.split(':').map(Number);b.p.h=Math.round((+b.p.w||600)*c/a);renderAll()});
-  const crb=$('#crb');if(crb)crb.onclick=()=>{const[a,c]=$('#cr').value.split(/[:x\/]/).map(Number);if(!(a>0&&c>0)){toast('Format rasio: lebar:tinggi, mis. 13:5');return}b.p.h=Math.round((+b.p.w||600)*c/a);renderAll()};
+  el.querySelectorAll('[data-ar]').forEach(x=>x.onclick=()=>{const[a,c]=x.dataset.ar.split(':').map(Number);b.p.h=Math.round((+b.p.w||600)*c/a);renderAll();if(b.p.orig)fitToFrame(b)});
+  const crb=$('#crb');if(crb)crb.onclick=()=>{const[a,c]=$('#cr').value.split(/[:x\/]/).map(Number);if(!(a>0&&c>0)){toast('Format rasio: lebar:tinggi, mis. 13:5');return}b.p.h=Math.round((+b.p.w||600)*c/a);renderAll();if(b.p.orig)fitToFrame(b)};
   const ta=el.querySelector('textarea[data-k=text]');
   if(ta&&$('#lbtn')){
    const ins=(a,z)=>{const s=ta.selectionStart,e=ta.selectionEnd;if(s===e){toast('Blok dulu teks yang ingin diubah');return}ta.setRangeText(a+ta.value.slice(s,e)+z,s,e,'end');ta.dispatchEvent(new Event('input'));ta.focus()};
@@ -560,12 +568,33 @@ async function upImg(f,ar){
  if(!url){url=await new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(blob)});toast('Gambar disimpan di draf dan ikut terkirim di dalam email.')}
  S.lib.unshift({url,id,name:f.name});S.lib=S.lib.slice(0,24);renderLib();save();return url;
 }
+// potong/sesuaikan gambar ke ukuran persis frame (sumber asli disimpan di p.orig agar bisa dipotong ulang saat ukuran diubah)
+function loadImg(src,cors){return new Promise((res,rej)=>{const im=new Image();if(cors)im.crossOrigin='anonymous';im.onload=()=>res(im);im.onerror=rej;im.src=src})}
+const fitT={};
+function scheduleFit(b,ms){clearTimeout(fitT[b.id]);fitT[b.id]=setTimeout(()=>fitToFrame(b),ms??400)}
+async function fitToFrame(b){
+ const src=b.p.orig||b.p.src;if(!src||b.type!=='frame')return;
+ const w=+b.p.w||600,h=+b.p.h||338,ext=!/^data:/i.test(src);
+ let im;try{im=await loadImg(src,ext)}catch(e){if(ext){try{im=await loadImg(src,false)}catch(e2){}}}
+ if(!im){toast(tx('Gambar tidak bisa dimuat. Cek URL-nya.'));return}
+ if((b.p.orig||b.p.src)!==src)return;
+ b.p.orig=src;
+ const same=Math.abs(im.naturalWidth/im.naturalHeight-w/h)<=0.01*(w/h);
+ if(same){if(b.p.src!==src){b.p.src=src;renderCanvas();save()}return}
+ const ow=Math.min(w*2,1600),oh=Math.round(ow*h/w),c=document.createElement('canvas');c.width=ow;c.height=oh;const x=c.getContext('2d');
+ const png=/^data:image\/(png|gif|webp)/i.test(src)||/\.(png|gif|webp)(\?|$)/i.test(src);
+ if(!png||b.p.fit==='contain'){x.fillStyle=b.p.ob||'#ffffff';x.fillRect(0,0,ow,oh)}
+ const sc=(b.p.fit==='contain'?Math.min:Math.max)(ow/im.naturalWidth,oh/im.naturalHeight),dw=im.naturalWidth*sc,dh=im.naturalHeight*sc;
+ x.drawImage(im,(ow-dw)/2,(oh-dh)/2,dw,dh);
+ let out;try{out=c.toDataURL(png?'image/png':'image/jpeg',.88)}catch(e){toast(tx('Gambar dari situs ini tidak bisa dipotong otomatis. Pakai gambar dengan ukuran yang sama dengan frame, atau upload gambarnya.'));return}
+ b.p.src=out;renderCanvas();if(S.sel&&S.sel.id===b.id)renderProps();save();
+ toast(tx('Gambar dipotong pas frame')+` ${w} × ${h} px`);
+}
 async function handleUp(files){
  for(const f of files){const t=+$('#upIn').dataset.t,fb=t&&findB(t),q=fb&&files.length===1?fb.b:null;let ar=null;
-  if(q&&q.type==='frame'){const w=+q.p.w||600,h=+q.p.h||338,ow=Math.min(w*2,1600);ar={ow,oh:Math.round(ow*h/w)}}
-  else if(q&&q.type==='image'&&q.p.ratio&&q.p.ratio!=='auto'){const[a,c]=q.p.ratio.split(':').map(Number);ar={ow:1200,oh:Math.round(1200*c/a)}}
+  if(q&&q.type==='image'&&q.p.ratio&&q.p.ratio!=='auto'){const[a,c]=q.p.ratio.split(':').map(Number);ar={ow:1200,oh:Math.round(1200*c/a)}}
   const u=await upImg(f,ar);
-  if(S.mode==='dnd'){const f2=t&&findB(t);if(f2&&(f2.b.type==='image'||f2.b.type==='frame')&&files.length===1){f2.b.p.src=u;renderAll()}else addBlock('image',u)}
+  if(S.mode==='dnd'){const f2=t&&findB(t);if(f2&&(f2.b.type==='image'||f2.b.type==='frame')&&files.length===1){if(f2.b.type==='frame'){f2.b.p.orig=u;f2.b.p.src=u;renderAll();fitToFrame(f2.b)}else{f2.b.p.src=u;renderAll()}}else addBlock('image',u)}
   else toast('Gambar diunggah. Klik gambar untuk menyisipkan.')}
  $('#upIn').dataset.t='';$('#upIn').value='';
 }
@@ -581,7 +610,7 @@ function libClick(e){
  const l=S.lib[+d.dataset.i];
  if(e.target.closest('[data-rm]'))return rmImg(+d.dataset.i);
  if(c)return copyText(l.url);
- if(S.mode==='dnd'){const f=S.sel&&S.sel.t==='b'&&findB(S.sel.id);if(f&&(f.b.type==='image'||f.b.type==='frame')){f.b.p.src=l.url;renderAll()}else addBlock('image',l.url)}
+ if(S.mode==='dnd'){const f=S.sel&&S.sel.t==='b'&&findB(S.sel.id);if(f&&(f.b.type==='image'||f.b.type==='frame')){if(f.b.type==='frame'){f.b.p.orig=l.url;f.b.p.src=l.url;renderAll();fitToFrame(f.b)}else{f.b.p.src=l.url;renderAll()}}else addBlock('image',l.url)}
  else{const s=`<img src="${l.url}" alt="" style="max-width:100%;height:auto;display:block">`;if(cm){cm.replaceSelection(s,'end');cm.focus()}else{const ta=$('#code');ta.setRangeText(s,ta.selectionStart,ta.selectionEnd,'end');onCode(ta.value)}toast('Gambar disisipkan')}
 }
 $('#lib1').onclick=libClick;$('#lib2').onclick=libClick;
@@ -597,7 +626,7 @@ $('#dlgNo').onclick=()=>$('#dlg').classList.add('hid');
 $('#dlg').onclick=e=>{if(e.target.id==='dlg')$('#dlg').classList.add('hid')};
 $('#dlgYes').onclick=async()=>{
  const l=S.lib[rmIdx];$('#dlg').classList.add('hid');if(!l)return;
- S.rows.forEach(r=>r.cols.forEach(c=>c.forEach(b=>{if(b.p&&b.p.src===l.url)b.p.src=''})));
+ S.rows.forEach(r=>r.cols.forEach(c=>c.forEach(b=>{if(b.p&&(b.p.src===l.url||b.p.orig===l.url)){b.p.src='';delete b.p.orig}})));
  if(l.id&&assets){try{await assets.delete(l.id)}catch(e){}}
  const k=S.lib.indexOf(l);if(k>=0)S.lib.splice(k,1);
  renderAll();toast('Gambar dihapus');
@@ -780,8 +809,8 @@ const TPL={
   RW([[H('Newsletter',{size:22,align:'left',color:'#0d9488'})],[P(L('Edisi bulan ini','This month’s edition'),{align:'right',size:13,color:'#71717a',py:22})]],{pad:6}),
   RW([[FR(600,260,{px:0,py:0})]],{pad:0}),
   RW([[H(L('Halo <<nama>>, ini kabar terbaru kami','Hi <<nama>>, here is our latest news'),{size:26,align:'left'}),P(L('Tulis pembuka singkat di sini: apa yang baru bulan ini dan kenapa perlu dibaca. [Lihat ringkasannya](https://example.com).','Write a short intro here: what is new this month and why it is worth reading. [See the summary](https://example.com).'))]],{pad:12}),
-  RW([[FR(280,190,{px:12})],[H(L('Artikel Pilihan #1','Featured Story #1'),{size:18,align:'left',py:6}),P(L('Ringkasan dua kalimat tentang artikel ini. [Baca selengkapnya →](https://example.com)','A two-sentence summary of this story. [Read more →](https://example.com)'),{size:14})]],{pad:8}),
-  RW([[H(L('Artikel Pilihan #2','Featured Story #2'),{size:18,align:'left',py:6}),P(L('Ringkasan dua kalimat tentang artikel kedua. [Baca selengkapnya →](https://example.com)','A two-sentence summary of the second story. [Read more →](https://example.com)'),{size:14})],[FR(280,190,{px:12})]],{pad:8}),
+  RW([[FR(276,187,{px:12})],[H(L('Artikel Pilihan #1','Featured Story #1'),{size:18,align:'left',py:6}),P(L('Ringkasan dua kalimat tentang artikel ini. [Baca selengkapnya →](https://example.com)','A two-sentence summary of this story. [Read more →](https://example.com)'),{size:14})]],{pad:8}),
+  RW([[H(L('Artikel Pilihan #2','Featured Story #2'),{size:18,align:'left',py:6}),P(L('Ringkasan dua kalimat tentang artikel kedua. [Baca selengkapnya →](https://example.com)','A two-sentence summary of the second story. [Read more →](https://example.com)'),{size:14})],[FR(276,187,{px:12})]],{pad:8}),
   RW([[H(L('Punya cerita untuk dibagikan?','Have a story to share?'),{size:20}),P(L('Balas email ini dan ceritakan padaku.','Reply to this email and tell me about it.'),{align:'center'}),BT(L('Balas Sekarang','Reply Now'),{bg:'#ea580c'})]],{bg:'#fef3c7',pad:16}),
   RW([[SOC(),P(L('Kamu menerima email ini karena berlangganan newsletter kami.','You are receiving this because you subscribed to our newsletter.'),{size:12,color:'#71717a',align:'center'})]],{bg:'#fafafa',pad:12})
  ]
@@ -818,6 +847,10 @@ $('#tplBack').onclick=()=>navBack('choose');
 $('#tplResumeBtn').onclick=()=>{S.mode='dnd';renderAll();go('edit')};
 /* i18n + settings */
 const EN={
+'tampil':'shows at','Ukuran nyata di email':'Real size in the email','lebar kolom tersedia':'available column width','Kolom ini hanya muat':'This column only fits','Frame akan tampil':'The frame will show at','di email (rasio tetap).':'in the email (same ratio).','Pakai ukuran nyata':'Use real size',
+'Gambar tidak bisa dimuat. Cek URL-nya.':'The image could not be loaded. Check the URL.','Gambar dipotong pas frame':'Image cropped to the frame','Ukuran frame diubah ke ukuran nyata':'Frame size changed to the real size',
+'Gambar dari situs ini tidak bisa dipotong otomatis. Pakai gambar dengan ukuran yang sama dengan frame, atau upload gambarnya.':'Images from this site cannot be cropped automatically. Use an image with the same size as the frame, or upload it.',
+'Gambar otomatis dipotong pas ukuran frame. Jika ukurannya sudah sama, link dipakai apa adanya.':'Images are cropped to the exact frame size automatically. If the size already matches, the link is used as-is.',
 'Agar <<nama>> terisi tanpa Excel, tulis: Nama <email>, contoh Budi <budi@gmail.com>. Tanpa nama, <<nama>> diganti “teman”.':'To fill <<nama>> without Excel, write: Name <email>, e.g. Budi <budi@gmail.com>. Without a name, <<nama>> becomes “teman”.',
 'Agar <<nama>> terisi tanpa Excel, tulis: ':'To fill <<nama>> without Excel, write: ',', contoh ':', e.g. ','. Tanpa nama, <<nama>> diganti “teman”.':'. Without a name, <<nama>> becomes “teman”.',
 '✨ Rapikan':'✨ Format','Rapikan kode seperti Prettier di VS Code':'Format the code like Prettier in VS Code','🧪 Buka tes di Gmail':'🧪 Open test in Gmail',
