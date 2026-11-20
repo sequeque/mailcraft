@@ -339,10 +339,10 @@ const txtF=[['text','Teks','rich'],['size','Ukuran (px)','num'],['color','Warna 
 Object.assign(T.heading.d,{ff:FF[0][0],fw:'bold',lh:1.25,ls:0,lc:'#0d9488',ob:'',py:14,px:24});
 Object.assign(T.text.d,{ff:FF[0][0],fw:'normal',lh:1.6,ls:0,lc:'#0d9488',ob:'',py:10,px:24});
 F.heading=txtF;F.text=txtF;
-Object.assign(T.image.d,{nodl:'hide',align:'center',radius:0,ratio:'auto',ob:'',py:10,px:24});
-F.image=[['img','','img'],['link','Link saat diklik','text'],['nodl','Tombol Download Gmail','sel',[['hide','Sembunyikan'],['show','Tampilkan']]],['alt','Alt text','text'],['ratio','Rasio gambar','sel',[['auto','Asli'],['1:1','1:1 (persegi)'],['4:3','4:3'],['3:2','3:2'],['16:9','16:9'],['2:1','2:1'],['3:1','3:1 (banner)']]],['radius','Sudut (px)','num'],BGF,...PAD];
-T.frame={n:'Frame',i:'▣',d:{nodl:'hide',src:'',w:600,h:338,fit:'cover',link:'',alt:'Gambar',radius:0,align:'center',ob:'',py:8,px:0}};
-F.frame=[['img','','img'],['frm','','frm'],['fit','Cara gambar mengisi frame','sel',[['cover','Potong agar penuh (crop)'],['contain','Tampilkan utuh']]],['link','Link saat diklik','text'],['nodl','Tombol Download Gmail','sel',[['hide','Sembunyikan'],['show','Tampilkan']]],['alt','Alt text','text'],['radius','Sudut (px)','num'],['align','Rata','align'],BGF,...PAD];
+Object.assign(T.image.d,{align:'center',radius:0,ratio:'auto',ob:'',py:10,px:24});
+F.image=[['img','','img'],['link','Link saat diklik','text'],['alt','Alt text','text'],['ratio','Rasio gambar','sel',[['auto','Asli'],['1:1','1:1 (persegi)'],['4:3','4:3'],['3:2','3:2'],['16:9','16:9'],['2:1','2:1'],['3:1','3:1 (banner)']]],['radius','Sudut (px)','num'],BGF,...PAD];
+T.frame={n:'Frame',i:'▣',d:{src:'',w:600,h:338,fit:'cover',link:'',alt:'Gambar',radius:0,align:'center',ob:'',py:8,px:0}};
+F.frame=[['img','','img'],['frm','','frm'],['fit','Cara gambar mengisi frame','sel',[['cover','Potong agar penuh (crop)'],['contain','Tampilkan utuh']]],['link','Link saat diklik','text'],['alt','Alt text','text'],['radius','Sudut (px)','num'],['align','Rata','align'],BGF,...PAD];
 Object.assign(T.button.d,{bg2:'',fs:16,fw:'bold',radius:6,bpx:28,bpy:12,full:'auto',ob:'',py:14,px:24});
 F.button=[['text','Teks tombol','text'],['url','Link tujuan','text'],['bg','Warna tombol','color'],['bg2','Gradien ke warna (opsional)','opt'],['color','Warna teks','color'],['fs','Ukuran teks','num'],['fw','Ketebalan','sel',[['bold','Tebal'],['normal','Normal']]],['radius','Sudut (px)','num'],['bpx','Padding tombol kiri/kanan','num'],['bpy','Padding tombol atas/bawah','num'],['full','Lebar tombol','sel',[['auto','Otomatis'],['full','Penuh']]],['align','Rata','align'],BGF,...PAD];
 Object.assign(T.divider.d,{th:1,st:'solid',dw:100,ob:'',py:10,px:24});
@@ -382,7 +382,7 @@ function blockHtml(b,edit){
    const st=fr?`width:100%;max-width:${w}px;height:auto;aspect-ratio:${w}/${h};object-fit:${g('fit')};`:`width:100%;max-width:100%;height:auto;${g('ratio')&&g('ratio')!=='auto'?`aspect-ratio:${g('ratio').replace(':','/')};object-fit:cover;`:''}`;
    const mg=g('align')==='left'?'0':g('align')==='right'?'0 0 0 auto':'0 auto';
    const im=`<img src="${attr(p.src)}" alt="${attr(p.alt)}"${fr?` width="${w}" height="${h}"`:''} style="${st}border:0;display:block;border-radius:${rd}px;margin:${mg}">`;
-   return W(`<div style="${pad}">${p.link?`<a href="${attr(p.link)}">${im}</a>`:g('nodl')!=='show'?`<a href="about:blank" style="cursor:default;text-decoration:none">${im}</a>`:im}</div>`)}
+   return W(`<div style="${pad}">${p.link?`<a href="${attr(p.link)}">${im}</a>`:im}</div>`)}
   case'button':{
    const full=g('full')==='full',gr=g('bg2')?`background-image:linear-gradient(135deg,${attr(g('bg'))},${attr(g('bg2'))});`:'';
    return W(`<div style="${pad};text-align:${g('align')}"><a href="${attr(p.url)}" style="display:${full?'block;text-align:center':'inline-block'};background:${attr(g('bg'))};${gr}color:${attr(g('color'))};padding:${+g('bpy')||0}px ${+g('bpx')||0}px;border-radius:${+g('radius')||0}px;text-decoration:none;font-weight:${g('fw')};font-size:${+g('fs')||16}px">${esc(p.text)}</a></div>`)}
@@ -851,7 +851,6 @@ const TPL={
  ]
 };
 const HELP={
-nodl:['Gmail menampilkan tombol Download di gambar besar tanpa link. “Sembunyikan”: gambar tanpa link dibungkus link kosong (about:blank) agar tombol itu tidak muncul. Tes dulu di Gmail. Jika “Link saat diklik” diisi, tombol Download otomatis tidak muncul.','Gmail shows a Download button on large images without a link. “Hide”: images without a link are wrapped in an empty link so the button does not appear. If “Link on click” is filled in, the Download button never appears.'],
 alt:['Deskripsi singkat gambar. Tampil saat gambar gagal dimuat, dan dibacakan oleh screen reader.','Short description of the image. Shown when the image fails to load and read aloud by screen readers.'],
 link:['Alamat tujuan jika gambar diklik. Kosongkan jika tidak perlu.','Where to go when the image is clicked. Leave empty if not needed.'],
 fit:['Dipakai jika rasio gambar beda dari frame. “Potong”: sisi gambar terpotong agar frame penuh. “Utuh”: seluruh gambar tampil, ada ruang kosong.','Used when the image ratio differs from the frame. “Crop”: edges are trimmed to fill the frame. “Whole”: the full image shows, with empty space.'],
@@ -883,7 +882,6 @@ $('#tplBack').onclick=()=>navBack('choose');
 $('#tplResumeBtn').onclick=()=>{S.mode='dnd';renderAll();go('edit')};
 /* i18n + settings */
 const EN={
-'Tombol Download Gmail':'Gmail Download button','Sembunyikan':'Hide','Tampilkan':'Show',
 'Latar isi email':'Email body background','Latar luar':'Outer background','Lanjut ke Preview & tes →':'Continue to Preview & test →',
 'Ganti latar isi email (semua baris sekaligus)':'Change the email body background (all rows at once)','Warna di sekeliling badan email':'Color around the email body',
 'Ukuran frame':'Frame size','Gambar asli':'Original image','Maks. kolom':'Column max','membaca…':'reading…','Pakai ukuran asli':'Use original size','Sudah ukuran asli':'Already original size',
@@ -1012,7 +1010,7 @@ function initSettings(){
 }
 /* init */
 load();
-['from','to','subj','testTo'].forEach(k=>{const el=$('#'+k);if(el)el.value=S[k]||''});$('#testFrom').value=S.from||'';delete S.gcid;delete S.method;migrateTags();
+['from','to','subj','testTo'].forEach(k=>{const el=$('#'+k);if(el)el.value=S[k]||''});$('#testFrom').value=S.from||'';delete S.gcid;delete S.method;migrateTags();S.rows.forEach(r=>r.cols.forEach(c=>c.forEach(b=>{if(b.p)delete b.p.nodl})));
 if(S.mode&&(S.rows.length||S.html))$('#resume').classList.remove('hid');
 initSettings();
 $('#gear').onclick=e=>{e.stopPropagation();$('#settings').classList.toggle('hid')};
