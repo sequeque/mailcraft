@@ -214,7 +214,8 @@ button:disabled{opacity:.55;cursor:not-allowed}
     <div class="card">
       <h3>Kode HTML</h3>
       <textarea id="code" class="code" spellcheck="false" placeholder="Tempel HTML emailmu di sini"></textarea>
-      <div class="row2"><button class="pri" id="hPrev">👁 Preview</button><button id="hUp">⬆ Upload gambar</button><button id="hNext">Lanjut →</button></div>
+      <div class="row2"><button class="pri" id="hPrev">👁 Preview</button><button id="hFull" title="Buka HTML di tab baru untuk diedit lewat Inspect">⛶ Preview penuh</button><button id="hPull" title="Masukkan HTML dari tab preview penuh ke kolom kode">⤓ Ambil dari preview penuh</button><button id="hUp">⬆ Upload gambar</button><button id="hNext">Lanjut →</button></div>
+      <div class="hint">⛶ Preview penuh membuka HTML apa adanya di tab baru. Edit dengan klik kanan → Inspect, lalu klik “⤓ Ambil dari preview penuh” (atau salin outerHTML dari tag &lt;html&gt; dan tempel di sini).</div>
       <div class="hint">Upload gambar untuk mendapat link publik; klik gambar di bawah untuk menyisipkannya di posisi kursor.</div>
       <div class="lib" id="lib2"></div>
     </div>
@@ -224,7 +225,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
 <section id="v-prev" class="hid">
   <div class="two">
-    <div class="card"><div class="row2" style="margin:0 0 12px"><div class="seg"><button id="pd" class="on">🖥 Desktop</button><button id="pm">📱 Mobile</button></div></div><div class="pv"><iframe id="frame" title="Preview email"></iframe></div></div>
+    <div class="card"><div class="row2" style="margin:0 0 12px"><div class="seg"><button id="pd" class="on">🖥 Desktop</button><button id="pm">📱 Mobile</button></div><button id="pFull" title="Buka email di tab baru (bisa di-Inspect)">⛶ Preview penuh</button></div><div class="pv"><iframe id="frame" title="Preview email"></iframe></div></div>
     <div class="card" style="align-self:start">
       <h3>Kirim email tes</h3>
       <div class="hint">Lihat hasil wireframe di inbox asli sebelum dikirim ke penerima.</div>
@@ -578,6 +579,30 @@ function copyText(t){navigator.clipboard.writeText(t).then(()=>toast('Link disal
 /* ---------- HTML mode ---------- */
 let apT;$('#code').oninput=e=>{S.html=e.target.value;save();if(S.autoPrev){clearTimeout(apT);apT=setTimeout(()=>{$('#hFrame').srcdoc=pz(S.html,'Nama')},300)}};
 $('#hPrev').onclick=()=>{$('#hFrame').srcdoc=pz(S.html,'Nama')};
+/* ---------- preview penuh (tab baru, bisa di-Inspect) ---------- */
+let fullWin=null;
+function openFull(html){
+ // tab baru same-origin agar hasil editan bisa diambil kembali; HTML ditulis apa adanya tanpa sisipan apa pun
+ const w=window.open('','mailcraft-preview-penuh');
+ if(!w){toast(L('Popup diblokir browser. Izinkan popup untuk situs ini.','Popup blocked. Allow popups for this site.'));return}
+ w.document.open();w.document.write(html);w.document.close();
+ fullWin=w;try{w.focus()}catch(e){}
+ toast(L('Preview penuh dibuka di tab baru. Klik kanan → Inspect untuk mengedit.','Full preview opened in a new tab. Right-click → Inspect to edit.'));
+}
+function fullHtml(d){const t=d.doctype;return(t?'<!DOCTYPE '+t.name+(t.publicId?' PUBLIC "'+t.publicId+'"':'')+(t.systemId?' "'+t.systemId+'"':'')+'>\n':'')+d.documentElement.outerHTML}
+$('#hFull').onclick=()=>openFull($('#code').value);
+$('#pFull').onclick=()=>openFull(getHtml());
+$('#hPull').onclick=()=>{
+ let d=null;try{d=fullWin&&!fullWin.closed&&fullWin.document}catch(e){}
+ if(!d||!d.documentElement){toast(L('Buka “⛶ Preview penuh” dulu, edit di sana, lalu klik tombol ini.','Open “⛶ Full preview” first, edit it there, then click this button.'));return}
+ const h=fullHtml(d),ta=$('#code');
+ if(h===ta.value){toast(L('Tidak ada perubahan dari preview penuh.','No changes in the full preview.'));return}
+ // pakai insertText agar Ctrl+Z di kolom kode bisa membatalkan
+ ta.focus();ta.select();let ok=false;try{ok=document.execCommand('insertText',false,h)}catch(e){}
+ if(!ok||ta.value!==h)ta.value=h;
+ S.html=ta.value;save();$('#hFrame').srcdoc=pz(S.html,'Nama');ta.setSelectionRange(0,0);ta.scrollTop=0;
+ toast(L('HTML dari preview penuh masuk ke kolom kode. Ctrl+Z untuk membatalkan.','HTML from the full preview is now in the code box. Ctrl+Z to undo.'));
+};
 $('#hNext').onclick=()=>go('prev');
 
 /* ---------- preview & tes ---------- */
@@ -924,6 +949,9 @@ $('#tplBack').onclick=()=>navBack('choose');
 $('#tplResumeBtn').onclick=()=>{S.mode='dnd';renderAll();go('edit')};
 /* i18n + settings */
 const EN={
+'⛶ Preview penuh':'⛶ Full preview','⤓ Ambil dari preview penuh':'⤓ Pull from full preview',
+'Buka HTML di tab baru untuk diedit lewat Inspect':'Open the HTML in a new tab to edit it with Inspect','Masukkan HTML dari tab preview penuh ke kolom kode':'Put the HTML from the full preview tab into the code box','Buka email di tab baru (bisa di-Inspect)':'Open the email in a new tab (you can Inspect it)',
+'⛶ Preview penuh membuka HTML apa adanya di tab baru. Edit dengan klik kanan → Inspect, lalu klik “⤓ Ambil dari preview penuh” (atau salin outerHTML dari tag <html> dan tempel di sini).':'⛶ Full preview opens the HTML as-is in a new tab. Edit it with right-click → Inspect, then click “⤓ Pull from full preview” (or copy the outerHTML of the <html> tag and paste it here).',
 'Metode kirim':'Sending method','⚡ Langsung via Gmail':'⚡ Directly via Gmail','📋 Buka Gmail & tempel':'📋 Open Gmail & paste',
 'Google Client ID (Gmail API)':'Google Client ID (Gmail API)','Biasanya diisi di config.js. Isi di sini hanya untuk testing di browser ini.':'Usually set in config.js. Fill it here only to test in this browser.',
 'Jeda antar email (detik)':'Delay between emails (seconds)','Jeda saat “Kirim ke semua”. Makin besar, makin aman dari batas Gmail.':'Delay used by “Send to all”. Longer is safer against Gmail limits.',
