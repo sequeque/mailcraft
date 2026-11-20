@@ -98,6 +98,23 @@ main{padding:20px;max-width:1360px;margin:0 auto}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media(max-width:900px){.two{grid-template-columns:1fr}}
 .code{font:12.5px/1.5 ui-monospace,Menlo,Consolas,monospace;min-height:520px;white-space:pre}
+:root{--cm-bg:#ffffff;--cm-fg:#1f1f1f;--cm-gut:#f8f8f8;--cm-num:#6e7681;--cm-sel:#add6ff;--cm-cur:#000;--cm-line:#f3f3f3;--cm-tag:#800000;--cm-attr:#e50000;--cm-str:#0000ff;--cm-com:#008000;--cm-br:#800000;--cm-prop:#e50000;--cm-num2:#098658;--cm-kw:#0000ff;--cm-val:#0451a5;--cm-match:rgba(0,0,0,.08)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--cm-bg:#1e1e1e;--cm-fg:#d4d4d4;--cm-gut:#1e1e1e;--cm-num:#858585;--cm-sel:#264f78;--cm-cur:#aeafad;--cm-line:#2a2d2e;--cm-tag:#569cd6;--cm-attr:#9cdcfe;--cm-str:#ce9178;--cm-com:#6a9955;--cm-br:#808080;--cm-prop:#9cdcfe;--cm-num2:#b5cea8;--cm-kw:#c586c0;--cm-val:#ce9178;--cm-match:rgba(255,255,255,.1)}}
+:root[data-theme="dark"]{--cm-bg:#1e1e1e;--cm-fg:#d4d4d4;--cm-gut:#1e1e1e;--cm-num:#858585;--cm-sel:#264f78;--cm-cur:#aeafad;--cm-line:#2a2d2e;--cm-tag:#569cd6;--cm-attr:#9cdcfe;--cm-str:#ce9178;--cm-com:#6a9955;--cm-br:#808080;--cm-prop:#9cdcfe;--cm-num2:#b5cea8;--cm-kw:#c586c0;--cm-val:#ce9178;--cm-match:rgba(255,255,255,.1)}
+#v-html .CodeMirror{height:560px;border:1px solid var(--line);border-radius:8px;font:13px/1.55 ui-monospace,"Cascadia Code",Consolas,Menlo,monospace}
+.cm-s-vsc.CodeMirror{background:var(--cm-bg);color:var(--cm-fg)}
+.cm-s-vsc .CodeMirror-gutters{background:var(--cm-gut);border-right:0}
+.cm-s-vsc .CodeMirror-linenumber{color:var(--cm-num);padding:0 10px 0 6px}
+.cm-s-vsc .CodeMirror-cursor{border-left:2px solid var(--cm-cur)}
+.cm-s-vsc .CodeMirror-selected,.cm-s-vsc.CodeMirror-focused .CodeMirror-selected{background:var(--cm-sel)}
+.cm-s-vsc .CodeMirror-activeline-background{background:var(--cm-line)}
+.cm-s-vsc .cm-tag{color:var(--cm-tag)}.cm-s-vsc .cm-attribute{color:var(--cm-attr)}.cm-s-vsc .cm-string{color:var(--cm-str)}
+.cm-s-vsc .cm-comment{color:var(--cm-com);font-style:normal}.cm-s-vsc .cm-bracket{color:var(--cm-br)}.cm-s-vsc .cm-meta{color:var(--cm-kw)}
+.cm-s-vsc .cm-property{color:var(--cm-prop)}.cm-s-vsc .cm-number{color:var(--cm-num2)}.cm-s-vsc .cm-keyword,.cm-s-vsc .cm-def{color:var(--cm-kw)}
+.cm-s-vsc .cm-atom,.cm-s-vsc .cm-variable-2,.cm-s-vsc .cm-variable-3{color:var(--cm-val)}.cm-s-vsc .cm-qualifier,.cm-s-vsc .cm-builtin{color:var(--cm-tag)}
+.cm-s-vsc .CodeMirror-matchingtag{background:var(--cm-match)}
+.edhead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}.edhead h3{margin:0}
+.edhead .kbd{font-size:11.5px;color:var(--muted)}
 .pv{display:flex;justify-content:center}
 .pv iframe{border:1px solid var(--line);border-radius:10px;background:#fff;height:640px;width:100%;max-width:700px}
 .pv iframe.m{max-width:375px}
@@ -109,21 +126,11 @@ main{padding:20px;max-width:1360px;margin:0 auto}
 .note{font-size:12.5px;color:var(--muted);background:var(--soft);padding:10px 12px;border-radius:8px;margin:12px 0}
 #toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--text);color:var(--bg);padding:9px 16px;border-radius:999px;opacity:0;transition:.25s;pointer-events:none;z-index:99;max-width:90%}
 #toast.s{opacity:1}
-.gconn{border:1px solid var(--line);border-radius:10px;padding:12px;margin:10px 0 4px;background:var(--bg)}
-.gconn .who{display:flex;align-items:center;gap:8px;font-size:13px;flex-wrap:wrap}
-.gconn .dot{width:9px;height:9px;border-radius:50%;background:#22c55e;flex:none;box-shadow:0 0 0 3px rgba(34,197,94,.2)}
-.gconn .row2{margin-top:8px}
-.gbtn{display:inline-flex;align-items:center;gap:10px;font-weight:600;padding:9px 16px}
-.gbtn svg{width:18px;height:18px;flex:none}
 .st{font-size:11.5px;padding:2px 8px;border-radius:999px;white-space:nowrap}
 .st.ok{background:rgba(34,197,94,.15);color:#16a34a}.st.err{background:rgba(220,38,38,.14);color:#dc2626;cursor:help}.st.run{background:var(--soft);color:var(--acc)}
 .prog{height:8px;border-radius:999px;background:var(--line);overflow:hidden;margin:10px 0 4px}.prog i{display:block;height:100%;background:linear-gradient(90deg,#22c55e,#14b8a6);transition:width .3s}
 .rc .acts{display:flex;gap:6px;align-items:center;flex:none}
 .ovl{position:fixed;inset:0;background:rgba(0,0,0,.55);display:grid;place-items:center;z-index:100;padding:16px}
-#setup .dlgbox{width:min(560px,100%);text-align:left;max-height:90vh;overflow:auto}
-#setup h3{margin:0 0 6px;font-size:17px;color:var(--text);text-transform:none;letter-spacing:0}
-#setup ol{padding-left:20px;font-size:13.5px;line-height:1.65;margin:10px 0}#setup li{margin-bottom:6px}#setup a{color:var(--acc)}
-code.k{background:var(--soft);color:var(--text);padding:2px 6px;border-radius:6px;word-break:break-all;font-size:12.5px}
 .foot{text-align:center;font-size:12px;color:var(--muted);margin:40px 0 0!important}.foot a{color:var(--muted)}
 button:disabled{opacity:.55;cursor:not-allowed}
 #gmPop .dlgbox{width:min(480px,100%);text-align:left}
@@ -134,8 +141,16 @@ button:disabled{opacity:.55;cursor:not-allowed}
 #gmPop .cp.ok{background:rgba(34,197,94,.13);color:#15803d}#gmPop .cp.no{background:rgba(220,38,38,.12);color:#dc2626}
 #gmPop .meta{font-size:12.5px;color:var(--muted);word-break:break-word;margin:0 0 4px}
 </style>
-<script src="config.js"></script>
-<script src="xlsx.full.min.js" defer></script>
+<link rel="stylesheet" href="vendor/codemirror/codemirror.css">
+<script src="vendor/codemirror/codemirror.js"></script>
+<script src="vendor/codemirror/xml.js"></script>
+<script src="vendor/codemirror/javascript.js"></script>
+<script src="vendor/codemirror/css.js"></script>
+<script src="vendor/codemirror/htmlmixed.js"></script>
+<script src="vendor/codemirror/xml-fold.js"></script>
+<script src="vendor/codemirror/closetag.js"></script>
+<script src="vendor/codemirror/matchtags.js"></script>
+<script src="vendor/xlsx.full.min.js" defer></script>
 </head>
 <body>
 <div class="deco" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i><svg viewBox="0 0 1440 320" preserveAspectRatio="none"><path fill="#14b8a6" fill-opacity=".14" d="M0,224L60,208C120,192,240,160,360,165C480,171,600,213,720,213C840,213,960,171,1080,154C1200,139,1320,149,1380,154L1440,160L1440,320L0,320Z"/><path fill="#0ea5e9" fill-opacity=".12" d="M0,256L80,240C160,224,320,192,480,197C640,203,800,245,960,250C1120,256,1280,224,1360,208L1440,192L1440,320L0,320Z"/><path fill="#22c55e" fill-opacity=".10" d="M0,288L120,277C240,267,480,245,720,250C960,256,1200,288,1320,298L1440,309L1440,320L0,320Z"/></svg></div>
@@ -152,10 +167,6 @@ button:disabled{opacity:.55;cursor:not-allowed}
     <label>Font bawaan teks baru</label><select id="setFont"></select>
     <label>Tanda tangan / footer otomatis</label><textarea id="setSig" rows="3" placeholder="Contoh: Dikirim oleh Budi · budi@gmail.com"></textarea>
     <div class="hint">Ditambahkan di bagian bawah setiap email.</div>
-    <label>Google Client ID (Gmail API)</label><input id="setCid" placeholder="xxxx.apps.googleusercontent.com" spellcheck="false">
-    <div class="hint">Biasanya diisi di config.js. Isi di sini hanya untuk testing di browser ini.</div>
-    <label>Jeda antar email (detik)</label><input id="setDelay" type="number" min="1" max="60" step="1">
-    <div class="hint">Jeda saat “Kirim ke semua”. Makin besar, makin aman dari batas Gmail.</div>
     <label class="chk"><input type="checkbox" id="setDeco">Hiasan latar halaman depan</label>
     <div class="row2"><button id="setReset">Reset draf</button></div>
   </div>
@@ -219,11 +230,11 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <section id="v-html" class="hid">
   <div class="two">
     <div class="card">
-      <h3>Kode HTML</h3>
+      <div class="edhead"><h3>Kode HTML</h3><span><span class="kbd">Shift+Alt+F</span> <button id="hFmt" title="Rapikan kode seperti Prettier di VS Code">✨ Rapikan</button></span></div>
       <textarea id="code" class="code" spellcheck="false" placeholder="Tempel HTML emailmu di sini"></textarea>
-      <div class="row2"><button class="pri" id="hPrev">👁 Preview</button><button id="hFull" title="Buka HTML di tab baru untuk diedit lewat Inspect">⛶ Preview penuh</button><button id="hPull" title="Masukkan HTML dari tab preview penuh ke kolom kode">⤓ Ambil dari preview penuh</button><button id="hUp">⬆ Upload gambar</button><button id="hNext">Lanjut →</button></div>
-      <div class="hint">⛶ Preview penuh membuka HTML apa adanya di tab baru. Edit dengan klik kanan → Inspect, lalu klik “⤓ Ambil dari preview penuh” (atau salin outerHTML dari tag &lt;html&gt; dan tempel di sini).</div>
-      <div class="hint">Upload gambar untuk mendapat link publik; klik gambar di bawah untuk menyisipkannya di posisi kursor.</div>
+      <div class="row2"><button class="pri" id="hPrev">👁 Preview</button><button id="hFull" title="Buka HTML di tab baru untuk diedit lewat Inspect">⛶ Preview penuh</button><button id="hUp">⬆ Upload gambar</button><button id="hNext">Lanjut →</button></div>
+      <div class="hint">⛶ Preview penuh membuka HTML apa adanya di tab baru. Edit dengan klik kanan → Inspect, lalu salin outerHTML dari tag &lt;html&gt; dan tempel di sini. Kode yang ditempel otomatis dirapikan.</div>
+      <div class="hint">Upload gambar, lalu klik gambar di bawah untuk menyisipkannya di posisi kursor.</div>
       <div class="lib" id="lib2"></div>
     </div>
     <div class="card"><h3>Preview</h3><div class="pv"><iframe id="hFrame" title="Preview HTML"></iframe></div></div>
@@ -236,10 +247,9 @@ button:disabled{opacity:.55;cursor:not-allowed}
     <div class="card" style="align-self:start">
       <h3>Kirim email tes</h3>
       <div class="hint">Lihat hasil wireframe di inbox asli sebelum dikirim ke penerima.</div>
-      <div id="gconn2" class="gconn"></div>
-      <label>From (akun Gmail pengirim)</label><input id="testFrom" type="email" list="accList" placeholder="kamu@gmail.com" autocomplete="email">
+      <label>From (akun Gmail pengirim)</label><input id="testFrom" type="email" placeholder="kamu@gmail.com" autocomplete="email">
       <label>Email tujuan tes</label><input id="testTo" type="email" placeholder="siapa@gmail.com">
-      <div class="row2"><button id="test">🧪 Kirim tes via Gmail</button></div>
+      <div class="row2"><button id="test">🧪 Buka tes di Gmail</button></div>
       <div class="row2" style="margin-top:24px"><button id="back">← Edit lagi</button><button class="pri" id="toSend">Lanjut ke pengiriman →</button></div>
     </div>
   </div>
@@ -249,9 +259,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
   <div class="two">
     <div class="card">
       <h3>Detail email</h3>
-      <label id="methodLbl">Metode kirim</label><div class="seg" id="method"><button data-m="api">⚡ Langsung via Gmail</button><button data-m="manual">📋 Buka Gmail &amp; tempel</button></div>
-      <div id="gconn" class="gconn"></div>
-      <div id="fromWrap"><label>From (akun Gmail pengirim)</label><input id="from" type="email" list="accList" placeholder="kamu@gmail.com" autocomplete="email"><div class="hint" id="fromHint"></div></div><datalist id="accList"></datalist>
+      <div id="fromWrap"><label>From (akun Gmail pengirim)</label><input id="from" type="email" placeholder="kamu@gmail.com" autocomplete="email"><div class="hint">Opsional. Jika diisi, Gmail dibuka dengan akun ini (harus sudah login di browser).</div></div>
       <label>To (pisahkan dengan koma)</label><textarea id="to" rows="3" placeholder="budi@gmail.com, Siti &lt;siti@yahoo.com&gt;"></textarea>
       <div class="row2"><button id="xlBtn">📄 Upload Excel</button><button id="xlTpl">⬇ Template Excel</button><button class="ghost" id="xlClr">Hapus hasil upload</button></div>
       <input type="file" id="xlIn" accept=".xlsx,.xls,.csv" class="hid">
@@ -361,7 +369,7 @@ const pz=(s,n)=>s.replace(/\{\{\s*(nama|name)\s*\}\}/gi,n||'teman');
 /* ---------- views + router (tombol back/forward browser) ---------- */
 const ROUTE={home:'',choose:'pilih',tpl:'template',dnd:'desain',html:'kode',prev:'preview',send:'kirim'};
 function routeView(){const m=location.hash.match(/^#\/?([\w-]*)/),k=m?m[1]:'';return Object.keys(ROUTE).find(v=>ROUTE[v]===k)||'home'}
-function closeOverlays(){$('#settings').classList.add('hid');$('#dlg').classList.add('hid');closeSetup();const g=$('#gmPop');if(g)g.remove()}
+function closeOverlays(){$('#settings').classList.add('hid');$('#dlg').classList.add('hid');const g=$('#gmPop');if(g)g.remove()}
 function go(v,o={}){
  if(v==='edit')v=S.mode==='html'?'html':'dnd';
  if(['dnd','html','prev','send'].includes(v)&&!S.mode){v='choose';o.fix=true}
@@ -374,7 +382,7 @@ function go(v,o={}){
  document.querySelectorAll('#steps button').forEach(b=>b.classList.toggle('on',(b.dataset.v==='edit'&&(v==='dnd'||v==='html'))||b.dataset.v===v));
  if(v==='prev'){$('#frame').srcdoc=pz(getHtml(),'Nama');(S.devD==='m'?$('#pm'):$('#pd')).click()}
  if(v==='send')renderRcpt();
- if(v==='html'){$('#code').value=S.html;if(S.autoPrev)$('#hFrame').srcdoc=pz(S.html,'Nama')}
+ if(v==='html'){setCode(S.html);if(S.autoPrev)$('#hFrame').srcdoc=pz(S.html,'Nama')}
  // catat di riwayat browser supaya tombol back/forward browser berfungsi
  const url=v==='home'?location.pathname+location.search:'#/'+ROUTE[v],cur=history.state&&history.state.mc?history.state:null;
  if(o.pop){if(o.fix)history.replaceState(Object.assign({},cur||{mc:1,d:1},{v}),'',url)}
@@ -561,7 +569,7 @@ function libClick(e){
  if(e.target.closest('[data-rm]'))return rmImg(+d.dataset.i);
  if(c)return copyText(l.url);
  if(S.mode==='dnd'){const f=S.sel&&S.sel.t==='b'&&findB(S.sel.id);if(f&&(f.b.type==='image'||f.b.type==='frame')){f.b.p.src=l.url;renderAll()}else addBlock('image',l.url)}
- else{const ta=$('#code'),s=`<img src="${l.url}" alt="" style="max-width:100%;height:auto;display:block">`;ta.setRangeText(s,ta.selectionStart,ta.selectionEnd,'end');S.html=ta.value;save();toast('Gambar disisipkan')}
+ else{const s=`<img src="${l.url}" alt="" style="max-width:100%;height:auto;display:block">`;if(cm){cm.replaceSelection(s,'end');cm.focus()}else{const ta=$('#code');ta.setRangeText(s,ta.selectionStart,ta.selectionEnd,'end');onCode(ta.value)}toast('Gambar disisipkan')}
 }
 $('#lib1').onclick=libClick;$('#lib2').onclick=libClick;
 let rmIdx=-1;
@@ -584,54 +592,60 @@ $('#dlgYes').onclick=async()=>{
 function copyText(t){navigator.clipboard.writeText(t).then(()=>toast('Link disalin'),()=>{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();toast('Link disalin')})}
 
 /* ---------- HTML mode ---------- */
-let apT;$('#code').oninput=e=>{S.html=e.target.value;save();if(S.autoPrev){clearTimeout(apT);apT=setTimeout(()=>{$('#hFrame').srcdoc=pz(S.html,'Nama')},300)}};
+let apT,cm=null,fmtBusy=false;
+const onCode=v=>{S.html=v;save();if(S.autoPrev){clearTimeout(apT);apT=setTimeout(()=>{$('#hFrame').srcdoc=pz(S.html,'Nama')},300)}};
+const getCode=()=>cm?cm.getValue():$('#code').value;
+function setCode(v){if(cm){if(cm.getValue()!==v){cm.setValue(v);cm.clearHistory()}cm.refresh()}else $('#code').value=v}
+if(window.CodeMirror){
+ cm=CodeMirror.fromTextArea($('#code'),{mode:'htmlmixed',theme:'vsc',lineNumbers:true,tabSize:2,indentUnit:2,smartIndent:true,autoCloseTags:true,matchTags:{bothTags:true},lineWrapping:false,viewportMargin:30,
+  extraKeys:{'Shift-Alt-F':()=>formatCode(),'Ctrl-Space':false,Tab:c=>c.somethingSelected()?c.indentSelection('add'):c.replaceSelection('  ','end')}});
+ cm.on('change',(c,ch)=>{onCode(c.getValue());if(ch.origin==='paste'&&!fmtBusy&&/<(!doctype|html|body|table|div)\b/i.test(ch.text.join('\n'))&&c.getValue().length===ch.text.join('\n').length)formatCode(true)});
+}else $('#code').oninput=e=>onCode(e.target.value);
+let prP=null;
+function loadPrettier(){
+ if(window.prettier&&window.prettierPlugins&&prettierPlugins.html)return Promise.resolve();
+ return prP||(prP=Promise.all(['standalone','html','postcss','babel','estree'].map(n=>new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='vendor/prettier/'+n+'.js';sc.onload=res;sc.onerror=rej;document.head.appendChild(sc)}))).catch(e=>{prP=null;throw e}));
+}
+async function formatCode(quiet){
+ const src=getCode();if(!src.trim()||fmtBusy)return;
+ fmtBusy=true;const b=$('#hFmt');b.disabled=true;
+ try{
+  await loadPrettier();
+  const out=await prettier.format(src,{parser:'html',plugins:Object.values(prettierPlugins),printWidth:100,tabWidth:2,htmlWhitespaceSensitivity:'css',bracketSameLine:false});
+  if(out!==src){if(cm){const sc=cm.getScrollInfo();cm.operation(()=>{cm.setValue(out)});cm.scrollTo(null,Math.min(sc.top,cm.getScrollInfo().height))}else $('#code').value=out;onCode(out)}
+  if(!quiet)toast(L('Kode dirapikan. Ctrl+Z untuk membatalkan.','Code formatted. Ctrl+Z to undo.'));
+ }catch(e){toast(e&&e.loc?L(`Kode belum bisa dirapikan: ada tag yang salah di baris ${e.loc.start.line}.`,`Could not format: invalid tag at line ${e.loc.start.line}.`):L('Kode belum bisa dirapikan. Cek tag yang belum ditutup.','Could not format the code. Check for unclosed tags.'))}
+ finally{fmtBusy=false;b.disabled=false}
+}
+$('#hFmt').onclick=()=>formatCode();
 $('#hPrev').onclick=()=>{$('#hFrame').srcdoc=pz(S.html,'Nama')};
 /* ---------- preview penuh (tab baru, bisa di-Inspect) ---------- */
-let fullWin=null;
 function openFull(html){
- // tab baru same-origin agar hasil editan bisa diambil kembali; HTML ditulis apa adanya tanpa sisipan apa pun
+ // HTML ditulis apa adanya ke tab baru, tanpa sisipan apa pun, agar bisa di-Inspect
  const w=window.open('','mailcraft-preview-penuh');
  if(!w){toast(L('Popup diblokir browser. Izinkan popup untuk situs ini.','Popup blocked. Allow popups for this site.'));return}
  w.document.open();w.document.write(html);w.document.close();
- fullWin=w;try{w.focus()}catch(e){}
+ try{w.focus()}catch(e){}
  toast(L('Preview penuh dibuka di tab baru. Klik kanan → Inspect untuk mengedit.','Full preview opened in a new tab. Right-click → Inspect to edit.'));
 }
-function fullHtml(d){const t=d.doctype;return(t?'<!DOCTYPE '+t.name+(t.publicId?' PUBLIC "'+t.publicId+'"':'')+(t.systemId?' "'+t.systemId+'"':'')+'>\n':'')+d.documentElement.outerHTML}
-$('#hFull').onclick=()=>openFull($('#code').value);
-$('#pFull').onclick=()=>openFull(getHtml());
-$('#hPull').onclick=()=>{
- let d=null;try{d=fullWin&&!fullWin.closed&&fullWin.document}catch(e){}
- if(!d||!d.documentElement){toast(L('Buka “⛶ Preview penuh” dulu, edit di sana, lalu klik tombol ini.','Open “⛶ Full preview” first, edit it there, then click this button.'));return}
- const h=fullHtml(d),ta=$('#code');
- if(h===ta.value){toast(L('Tidak ada perubahan dari preview penuh.','No changes in the full preview.'));return}
- // pakai insertText agar Ctrl+Z di kolom kode bisa membatalkan
- ta.focus();ta.select();let ok=false;try{ok=document.execCommand('insertText',false,h)}catch(e){}
- if(!ok||ta.value!==h)ta.value=h;
- S.html=ta.value;save();$('#hFrame').srcdoc=pz(S.html,'Nama');ta.setSelectionRange(0,0);ta.scrollTop=0;
- toast(L('HTML dari preview penuh masuk ke kolom kode. Ctrl+Z untuk membatalkan.','HTML from the full preview is now in the code box. Ctrl+Z to undo.'));
-};
+$('#hFull').onclick=()=>openFull(getCode());
 $('#hNext').onclick=()=>go('prev');
-
+$('#pFull').onclick=()=>openFull(getHtml());
 /* ---------- preview & tes ---------- */
 $('#pd').onclick=()=>{$('#frame').className='';$('#pd').classList.add('on');$('#pm').classList.remove('on')};
 $('#pm').onclick=()=>{$('#frame').className='m';$('#pm').classList.add('on');$('#pd').classList.remove('on')};
 $('#back').onclick=()=>navBack('edit');$('#toSend').onclick=()=>go('send');
 $('#testTo').oninput=e=>{S.testTo=e.target.value;save()};
-$('#test').onclick=async()=>{
+$('#test').onclick=()=>{
  const to=S.testTo.trim()||S.from.trim();
  if(!/^\S+@\S+\.\S+$/.test(to)){toast('Isi email tujuan tes dulu');return}
- const subj='[TES] '+pz(S.subj||'Tanpa subject','Nama'),html=pz(getHtml(),'Nama');
- if(!useApi()){gmail({to,subj,html});return}
- if(!await needApi())return;
- const b=$('#test');b.disabled=true;b.textContent=L('Mengirim…','Sending…');
- try{await gSend({to,subj,html});toast(L('Email tes terkirim ke ','Test email sent to ')+to+L('. Cek inbox (atau tab Promosi/Spam).','. Check the inbox (or Promotions/Spam).'))}
- catch(e){toast(e.message)}
- finally{b.disabled=false;renderConn()}
+ if(!checkFrom())return;
+ gmail({to,subj:'[TES] '+pz(S.subj||'Tanpa subject','Nama'),html:pz(getHtml(),'Nama')});
 };
 
 /* ---------- kirim ---------- */
 ['to','subj'].forEach(k=>$('#'+k).addEventListener('input',e=>{S[k]=e.target.value;if(S.view==='send')renderRcpt();save()}));
-['#from','#testFrom'].forEach(id=>$(id).addEventListener('input',e=>{S.from=e.target.value;['#from','#testFrom'].forEach(o=>{if(o!==id)$(o).value=S.from});renderConn();save()}));
+['#from','#testFrom'].forEach(id=>$(id).addEventListener('input',e=>{S.from=e.target.value;['#from','#testFrom'].forEach(o=>{if(o!==id)$(o).value=S.from});save()}));
 function contacts(){
  const m=new Map(),add=(n,e)=>{e=String(e||'').trim().toLowerCase();if(/^\S+@\S+\.\S+$/.test(e)&&!m.has(e))m.set(e,{name:String(n||'').trim(),email:e})};
  S.upl.forEach(c=>add(c.name,c.email));
@@ -639,17 +653,11 @@ function contacts(){
  return[...m.values()];
 }
 function renderRcpt(){
- const c=contacts(),api=useApi(),st=x=>job.st[x.email]||'';$('#cnt').textContent=c.length?`(${c.length})`:'';
- const done=c.filter(x=>st(x)==='ok').length,fail=c.filter(x=>st(x).startsWith('err')).length,left=c.length-done,dis=!c.length||job.run?' disabled':'';
- $('#sendActs').innerHTML=api
-  ?`<button class="pri" id="oneBtn"${dis}>✉ ${L('Kirim email','Send email')}</button>`+(c.length>1?`<button id="seqBtn"${dis||(!left?' disabled':'')}>${job.arm?L('Yakin? Klik lagi untuk kirim','Sure? Click again to send'):'👤 '+(done&&left?L('Satu per satu ke sisa','One by one to remaining')+` (${left})`:L('Satu per satu','One by one')+` (${c.length})`)}</button><button id="bccBtn"${dis}>${L('Sekaligus (BCC)','All at once (BCC)')}</button>`:'')+(job.run?`<button class="danger" id="stopBtn">■ ${L('Berhenti','Stop')}</button>`:'')+((done||fail)&&!job.run?`<button class="ghost" id="rstBtn">${L('Reset status','Reset status')}</button>`:'')
-  :`<button class="pri" id="oneBtn"${!c.length?' disabled':''}>✉ ${L('Buka di Gmail','Open in Gmail')}</button>`+(c.length>1?`<button id="bccBtn">${L('Sekaligus (BCC)','All at once (BCC)')}</button>`:'');
- $('#sendProg').innerHTML=api&&c.length&&(job.run||done||fail)?`<div class="prog"><i style="width:${Math.round(done/c.length*100)}%"></i></div><div class="hint">${L('Terkirim','Sent')} ${done}/${c.length}${fail?` · ${fail} ${L('gagal','failed')}`:''}${job.run?' · '+L('jangan tutup tab ini','keep this tab open'):''}</div>`:'';
- const chip=x=>{const v=st(x);return v==='ok'?`<span class="st ok">✓ ${L('Terkirim','Sent')}</span>`:v==='run'?`<span class="st run">${L('Mengirim…','Sending…')}</span>`:v.startsWith('err')?`<span class="st err" title="${attr(v.slice(4))}">✗ ${L('Gagal','Failed')}</span>`:''};
- $('#rcpt').innerHTML=c.length?c.map((x,i)=>`<div class="rc"><span>${esc(x.name||'—')} <small>${esc(x.email)}</small></span><span class="acts">${api?chip(x):''}<button data-i="${i}"${api&&(job.run||st(x)==='run')?' disabled':''}>${api?(st(x)==='ok'?L('Kirim lagi','Send again'):L('Kirim','Send')):L('Buka di Gmail','Open in Gmail')}</button></span></div>`).join(''):`<div class="hint">${L('Isi kolom To atau upload Excel.','Fill in the To field or upload Excel.')}</div>`;
- $('#sendNote').textContent=api
-  ?L('“Kirim email” mengirim 1 email biasa dari akun From ke semua alamat di To (penerima saling melihat). Jika penerima lebih dari satu: “Satu per satu” mengirim email terpisah yang menyapa tiap orang dengan namanya, “Sekaligus (BCC)” mengirim 1 email tanpa saling melihat. Batas Gmail pribadi ±500 penerima/hari.','“Send email” sends 1 normal email from the From account to every address in To (recipients see each other). With several recipients: “One by one” sends separate emails greeting each person by name, “All at once (BCC)” sends 1 email where nobody sees the others. Personal Gmail allows about 500 recipients/day.')
-  :L('Gmail terbuka dengan penerima dan subject terisi, dan desain sudah disalin otomatis. Tempel dengan Ctrl+V di badan email, lalu kirim. Pastikan sudah login ke akun From. “Buka di Gmail” per orang menyapa dengan namanya.','Gmail opens with the recipients and subject filled in, and the design is copied automatically. Paste it with Ctrl+V into the email body, then send. Make sure you are signed in to the From account. “Open in Gmail” per person greets them by name.');
+ const c=contacts();$('#cnt').textContent=c.length?`(${c.length})`:'';
+ $('#sendActs').innerHTML=`<button class="pri" id="oneBtn"${!c.length?' disabled':''}>✉ ${L('Buka di Gmail','Open in Gmail')}</button>`+(c.length>1?`<button id="bccBtn">${L('Sekaligus (BCC)','All at once (BCC)')}</button>`:'');
+ $('#sendProg').innerHTML='';
+ $('#rcpt').innerHTML=c.length?c.map((x,i)=>`<div class="rc"><span>${esc(x.name||'—')} <small>${esc(x.email)}</small></span><span class="acts"><button data-i="${i}">${L('Buka di Gmail','Open in Gmail')}</button></span></div>`).join(''):`<div class="hint">${L('Isi kolom To atau upload Excel.','Fill in the To field or upload Excel.')}</div>`;
+ $('#sendNote').textContent=L('“Buka di Gmail” (atas) membuka 1 email ke semua alamat di To. Tombol per orang membuka email terpisah yang menyapa namanya ({{nama}}). “Sekaligus (BCC)” membuka 1 email tanpa penerima saling melihat. Desain disalin otomatis, lalu tempel dengan Ctrl+V di badan email Gmail.','“Open in Gmail” (top) opens 1 email to every address in To. The per-person button opens a separate email greeting them by name ({{nama}}). “All at once (BCC)” opens 1 email where recipients cannot see each other. The design is copied automatically; paste it with Ctrl+V into the Gmail body.');
 }
 $('#xlBtn').onclick=()=>$('#xlIn').click();
 $('#xlTpl').onclick=async()=>{
@@ -674,25 +682,16 @@ $('#xlIn').onchange=async e=>{
  }catch(err){toast('File tidak bisa dibaca')}
  e.target.value='';
 };
-$('#v-send').addEventListener('click',async e=>{
+$('#v-send').addEventListener('click',e=>{
  const b=e.target.closest('button');if(!b||b.disabled)return;
- if(b.closest('#rcpt')){
-  const c=contacts()[+b.dataset.i];if(!c)return;
-  if(!useApi()){if(!checkFrom())return;gmail({to:c.email,subj:pz(S.subj||'Tanpa subject',c.name),html:pz(getHtml(),esc(c.name))});b.textContent=L('✓ Dibuka','✓ Opened');return}
-  if(!await needApi())return;
-  job.st[c.email]='run';renderRcpt();
-  try{await gSend({to:addr(c),subj:pz(S.subj||'Tanpa subject',c.name),html:pz(getHtml(),esc(c.name))});job.st[c.email]='ok';toast(L('Terkirim ke ','Sent to ')+c.email)}
-  catch(err){job.st[c.email]='err:'+err.message;toast(err.message)}
-  renderRcpt();return}
- if(b.id==='seqBtn'){if(!job.arm){job.arm=1;renderRcpt();clearTimeout(job.at);job.at=setTimeout(()=>{job.arm=0;renderRcpt()},4000);return}job.arm=0;clearTimeout(job.at);runSeq()}
- else if(b.id==='bccBtn')runBcc();
- else if(b.id==='oneBtn')runOne();
- else if(b.id==='stopBtn'){job.stop=true;b.disabled=true;b.textContent=L('Menghentikan…','Stopping…')}
- else if(b.id==='rstBtn'){job.st={};renderRcpt()}
+ const subj=S.subj||'Tanpa subject';
+ if(b.closest('#rcpt')){const c=contacts()[+b.dataset.i];if(!c||!checkFrom())return;gmail({to:c.email,subj:pz(subj,c.name),html:pz(getHtml(),esc(c.name))});return}
+ if(b.id!=='oneBtn'&&b.id!=='bccBtn')return;
+ const c=contacts();if(!c.length){toast('Belum ada penerima');return}if(!checkFrom())return;
+ if(b.id==='oneBtn'){const nm=c.length===1?c[0].name:'';gmail({to:c.map(x=>x.email).join(','),subj:pz(subj,nm),html:pz(getHtml(),esc(nm))})}
+ else gmail({to:S.from.trim(),bcc:c.map(x=>x.email).join(','),subj:pz(subj,''),html:pz(getHtml(),'')});
 });
-$('#method').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.method=b.dataset.m;save();renderConn()};
-addEventListener('beforeunload',e=>{if(job.run){e.preventDefault();e.returnValue=''}});
-const checkFrom=()=>/\S+@\S+\.\S+/.test(S.from)||(toast('Isi email From dulu'),false);
+const checkFrom=()=>!S.from.trim()||/^\S+@\S+\.\S+$/.test(S.from.trim())||(toast('Alamat From tidak valid'),false);
 function copyRich(html){
  const body=new DOMParser().parseFromString(html,'text/html').body.innerHTML;
  const fb=()=>{const d=document.createElement('div');d.contentEditable='true';d.style.cssText='position:fixed;left:-9999px;top:0';d.innerHTML=body;document.body.appendChild(d);const r=document.createRange();r.selectNodeContents(d);const s=getSelection();s.removeAllRanges();s.addRange(r);let ok=false;try{ok=document.execCommand('copy')}catch(e){}s.removeAllRanges();d.remove();return ok};
@@ -722,204 +721,6 @@ function gmail({to,bcc,subj,html}){
  d.addEventListener('keydown',e=>{if(e.key==='Escape')d.remove()});
  $('#gmGo').onclick=()=>{window.open(url,'_blank','noopener');d.remove();toast(L(`Di Gmail: klik badan email lalu tekan ${K}+V.`,`In Gmail: click the email body, then press ${K}+V.`))};
  $('#gmGo').focus();
-}
-
-/* ---------- Gmail API: login Google + kirim langsung ---------- */
-const CFG=window.MAILCRAFT_CONFIG||{};
-const G_SEND='https://www.googleapis.com/auth/gmail.send';
-const G_SCOPE=G_SEND+' https://www.googleapis.com/auth/userinfo.email openid';
-const GK='mailcraft-gmail';
-let GA={},job={st:{},run:false,stop:false,arm:0};// GA: akun Gmail yang terhubung {email:{tok,exp}}
-try{GA=JSON.parse(sessionStorage.getItem(GK))||{};if(GA.email)GA={}}catch(e){}
-const gCid=()=>String(S.gcid||CFG.googleClientId||'').trim();
-const fromAcc=()=>String(S.from||'').trim().toLowerCase();
-const accOn=e=>!!(GA[e]&&GA[e].tok&&GA[e].exp>Date.now());
-const gOn=()=>accOn(fromAcc());
-const setFrom=v=>{S.from=v;$('#from').value=v;$('#testFrom').value=v;save()};
-const useApi=()=>!!gCid()&&(S.method||'manual')==='api';
-const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-function gSave(){try{sessionStorage.setItem(GK,JSON.stringify(GA))}catch(e){}}
-let gsiP=null,tc=null,tcCid='',tcCb=null;
-function loadGsi(){
- if(window.google&&google.accounts&&google.accounts.oauth2)return Promise.resolve();
- return gsiP||(gsiP=new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';s.async=true;s.onload=res;s.onerror=()=>{gsiP=null;s.remove();rej(new Error(L('Gagal memuat login Google. Cek koneksi internet.','Could not load Google sign-in. Check your connection.')))};document.head.appendChild(s)}));
-}
-function gConnect(hint,pick){
- if(!gCid()){showSetup();return Promise.reject(new Error('setup'))}
- if(location.protocol==='file:'){toast(L('Login Google tidak bisa dari file lokal. Buka lewat http://localhost atau domain live.','Google sign-in does not work from a local file. Open it via http://localhost or your live domain.'));return Promise.reject(new Error('file'))}
- return loadGsi().then(()=>new Promise((res,rej)=>{
-  if(!tc||tcCid!==gCid()){tcCid=gCid();tc=google.accounts.oauth2.initTokenClient({client_id:tcCid,scope:G_SCOPE,callback:r=>tcCb&&tcCb(r),error_callback:e=>tcCb&&tcCb({error:e&&e.type||'unknown'})})}
-  tcCb=async r=>{tcCb=null;
-   if(r.error){rej(new Error(r.error==='popup_closed'?L('Login dibatalkan.','Sign-in cancelled.'):r.error==='popup_failed_to_open'?L('Popup login diblokir browser. Izinkan popup untuk situs ini.','The sign-in popup was blocked. Allow popups for this site.'):r.error==='access_denied'?L('Akses ditolak. Pastikan akunmu terdaftar sebagai test user.','Access denied. Make sure your account is listed as a test user.'):L('Login Google gagal: ','Google sign-in failed: ')+(r.error_description||r.error)));return}
-   if(!google.accounts.oauth2.hasGrantedAllScopes(r,G_SEND)){rej(new Error(L('Izin “Kirim email” belum dicentang. Hubungkan lagi dan centang izinnya.','The “Send email” permission was not ticked. Connect again and tick it.')));return}
-   let em='';try{const u=await(await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+r.access_token}})).json();em=String(u.email||'').toLowerCase()}catch(e){}
-   if(!em){rej(new Error(L('Tidak bisa membaca alamat akun Google. Coba lagi.','Could not read the Google account address. Try again.')));return}
-   GA[em]={tok:r.access_token,exp:Date.now()+((+r.expires_in||3600)-60)*1000};gSave();setFrom(em);renderConn();
-   if(hint&&hint!==em){const e=new Error(L(`Kamu login sebagai ${em}, bukan ${hint}. From diganti ke ${em}. Cek lalu klik kirim lagi.`,`You signed in as ${em}, not ${hint}. From was changed to ${em}. Check it, then click send again.`));e.mismatch=1;rej(e);return}
-   res(em)};
-  tc.requestAccessToken(Object.assign({prompt:pick||!hint?'select_account':''},hint?{login_hint:hint}:{}));
- }));
-}
-function gDisconnect(em){
- const t=GA[em]&&GA[em].tok;delete GA[em];gSave();
- if(t&&window.google&&google.accounts&&google.accounts.oauth2)try{google.accounts.oauth2.revoke(t,()=>{})}catch(e){}
- renderConn();toast(L('Gmail diputus.','Gmail disconnected.'));
-}
-async function needApi(){
- const f=fromAcc();
- if(f&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f)){toast(L('Alamat From tidak valid.','The From address is not valid.'));return false}
- if(accOn(f))return true;
- try{await gConnect(f,!f);return true}catch(e){if(!/^(setup|file)$/.test(e.message))toast(e.message);return false}
-}
-
-/* MIME: HTML + teks biasa + gambar base64 jadi lampiran inline (cid:) agar tampil di Gmail */
-function b64(s){const u=typeof s==='string'?new TextEncoder().encode(s):s;let o='';for(let i=0;i<u.length;i+=0x8000)o+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(o)}
-const wrap76=s=>s.replace(/.{1,76}/g,'$&\r\n');
-function hEnc(s){
- s=String(s).replace(/[\r\n]+/g,' ');if(/^[\x20-\x7e]*$/.test(s))return s;
- const te=new TextEncoder(),out=[];let cur='';
- for(const ch of s){if(te.encode(cur+ch).length>45){out.push(cur);cur=''}cur+=ch}
- if(cur)out.push(cur);return out.map(p=>'=?UTF-8?B?'+b64(p)+'?=').join('\r\n ');
-}
-function addr(c){const n=String(c.name||'').replace(/["\\<>\r\n]/g,'').trim();return n?(/^[\x20-\x7e]*$/.test(n)?'"'+n+'"':hEnc(n))+' <'+c.email+'>':c.email}
-function toText(html){
- const d=new DOMParser().parseFromString(html.replace(/<(br|\/p|\/div|\/tr|\/h[1-6]|\/li|\/table)\b[^>]*>/gi,'$&\n'),'text/html');
- d.querySelectorAll('style,script,title').forEach(n=>n.remove());
- d.querySelectorAll('a[href]').forEach(a=>{const h=a.getAttribute('href'),t=a.textContent.trim();if(/^https?:/i.test(h)&&t&&t!==h)a.append(' ('+h+')')});
- return(d.body?d.body.textContent:'').replace(/[ \t\u00a0]+/g,' ').replace(/ *\n */g,'\n').replace(/\n{3,}/g,'\n\n').trim();
-}
-function buildMime({from,to,bcc,subj,html}){
- const imgs=[],seen=new Map(),N='\r\n',tag=Date.now().toString(36);
- html=html.replace(/data:(image\/[a-z0-9.+-]+);base64,([a-z0-9+/=\s]+)/gi,(m,t,d)=>{d=d.replace(/\s+/g,'');let id=seen.get(d);if(!id){id='img'+(imgs.length+1)+'.'+tag+'@mailcraft';seen.set(d,id);imgs.push({t:t.toLowerCase(),d,id})}return 'cid:'+id});
- const bd=()=>'=_mc_'+Math.random().toString(36).slice(2)+tag,A=bd(),R=bd();
- const part=(type,data)=>'Content-Type: '+type+'; charset=UTF-8'+N+'Content-Transfer-Encoding: base64'+N+N+wrap76(b64(data));
- const htmlPart=!imgs.length?part('text/html',html):'Content-Type: multipart/related; boundary="'+R+'"'+N+N+'--'+R+N+part('text/html',html)
-  +imgs.map((m,i)=>{const ext=m.t.split('/')[1].replace('jpeg','jpg').replace(/\+.*/,''),fn='gambar'+(i+1)+'.'+ext;
-   return '--'+R+N+'Content-Type: '+m.t+'; name="'+fn+'"'+N+'Content-Transfer-Encoding: base64'+N+'Content-ID: <'+m.id+'>'+N+'Content-Disposition: inline; filename="'+fn+'"'+N+N+wrap76(m.d)}).join('')+'--'+R+'--'+N;
- return['From: '+from,'To: '+to,bcc?'Bcc: '+bcc:'','Subject: '+hEnc(subj),'MIME-Version: 1.0','X-Mailer: MailCraft','Content-Type: multipart/alternative; boundary="'+A+'"'].filter(Boolean).join(N)
-  +N+N+'--'+A+N+part('text/plain',toText(html))+'--'+A+N+htmlPart+'--'+A+'--'+N;
-}
-const authErr=()=>{delete GA[fromAcc()];gSave();renderConn();const e=new Error(L('Sesi Gmail habis. Klik “Hubungkan ulang”, lalu lanjutkan.','Gmail session expired. Click “Reconnect”, then continue.'));e.auth=1;return e};
-async function gSend(m){
- const acc=fromAcc(),raw=buildMime(Object.assign({from:addr({email:acc})},m));
- for(let a=0;;a++){
-  if(!accOn(acc))throw authErr();
-  let r;
-  try{r=await fetch('https://gmail.googleapis.com/upload/gmail/v1/users/me/messages/send?uploadType=media',{method:'POST',headers:{Authorization:'Bearer '+(GA[acc]||{}).tok,'Content-Type':'message/rfc822'},body:raw})}
-  catch(e){if(a<3){await sleep(2000*(a+1));continue}throw new Error(L('Koneksi internet bermasalah.','Network problem.'))}
-  if(r.ok)return r.json();
-  let j={};try{j=await r.json()}catch(e){}
-  const msg=(j.error&&j.error.message)||('HTTP '+r.status);
-  if(r.status===401)throw authErr();
-  if((r.status===429||r.status>=500)&&a<3){const ra=+r.headers.get('Retry-After');await sleep(ra>0&&ra<=60?ra*1000:4000*2**a);continue}
-  if(r.status===403&&/insufficient/i.test(msg))throw authErr();
-  const e=new Error(/has not been used|is disabled|accessNotConfigured/i.test(msg)?L('Gmail API belum diaktifkan di Google Cloud project (lihat panduan langkah 2).','Gmail API is not enabled in the Google Cloud project (see setup step 2).')
-   :/invalid to header|invalid.*address|recipient address/i.test(msg)?L('Alamat email penerima tidak valid.','Invalid recipient address.')
-   :r.status===429||/limit/i.test(msg)?L('Batas kirim Gmail tercapai. Coba lagi nanti (batas harian akun pribadi ±500 penerima).','Gmail sending limit reached. Try again later (personal accounts allow about 500 recipients/day).'):msg);
-  if(r.status===429||/limit/i.test(msg))e.stop=1;
-  throw e;
- }
-}
-async function runSeq(){
- const list=contacts().filter(x=>job.st[x.email]!=='ok');if(!list.length)return;
- if(!await needApi())return;
- const subj=S.subj||'Tanpa subject',html=getHtml(),gap=Math.max(1,+S.delay||2)*1000;
- job.run=true;job.stop=false;let ok=0,bad=0;renderRcpt();
- for(let i=0;i<list.length&&!job.stop;i++){
-  const x=list[i];job.st[x.email]='run';renderRcpt();
-  try{await gSend({to:addr(x),subj:pz(subj,x.name),html:pz(html,esc(x.name))});job.st[x.email]='ok';ok++}
-  catch(e){job.st[x.email]='err:'+e.message;bad++;if(e.auth||e.stop){job.stop=true;toast(e.message)}}
-  renderRcpt();
-  if(i<list.length-1&&!job.stop)await sleep(gap);
- }
- const stopped=job.stop;job.run=false;job.stop=false;renderRcpt();
- if(!stopped||ok)toast(L(`Selesai: ${ok} terkirim`,`Done: ${ok} sent`)+(bad?L(`, ${bad} gagal`,`, ${bad} failed`):''));
-}
-async function runOne(){
- const c=contacts();if(!c.length){toast(L('Isi kolom To dulu.','Fill in the To field first.'));return}
- const nm=c.length===1?c[0].name:'',subj=pz(S.subj||'Tanpa subject',nm),html=pz(getHtml(),esc(nm));
- if(!useApi()){if(!checkFrom())return;gmail({to:c.map(x=>x.email).join(','),subj,html});return}
- if(!await needApi())return;
- job.run=true;c.forEach(x=>job.st[x.email]='run');renderRcpt();
- try{await gSend({to:c.map(addr).join(', '),subj,html});c.forEach(x=>job.st[x.email]='ok');toast(L('Email terkirim dari ','Email sent from ')+fromAcc())}
- catch(e){c.forEach(x=>job.st[x.email]='err:'+e.message);toast(e.message)}
- job.run=false;renderRcpt();
-}
-async function runBcc(){
- const c=contacts();if(!c.length){toast('Belum ada penerima');return}
- if(!useApi()){if(!checkFrom())return;gmail({to:S.from.trim(),bcc:c.map(x=>x.email).join(','),subj:pz(S.subj||'Tanpa subject',''),html:pz(getHtml(),'')});return}
- if(!await needApi())return;
- const subj=pz(S.subj||'Tanpa subject',''),html=pz(getHtml(),''),N=90;
- job.run=true;renderRcpt();let ok=0;
- for(let i=0;i<c.length;i+=N){
-  const ch=c.slice(i,i+N);ch.forEach(x=>job.st[x.email]='run');renderRcpt();
-  try{await gSend({to:addr({email:fromAcc()}),bcc:ch.map(x=>x.email).join(', '),subj,html});ch.forEach(x=>job.st[x.email]='ok');ok+=ch.length}
-  catch(e){ch.forEach(x=>job.st[x.email]='err:'+e.message);toast(e.message);if(e.auth||e.stop)break}
-  renderRcpt();if(i+N<c.length)await sleep(Math.max(1,+S.delay||2)*1000);
- }
- job.run=false;renderRcpt();if(ok)toast(L(`Terkirim ke ${ok} penerima (BCC)`,`Sent to ${ok} recipients (BCC)`));
-}
-
-const GICON='<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>';
-function renderConn(){
- const api=useApi(),on=gOn();
- document.querySelectorAll('#method button').forEach(b=>b.classList.toggle('on',(b.dataset.m==='api')===api));
- ['#method','#methodLbl'].forEach(s=>$(s).classList.toggle('hid',!gCid()));
- let h;
- if(!api)h=`<div class="hint" style="margin:0">${L('Mode manual: Gmail terbuka di tab baru dengan penerima & subject terisi, desain disalin otomatis, lalu kamu tempel (Ctrl+V) dan klik Kirim di Gmail.','Manual mode: Gmail opens in a new tab with recipients & subject filled in, the design is copied automatically, then you paste (Ctrl+V) and click Send in Gmail.')}</div>`;
- else if(!gCid())h=`<div class="who">⚠ ${L('Koneksi Gmail belum disiapkan untuk situs ini.','The Gmail connection is not set up for this site yet.')}</div><div class="row2"><button class="pri" data-g="setup">${L('Siapkan koneksi Gmail','Set up Gmail connection')}</button></div>`;
- else{
-  const f=fromAcc(),acc=Object.keys(GA).filter(accOn);
-  h=acc.map(e=>`<div class="who" style="margin-bottom:6px"><i class="dot"></i><b>${esc(e)}</b>${e===f?` <span class="st ok">${L('dipakai sebagai From','used as From')}</span>`:`<button class="ghost" data-g="use" data-e="${attr(e)}">${L('Pakai','Use')}</button>`}<button class="ghost" data-g="out" data-e="${attr(e)}">${L('Putuskan','Disconnect')}</button></div>`).join('')
-   +`<button class="gbtn" data-g="in">${GICON}${acc.length?L('Tambah akun Gmail lain','Add another Gmail account'):L('Hubungkan Gmail','Connect Gmail')}</button>`
-   +(acc.length?'':`<div class="hint">${L('Login dengan akun Google-mu. MailCraft hanya meminta izin mengirim email, tidak bisa membaca inbox, dan tidak menyimpan password.','Sign in with your Google account. MailCraft only asks permission to send email, cannot read your inbox, and never stores your password.')}</div>`);
- }
- ['#gconn','#gconn2'].forEach(s=>{const el=$(s);if(el)el.innerHTML=h});
- $('#gconn2').classList.toggle('hid',!api);
- const t=$('#test');if(!t.disabled)t.textContent=api?L('🧪 Kirim email tes','🧪 Send test email'):L('🧪 Buka tes di Gmail','🧪 Open test in Gmail');
- $('#accList').innerHTML=Object.keys(GA).map(e=>`<option value="${attr(e)}">`).join('');
- const f=fromAcc();
- $('#fromHint').textContent=!api?L('Pastikan browser sudah login ke akun ini di Gmail.','Make sure this account is signed in to Gmail in this browser.')
-  :!f?L('Isi akun Gmail mana pun yang mau dipakai mengirim.','Enter any Gmail account you want to send from.')
-  :accOn(f)?L('✓ Akun ini sudah terhubung.','✓ This account is connected.')
-  :L('Akun ini belum terhubung. Saat klik kirim, Google akan meminta login akun ini.','This account is not connected yet. When you click send, Google will ask you to sign in to it.');
- if(S.view==='send')renderRcpt();
-}
-document.addEventListener('click',e=>{
- const b=e.target.closest('[data-g]');if(!b)return;const g=b.dataset.g;
- if(g==='setup')showSetup();
- else if(g==='out')gDisconnect(b.dataset.e);
- else if(g==='use'){setFrom(b.dataset.e);renderConn()}
- else gConnect('',true).then(em=>toast(L('Gmail terhubung: ','Gmail connected: ')+em),er=>{if(!/^(setup|file)$/.test(er.message))toast(er.message)});
-});
-function closeSetup(){const d=$('#setup');if(d)d.remove()}
-function showSetup(){
- closeSetup();
- const o=location.protocol==='file:'?'http://localhost:8080':location.origin,d=document.createElement('div');
- d.id='setup';d.className='ovl';
- d.innerHTML=`<div class="dlgbox" role="dialog" aria-modal="true"><h3>${L('Hubungkan MailCraft ke Gmail','Connect MailCraft to Gmail')}</h3>
- <div class="hint">${L('Sekali saja, sekitar 10 menit, gratis. Lakukan dengan akun Google pemilik situs.','One time only, about 10 minutes, free. Do this with the site owner’s Google account.')}</div>
- <ol>
- <li>${L('Buka','Open')} <a href="https://console.cloud.google.com/projectcreate" target="_blank" rel="noopener">Google Cloud Console</a> ${L('dan buat project baru, misalnya “MailCraft”.','and create a new project, e.g. “MailCraft”.')}</li>
- <li>${L('Aktifkan','Enable')} <a href="https://console.cloud.google.com/apis/library/gmail.googleapis.com" target="_blank" rel="noopener">Gmail API</a> ${L('untuk project itu.','for that project.')}</li>
- <li>${L('Buka','Open')} <a href="https://console.cloud.google.com/auth/overview" target="_blank" rel="noopener">Google Auth Platform</a>${L(': isi nama app & email dukungan, pilih Audience “External”. Di menu Audience, tambahkan email Gmail yang boleh mencoba (test users, maks. 100).',': fill in the app name & support email, choose Audience “External”. Under Audience, add the Gmail addresses allowed to try it (test users, max 100).')}</li>
- <li>${L('Di menu Data Access, klik “Add or remove scopes” dan tambahkan','Under Data Access, click “Add or remove scopes” and add')} <code class="k">${G_SEND}</code>.</li>
- <li>${L('Di menu Clients, buat client tipe','Under Clients, create a client of type')} <b>Web application</b>. ${L('Isi “Authorized JavaScript origins” dengan alamat situs ini:','Put this site’s address under “Authorized JavaScript origins”:')}<br><code class="k">${esc(o)}</code> <button class="ghost" data-copy="${attr(o)}">${L('Salin','Copy')}</button></li>
- <li>${L('Salin Client ID-nya. Tempel di config.js agar berlaku untuk semua pengunjung, atau tempel di bawah untuk mencoba di browser ini saja.','Copy the Client ID. Put it in config.js so it works for every visitor, or paste it below to try it in this browser only.')}</li>
- </ol>
- <label>Google Client ID</label><input id="cidIn" spellcheck="false" placeholder="1234567890-abc.apps.googleusercontent.com" value="${attr(S.gcid||'')}">
- <div class="row2" style="justify-content:flex-end"><button class="ghost" data-x="1">${L('Tutup','Close')}</button><button class="pri" id="cidSave">${L('Simpan & hubungkan','Save & connect')}</button></div></div>`;
- document.body.appendChild(d);
- d.addEventListener('click',e=>{
-  if(e.target===d||e.target.closest('[data-x]')){closeSetup();return}
-  const c=e.target.closest('[data-copy]');if(c){navigator.clipboard.writeText(c.dataset.copy).then(()=>toast(L('Disalin','Copied')),()=>{})}
- });
- $('#cidSave').onclick=()=>{
-  const v=$('#cidIn').value.trim();
-  if(!/^[\w-]+\.apps\.googleusercontent\.com$/.test(v)){toast(L('Client ID harus berakhiran .apps.googleusercontent.com','The Client ID must end with .apps.googleusercontent.com'));return}
-  S.gcid=v;tc=null;save();$('#setCid').value=v;closeSetup();renderConn();
-  gConnect(fromAcc(),!fromAcc()).then(em=>toast(L('Gmail terhubung: ','Gmail connected: ')+em),er=>{if(!/^(setup|file)$/.test(er.message))toast(er.message)});
- };
 }
 
 /* templates */
@@ -978,6 +779,10 @@ $('#tplBack').onclick=()=>navBack('choose');
 $('#tplResumeBtn').onclick=()=>{S.mode='dnd';renderAll();go('edit')};
 /* i18n + settings */
 const EN={
+'✨ Rapikan':'✨ Format','Rapikan kode seperti Prettier di VS Code':'Format the code like Prettier in VS Code','🧪 Buka tes di Gmail':'🧪 Open test in Gmail',
+'Opsional. Jika diisi, Gmail dibuka dengan akun ini (harus sudah login di browser).':'Optional. If filled in, Gmail opens with this account (it must be signed in to the browser).',
+'⛶ Preview penuh membuka HTML apa adanya di tab baru. Edit dengan klik kanan → Inspect, lalu salin outerHTML dari tag <html> dan tempel di sini. Kode yang ditempel otomatis dirapikan.':'⛶ Full preview opens the HTML as-is in a new tab. Edit it with right-click → Inspect, then copy the outerHTML of the <html> tag and paste it here. Pasted code is formatted automatically.',
+'Alamat From tidak valid':'The From address is not valid',
 '⛶ Preview penuh':'⛶ Full preview','⤓ Ambil dari preview penuh':'⤓ Pull from full preview',
 'Buka HTML di tab baru untuk diedit lewat Inspect':'Open the HTML in a new tab to edit it with Inspect','Masukkan HTML dari tab preview penuh ke kolom kode':'Put the HTML from the full preview tab into the code box','Buka email di tab baru (bisa di-Inspect)':'Open the email in a new tab (you can Inspect it)',
 '⛶ Preview penuh membuka HTML apa adanya di tab baru. Edit dengan klik kanan → Inspect, lalu klik “⤓ Ambil dari preview penuh” (atau salin outerHTML dari tag <html> dan tempel di sini).':'⛶ Full preview opens the HTML as-is in a new tab. Edit it with right-click → Inspect, then click “⤓ Pull from full preview” (or copy the outerHTML of the <html> tag and paste it here).',
@@ -1027,7 +832,7 @@ const EN={
 'Rasio sekarang:':'Current ratio:','Tombol rasio dan Terapkan mengubah tinggi mengikuti lebar. Gambar yang diupload langsung ke frame ini di-crop persis sesuai ukuran.':'The ratio buttons and Apply change the height to match the width. Images uploaded straight into this frame are cropped to exactly this size.',
 'https://… atau upload':'https://… or upload','https://… untuk teks yang diblok':'https://… for the selected text','Rasio kustom, mis. 13:5':'Custom ratio, e.g. 13:5',
 'Seret layout ke sini untuk memulai':'Drag a layout here to start','Seret konten ke sini':'Drag content here','Belum ada gambar':'No images yet','Pilih atau upload gambar':'Choose or upload an image',
-'Tempel HTML emailmu di sini':'Paste your email HTML here','Upload gambar untuk mendapat link publik; klik gambar di bawah untuk menyisipkannya di posisi kursor.':'Upload an image to get a public link; click an image below to insert it at the cursor.',
+'Tempel HTML emailmu di sini':'Paste your email HTML here','Upload gambar, lalu klik gambar di bawah untuk menyisipkannya di posisi kursor.':'Upload an image to get a public link; click an image below to insert it at the cursor.',
 'Preview HTML':'HTML preview','Preview email':'Email preview','Lanjut →':'Next →',
 'Kirim email tes':'Send a test email','Lihat hasil wireframe di inbox asli sebelum dikirim ke penerima.':'See your layout in a real inbox before sending to recipients.','Email tujuan tes':'Test recipient email',
 '🧪 Kirim tes via Gmail':'🧪 Send test via Gmail','← Edit lagi':'← Edit again','Lanjut ke pengiriman →':'Continue to sending →',
@@ -1052,7 +857,7 @@ const tx=s=>S.lang==='en'&&EN[s]!==undefined?EN[s]:s;
 const orig=new WeakMap(),oa=new WeakMap();
 function trs(s){const t=s.trim();if(!t)return s;let r=EN[t];if(r===undefined)for(const[re,rep]of ENRE)if(re.test(t)){r=t.replace(re,rep);break}return r===undefined?s:s.replace(t,()=>r)}
 function visit(n){
- if(n.nodeType===3){const p=n.parentElement;if(!p||/^(SCRIPT|STYLE|TEXTAREA)$/.test(p.tagName)||p.closest('.blk'))return;
+ if(n.nodeType===3){const p=n.parentElement;if(!p||/^(SCRIPT|STYLE|TEXTAREA)$/.test(p.tagName)||p.closest('.blk,.CodeMirror'))return;
   if(S.lang==='en'){if(!orig.has(n))orig.set(n,n.data);const r=trs(orig.get(n));if(n.data!==r)n.data=r}
   else if(orig.has(n)&&n.data!==orig.get(n))n.data=orig.get(n)}
  else if(n.nodeType===1){for(const a of['placeholder','title']){const v=n.getAttribute(a);if(v==null)continue;let o=oa.get(n);if(!o)oa.set(n,o={});
@@ -1068,7 +873,7 @@ function applyTheme(){
 }
 function setLang(l){
  S.lang=l;document.documentElement.lang=l;$('#langBtn').textContent=l==='en'?'ID':'EN';$('#setLang').value=l;
- trAll(document.body);renderTpls();renderCanvas();renderProps();renderLib();renderConn();save();
+ trAll(document.body);renderTpls();renderCanvas();renderProps();renderLib();if(S.view==='send')renderRcpt();save();
 }
 function initSettings(){
  $('#setFont').innerHTML='<option value="">Bawaan</option>'+FF.map(([v,n])=>`<option value="${attr(v)}">${n}</option>`).join('');
@@ -1081,27 +886,24 @@ function initSettings(){
  $('#setDev').onchange=e=>{S.devD=e.target.value;save()};
  $('#setFont').onchange=e=>{S.font=e.target.value;save()};
  $('#setSig').oninput=e=>{S.sig=e.target.value;save()};
- $('#setCid').value=S.gcid||'';$('#setCid').onchange=e=>{S.gcid=e.target.value.trim();tc=null;save();renderConn()};
- $('#setDelay').value=S.delay||2;$('#setDelay').onchange=e=>{S.delay=Math.min(60,Math.max(1,Math.round(+e.target.value)||2));e.target.value=S.delay;save()};
  $('#setDeco').onchange=e=>{S.deco=e.target.checked;document.body.classList.toggle('nodeco',!e.target.checked);save()};
  $('#setReset').onclick=function(){
   if(!this.dataset.c){this.dataset.c=1;this.textContent='Klik lagi untuk konfirmasi';setTimeout(()=>{delete this.dataset.c;this.textContent='Reset draf'},4000);return}
-  S.rows=[];S.html='';S.mode=null;S.sel=null;S.upl=[];S.to='';S.subj='';$('#to').value='';$('#subj').value='';job.st={};
+  S.rows=[];S.html='';S.mode=null;S.sel=null;S.upl=[];S.to='';S.subj='';$('#to').value='';$('#subj').value='';
   $('#resume').classList.add('hid');renderAll();go('home');toast('Draf direset');
  };
  applyTheme();setLang(S.lang||'id');
 }
 /* init */
 load();
-['from','to','subj','testTo'].forEach(k=>{const el=$('#'+k);if(el)el.value=S[k]||''});$('#testFrom').value=S.from||'';
+['from','to','subj','testTo'].forEach(k=>{const el=$('#'+k);if(el)el.value=S[k]||''});$('#testFrom').value=S.from||'';delete S.gcid;delete S.method;
 if(S.mode&&(S.rows.length||S.html))$('#resume').classList.remove('hid');
 initSettings();
 $('#gear').onclick=e=>{e.stopPropagation();$('#settings').classList.toggle('hid')};
 document.addEventListener('click',e=>{if(!e.target.closest('#settings'))$('#settings').classList.add('hid')});
 $('#autoPrev').onchange=e=>{S.autoPrev=e.target.checked;save();if(S.autoPrev&&S.view==='html')$('#hFrame').srcdoc=pz(S.html,'Nama')};
 try{history.scrollRestoration='manual'}catch(e){}
-renderLib();renderConn();go(routeView(),{replace:true});
-if(gCid()&&location.protocol!=='file:')loadGsi().catch(()=>{});
+renderLib();go(routeView(),{replace:true});
 </script>
 </body>
 </html>
