@@ -76,6 +76,12 @@ main{padding:20px;max-width:1360px;margin:0 auto}
 .pi:hover{border-color:var(--acc);background:var(--soft)}
 .pi b{display:block;font-size:16px;font-weight:600}
 .lay{display:flex;gap:3px;justify-content:center;margin-bottom:4px}.lay u{display:block;height:14px;border:1.5px solid var(--muted);border-radius:2px;flex:1}
+.stagewrap{min-width:0}
+.stagebar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:flex-end;margin-bottom:10px}
+.stagebar .sw{display:inline-flex;align-items:center;gap:8px;margin:0;font-size:12.5px;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:4px 6px 4px 10px;cursor:pointer}
+.stagebar .sw input{width:34px;height:26px;padding:1px;border-radius:6px;cursor:pointer}
+@media(max-width:600px){.stagebar{justify-content:stretch}.stagebar .sw{flex:1}.stagebar .pri{width:100%}}
+.finfo{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12.5px;margin:8px 0;padding:10px 12px;border-radius:8px;background:var(--soft);color:var(--text)}.finfo span{color:var(--muted)}.finfo .row2{grid-column:1/-1;margin-top:6px}
 .stage{background:linear-gradient(160deg,var(--soft),var(--bg) 65%);border:1px dashed var(--line);border-radius:12px;padding:20px;min-height:480px;overflow-x:auto}
 #canvas{margin:0 auto;background:#fff;color:#222;min-height:240px;box-shadow:0 2px 14px rgba(0,0,0,.12);border-radius:4px;overflow:hidden}
 .row{position:relative;outline:2px solid transparent;outline-offset:-2px}
@@ -147,6 +153,8 @@ button:disabled{opacity:.55;cursor:not-allowed}
 #gmPop .cp.ok{background:rgba(34,197,94,.13);color:#15803d}#gmPop .cp.no{background:rgba(220,38,38,.12);color:#dc2626}
 #gmPop .meta{font-size:12.5px;color:var(--muted);word-break:break-word;margin:0 0 4px}
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
 <link rel="stylesheet" href="vendor/codemirror/codemirror.css">
 <script src="vendor/codemirror/codemirror.js"></script>
 <script src="vendor/codemirror/xml.js"></script>
@@ -229,7 +237,14 @@ button:disabled{opacity:.55;cursor:not-allowed}
     <div class="hint">Klik gambar untuk memakainya (mengisi gambar atau frame yang dipilih). 🔗 salin link, 🗑 hapus.</div>
     <div class="lib" id="lib1"></div>
   </div>
-  <div class="stage"><div id="canvas"></div></div>
+  <div class="stagewrap">
+    <div class="stagebar">
+      <label class="sw" title="Ganti latar isi email (semua baris sekaligus)">Latar isi email <input type="color" id="cbgAll"></label>
+      <label class="sw" title="Warna di sekeliling badan email">Latar luar <input type="color" id="obgAll"></label>
+      <button class="pri" id="dNext2">Lanjut ke Preview &amp; tes →</button>
+    </div>
+    <div class="stage"><div id="canvas"></div></div>
+  </div>
   <div class="card" id="props"></div>
 </section>
 
@@ -317,7 +332,7 @@ const F={
  spacer:[['h','Tinggi (px)','num']],
  html:[['code','Kode HTML','area']]
 };
-const FF=[['Arial,Helvetica,sans-serif','Arial'],['Georgia,serif','Georgia'],['Verdana,sans-serif','Verdana'],['Trebuchet MS,sans-serif','Trebuchet'],['Tahoma,sans-serif','Tahoma'],['Courier New,monospace','Courier']];
+const FF=[['Arial,Helvetica,sans-serif','Arial'],['Poppins,Arial,Helvetica,sans-serif','Poppins'],['Georgia,serif','Georgia'],['Verdana,sans-serif','Verdana'],['Trebuchet MS,sans-serif','Trebuchet'],['Tahoma,sans-serif','Tahoma'],['Courier New,monospace','Courier']];
 const AL=[['left','Kiri'],['center','Tengah'],['right','Kanan']];
 const BGF=['ob','Warna latar blok (opsional)','opt'],PAD=[['py','Jarak atas & bawah (px)','num'],['px','Jarak kiri & kanan (px)','num']];
 const txtF=[['text','Teks','rich'],['size','Ukuran (px)','num'],['color','Warna teks','color'],['lc','Warna link','color'],['align','Rata','align'],['fw','Ketebalan','sel',[['normal','Normal'],['bold','Tebal']]],['ff','Font','sel',FF],['lh','Tinggi baris','num'],['ls','Jarak huruf (px)','num'],BGF,...PAD];
@@ -335,11 +350,24 @@ F.divider=[['color','Warna','color'],['th','Ketebalan (px)','num'],['st','Jenis 
 T.spacer.d.ob='';F.spacer=[['h','Tinggi (px)','num'],BGF];
 T.social={n:'Tautan',i:'🔗',d:{text:'Instagram|https://instagram.com\nWebsite|https://example.com',align:'center',color:'#0d9488',size:14,ob:'',py:12,px:24}};
 F.social=[['text','Tautan (satu per baris: Label|URL)','area'],['size','Ukuran (px)','num'],['color','Warna','color'],['align','Rata','align'],BGF,...PAD];
+const ratioOf=(w,h)=>{w=Math.round(w);h=Math.round(h);const gc=(a,b)=>b?gc(b,a%b):a,d=gc(w,h)||1;return w&&h?`${w/d}:${h/d}`:'-'};
 const ratioTxt=p=>{const w=Math.round(+p.w||0),h=Math.round(+p.h||0),gc=(a,b)=>b?gc(b,a%b):a,d=gc(w,h)||1;return w&&h?`${w/d}:${h/d}`:'-'};
 const rbg=r=>r.g2?`background:${r.bg};background-image:linear-gradient(135deg,${r.bg},${r.g2})`:`background:${r.bg}`;
-const frameUi=b=>{const r=frameReal(b);return `<label>Ukuran frame (px): lebar × tinggi</label><div class="lk"><input data-k="w" type="number" value="${b.p.w}"><span>×</span><input data-k="h" type="number" value="${b.p.h}"></div><div class="ar">${['1:1','4:3','16:9','3:1','9:16'].map(a=>`<button data-ar="${a}">${a}</button>`).join('')}</div><div class="lk"><input id="cr" placeholder="Rasio kustom, mis. 13:5"><button id="crb">Terapkan</button></div><div class="hint"><span>Rasio sekarang:</span> <b id="rt">${ratioTxt(b.p)}</b></div>`+(r.fits?`<div class="note" style="margin:8px 0">✓ ${tx('Ukuran nyata di email')}: <b>${r.w} × ${r.h} px</b> (${tx('lebar kolom tersedia')} ${r.av} px)</div>`:`<div class="note" style="margin:8px 0;background:var(--bb);color:var(--bf)">⚠ ${tx('Kolom ini hanya muat')} <b>${r.av} px</b>. ${tx('Frame akan tampil')} <b>${r.rw} × ${r.rh} px</b> ${tx('di email (rasio tetap).')}<div class="row2" style="margin-top:8px"><button id="useReal">${tx('Pakai ukuran nyata')} (${r.rw} × ${r.rh})</button></div></div>`)};
+const frameUi=b=>{const r=frameReal(b);return `<label>Ukuran frame (px): lebar × tinggi</label><div class="lk"><input data-k="w" type="number" value="${b.p.w}"><span>×</span><input data-k="h" type="number" value="${b.p.h}"></div><div class="ar">${['1:1','4:3','16:9','3:1','9:16'].map(a=>`<button data-ar="${a}">${a}</button>`).join('')}</div><div class="lk"><input id="cr" placeholder="Rasio kustom, mis. 13:5"><button id="crb">Terapkan</button></div><div class="hint"><span>Rasio sekarang:</span> <b id="rt">${ratioTxt(b.p)} (${b.p.w} × ${b.p.h} px)</b></div>`+frameInfo(b,r)};
+const szSeen=new WeakSet();
+function frameInfo(b,r){
+ const o=b.p.ow&&b.p.oh?{w:b.p.ow,h:b.p.oh}:null,src=b.p.orig||b.p.src;
+ // ukuran asli gambar dibaca sekali lalu disimpan
+ if(!o&&src&&!szSeen.has(b)){szSeen.add(b);loadImg(src,false).then(im=>{b.p.ow=im.naturalWidth;b.p.oh=im.naturalHeight;save();if(S.sel&&S.sel.id===b.id)renderProps()},()=>{})}
+ const fw=o?Math.min(o.w,r.av):0,fh=o?Math.round(fw*o.h/o.w):0,same=o&&fw===+b.p.w&&fh===+b.p.h;
+ return `<div class="finfo"><span>${tx('Ukuran frame')}</span><b>${r.w} × ${r.h} px (${ratioOf(r.w,r.h)})</b>`
+  +`<span>${tx('Gambar asli')}</span><b>${o?`${o.w} × ${o.h} px (${ratioOf(o.w,o.h)})`:src?tx('membaca…'):'—'}</b>`
+  +`<span>${tx('Maks. kolom')}</span><b>${r.av} px</b>`
+  +(o?`<div class="row2"><button id="useOrig"${same?' disabled':''}>${same?'✓ '+tx('Sudah ukuran asli'):tx('Pakai ukuran asli')+` → ${fw} × ${fh}`}</button></div>`+(o.w>r.av?`<div style="grid-column:1/-1;color:var(--muted);font-size:11.5px">${tx('Gambar asli lebih lebar dari kolom, jadi dikecilkan dengan rasio yang sama agar muat.')}</div>`:''):'')
+  +`</div>`+(r.fits?'':`<div class="note" style="margin:8px 0;background:var(--bb);color:var(--bf)">⚠ ${tx('Kolom ini hanya muat')} <b>${r.av} px</b>. ${tx('Frame akan tampil')} <b>${r.rw} × ${r.rh} px</b> ${tx('di email (rasio tetap).')}<div class="row2" style="margin-top:8px"><button id="useReal">${tx('Kecilkan agar muat')} (${r.rw} × ${r.rh})</button></div></div>`);
+}
 const mk=(type,o)=>{const d=T[type].d;return{id:uid++,type,p:Object.assign({},d,d.text?{text:tx(d.text)}:{},S.font&&d.ff?{ff:S.font}:{},type==='frame'&&!(o&&o.w)?{w:S.w,h:Math.round(S.w*9/16)}:{},o||{})}};
-const newRow=n=>({id:uid++,bg:'#ffffff',pad:8,cols:Array.from({length:n},()=>[])});
+const newRow=n=>({id:uid++,bg:S.cbg||'#ffffff',pad:8,cols:Array.from({length:n},()=>[])});
 
 const fmt=(t,lc)=>esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\*(.+?)\*/g,'<i>$1</i>').replace(/\+\+(.+?)\+\+/g,'<u>$1</u>').replace(/\[([^\]]+)\]\(([^)\s]+)\)/g,(m,t,u)=>`<a href="${u.replace(/"/g,'%22')}" style="color:${lc};text-decoration:underline">${t}</a>`);
 function blockHtml(b,edit){
@@ -368,7 +396,7 @@ function blockHtml(b,edit){
 function toEmail(){
  const rows=S.rows.map(r=>{const n=r.cols.length,w=(100/n).toFixed(2);
   return `<tr><td bgcolor="${r.bg}" style="${rbg(r)};padding:${r.pad}px 0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>${r.cols.map(c=>`<td class="col" valign="top" width="${w}%" style="width:${w}%">${c.map(b=>blockHtml(b)).join('')}</td>`).join('')}</tr></table></td></tr>`}).join('\n');
- return `<!DOCTYPE html>\n<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>@media(max-width:480px){.col{display:block!important;width:100%!important}}</style></head>\n<body style="margin:0;padding:24px 0;background:${S.bg};font-family:Arial,Helvetica,sans-serif">\n<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">\n<table role="presentation" width="${S.w}" cellpadding="0" cellspacing="0" style="width:100%;max-width:${S.w}px;background:#ffffff">\n${rows}\n${sigHtml()?`<tr><td style="padding:0">${sigHtml()}</td></tr>`:''}</table>\n</td></tr></table>\n</body></html>`;
+ return `<!DOCTYPE html>\n<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${/Poppins/.test(JSON.stringify(S.rows))?'<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">':''}<style>@media(max-width:480px){.col{display:block!important;width:100%!important}}</style></head>\n<body style="margin:0;padding:0;background:${S.bg};font-family:Arial,Helvetica,sans-serif">\n<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${S.bg}" style="background:${S.bg}"><tr><td align="center" style="padding:24px 0">\n<table role="presentation" width="${S.w}" cellpadding="0" cellspacing="0" bgcolor="${S.cbg||'#ffffff'}" style="width:100%;max-width:${S.w}px;background:${S.cbg||'#ffffff'}">\n${rows}\n${sigHtml()?`<tr><td style="padding:0">${sigHtml()}</td></tr>`:''}</table>\n</td></tr></table>\n</body></html>`;
 }
 const sigHtml=()=>S.sig&&S.sig.trim()?`<div style="padding:16px 24px;font-size:12px;color:#888888;text-align:center;line-height:1.6;font-family:Arial,Helvetica,sans-serif">${fmt(S.sig,'#0d9488')}</div>`:'';
 const getHtml=()=>{if(S.mode!=='html')return toEmail();const g=sigHtml();return !g?S.html:/<\/body>/i.test(S.html)?S.html.replace(/<\/body>/i,()=>g+'</body>'):S.html+g};
@@ -405,6 +433,10 @@ function go(v,o={}){
 function navBack(t){const s=history.state;if(s&&s.mc&&s.d>1&&s.p&&(s.p===t||(t==='edit'&&(s.p==='dnd'||s.p==='html'))))history.back();else go(t)}
 addEventListener('popstate',()=>{closeOverlays();go(routeView(),{pop:true})});
 $('#logo').onclick=()=>go('home');
+$('#dNext2').onclick=()=>go('prev');
+$('#obgAll').oninput=e=>{S.bg=e.target.value;syncBgUi();save()};
+// latar isi email: ganti semua baris sekaligus (baris masih bisa diubah satu per satu sesudahnya)
+$('#cbgAll').oninput=e=>{S.cbg=e.target.value;S.rows.forEach(r=>{r.bg=S.cbg;r.g2=''});renderCanvas();if(S.sel&&S.sel.t==='r')renderProps();save()};
 $('#steps').onclick=e=>{const b=e.target.closest('button');if(b)go(b.dataset.v)};
 document.querySelectorAll('.opt').forEach(o=>o.onclick=()=>{
  const m=o.dataset.m;if(m==='dnd'){showTpl();return}
@@ -424,7 +456,9 @@ function seed(){const r=newRow(1);r.cols[0]=[mk('heading',{text:tx('Halo <<nama>
 $('#pal').innerHTML=Object.entries(T).map(([k,v])=>`<div class="pi" draggable="true" data-new="${k}"><b>${v.i}</b>${v.n}</div>`).join('');
 const findB=id=>{for(const r of S.rows)for(const c of r.cols){const i=c.findIndex(b=>b.id===id);if(i>=0)return{r,c,i,b:c[i]}}};
 const isSel=(t,id)=>S.sel&&S.sel.t===t&&S.sel.id===id;
+function syncBgUi(){const a=$('#cbgAll'),o=$('#obgAll');if(a)a.value=S.cbg||'#ffffff';if(o)o.value=S.bg;const st=$('.stage');if(st)st.style.background=S.bg;const g=$('#gbg');if(g)g.value=S.bg}
 function renderCanvas(){
+ syncBgUi();
  const c=$('#canvas');c.style.maxWidth='none';c.style.width=S.w+'px';fitCanvas();
  if(!S.rows.length){c.innerHTML='<div class="ph" style="margin:40px">Seret layout ke sini untuk memulai</div>';return}
  c.innerHTML=S.rows.map(r=>`<div class="row${isSel('r',r.id)?' sel':''}" data-r="${r.id}" style="${rbg(r)};padding:${r.pad}px 0"><div class="rt"><span class="rh" draggable="true" data-id="${r.id}" title="Seret untuk memindah baris">⠿ Seret</span><button data-a="rdel" data-id="${r.id}">✕</button></div><div class="cols">${r.cols.map((col,ci)=>`<div class="cell" data-r="${r.id}" data-c="${ci}">${col.length?col.map(b=>`<div class="blk${isSel('b',b.id)?' sel':''}" draggable="true" data-id="${b.id}"><button class="bx" data-a="bdel" data-id="${b.id}">✕</button>${blockHtml(b,1)}</div>`).join(''):'<div class="ph">Seret konten ke sini</div>'}</div>`).join('')}</div></div>`).join('');
@@ -456,7 +490,8 @@ function renderProps(){
   });
   h+=`<div class="row2"><button id="dup">Duplikat</button><button id="del">Hapus</button></div>`;
   el.innerHTML=h;
-  el.querySelectorAll('[data-k]').forEach(i=>i.oninput=()=>{const k=i.dataset.k;b.p[k]=i.type==='number'?+i.value:i.value;if(b.type==='frame'&&k==='src')b.p.orig=i.value;const rt=$('#rt');if(rt)rt.textContent=ratioTxt(b.p);renderCanvas();save();if(b.type==='frame'&&/^(src|w|h|fit)$/.test(k)&&b.p.orig){scheduleFit(b,k==='src'?700:500);if(k!=='src')clearTimeout(rpT),rpT=setTimeout(()=>{if(S.sel&&S.sel.id===b.id)renderProps()},600)}});
+  el.querySelectorAll('[data-k]').forEach(i=>i.oninput=()=>{const k=i.dataset.k;b.p[k]=i.type==='number'?+i.value:i.value;if(b.type==='frame'&&k==='src'){b.p.orig=i.value;delete b.p.ow;delete b.p.oh;szSeen.delete(b)}const rt=$('#rt');if(rt)rt.textContent=ratioTxt(b.p)+` (${b.p.w} × ${b.p.h} px)`;renderCanvas();save();if(b.type==='frame'&&/^(src|w|h|fit)$/.test(k)&&b.p.orig){scheduleFit(b,k==='src'?700:500);if(k!=='src')clearTimeout(rpT),rpT=setTimeout(()=>{if(S.sel&&S.sel.id===b.id)renderProps()},600)}});
+  const uo=$('#useOrig');if(uo)uo.onclick=()=>{const r=frameReal(b),fw=Math.min(b.p.ow,r.av),fh=Math.round(fw*b.p.oh/b.p.ow);b.p.w=fw;b.p.h=fh;renderAll();fitToFrame(b);toast(tx('Frame memakai ukuran asli gambar')+` ${fw} × ${fh} px`)};
   const ur=$('#useReal');if(ur)ur.onclick=()=>{const r=frameReal(b);b.p.w=r.rw;b.p.h=r.rh;renderAll();if(b.p.orig)fitToFrame(b);toast(tx('Ukuran frame diubah ke ukuran nyata')+` ${r.rw} × ${r.rh} px`)};
   const u=$('#pUp');if(u)u.onclick=()=>{$('#upIn').dataset.t=b.id;$('#upIn').click()};
   const cp=$('#pCp');if(cp)cp.onclick=()=>copyText(b.p.src);
@@ -485,7 +520,7 @@ function renderProps(){
   $('#rdup').onclick=()=>{const n=JSON.parse(JSON.stringify(sr));n.id=uid++;n.cols.forEach(c=>c.forEach(x=>x.id=uid++));S.rows.splice(S.rows.indexOf(sr)+1,0,n);S.sel={t:'r',id:n.id};renderAll()};
  }else{
   el.innerHTML=`<h3>Pengaturan email</h3><label>Warna latar luar</label><input type="color" id="gbg" value="${S.bg}">${hp('outer')}<label>Lebar email (px)</label><input type="number" id="gw" value="${S.w}" min="320" max="800">${hp('ew')}<div class="note">Klik baris atau konten di kanvas untuk mengubahnya. Seret konten untuk memindah, bahkan antar kolom.</div><div class="row2"><button class="pri" id="dNext">Lanjut: Preview →</button></div>`;
-  $('#gbg').oninput=e=>{S.bg=e.target.value;save()};
+  $('#gbg').oninput=e=>{S.bg=e.target.value;syncBgUi();save()};
   $('#gw').oninput=e=>{S.w=Math.min(800,Math.max(320,+e.target.value||600));renderCanvas();save()};
   $('#dNext').onclick=()=>go('prev');
  }
@@ -578,7 +613,7 @@ async function fitToFrame(b){
  let im;try{im=await loadImg(src,ext)}catch(e){if(ext){try{im=await loadImg(src,false)}catch(e2){}}}
  if(!im){toast(tx('Gambar tidak bisa dimuat. Cek URL-nya.'));return}
  if((b.p.orig||b.p.src)!==src)return;
- b.p.orig=src;
+ b.p.orig=src;b.p.ow=im.naturalWidth;b.p.oh=im.naturalHeight;
  const same=Math.abs(im.naturalWidth/im.naturalHeight-w/h)<=0.01*(w/h);
  if(same){if(b.p.src!==src){b.p.src=src;renderCanvas();save()}return}
  const ow=Math.min(w*2,1600),oh=Math.round(ow*h/w),c=document.createElement('canvas');c.width=ow;c.height=oh;const x=c.getContext('2d');
@@ -594,7 +629,7 @@ async function handleUp(files){
  for(const f of files){const t=+$('#upIn').dataset.t,fb=t&&findB(t),q=fb&&files.length===1?fb.b:null;let ar=null;
   if(q&&q.type==='image'&&q.p.ratio&&q.p.ratio!=='auto'){const[a,c]=q.p.ratio.split(':').map(Number);ar={ow:1200,oh:Math.round(1200*c/a)}}
   const u=await upImg(f,ar);
-  if(S.mode==='dnd'){const f2=t&&findB(t);if(f2&&(f2.b.type==='image'||f2.b.type==='frame')&&files.length===1){if(f2.b.type==='frame'){f2.b.p.orig=u;f2.b.p.src=u;renderAll();fitToFrame(f2.b)}else{f2.b.p.src=u;renderAll()}}else addBlock('image',u)}
+  if(S.mode==='dnd'){const f2=t&&findB(t);if(f2&&(f2.b.type==='image'||f2.b.type==='frame')&&files.length===1){if(f2.b.type==='frame'){delete f2.b.p.ow;delete f2.b.p.oh;f2.b.p.orig=u;f2.b.p.src=u;renderAll();fitToFrame(f2.b)}else{f2.b.p.src=u;renderAll()}}else addBlock('image',u)}
   else toast('Gambar diunggah. Klik gambar untuk menyisipkan.')}
  $('#upIn').dataset.t='';$('#upIn').value='';
 }
@@ -610,7 +645,7 @@ function libClick(e){
  const l=S.lib[+d.dataset.i];
  if(e.target.closest('[data-rm]'))return rmImg(+d.dataset.i);
  if(c)return copyText(l.url);
- if(S.mode==='dnd'){const f=S.sel&&S.sel.t==='b'&&findB(S.sel.id);if(f&&(f.b.type==='image'||f.b.type==='frame')){if(f.b.type==='frame'){f.b.p.orig=l.url;f.b.p.src=l.url;renderAll();fitToFrame(f.b)}else{f.b.p.src=l.url;renderAll()}}else addBlock('image',l.url)}
+ if(S.mode==='dnd'){const f=S.sel&&S.sel.t==='b'&&findB(S.sel.id);if(f&&(f.b.type==='image'||f.b.type==='frame')){if(f.b.type==='frame'){delete f.b.p.ow;delete f.b.p.oh;f.b.p.orig=l.url;f.b.p.src=l.url;renderAll();fitToFrame(f.b)}else{f.b.p.src=l.url;renderAll()}}else addBlock('image',l.url)}
  else{const s=`<img src="${l.url}" alt="" style="max-width:100%;height:auto;display:block">`;if(cm){cm.replaceSelection(s,'end');cm.focus()}else{const ta=$('#code');ta.setRangeText(s,ta.selectionStart,ta.selectionEnd,'end');onCode(ta.value)}toast('Gambar disisipkan')}
 }
 $('#lib1').onclick=libClick;$('#lib2').onclick=libClick;
@@ -847,6 +882,11 @@ $('#tplBack').onclick=()=>navBack('choose');
 $('#tplResumeBtn').onclick=()=>{S.mode='dnd';renderAll();go('edit')};
 /* i18n + settings */
 const EN={
+'Latar isi email':'Email body background','Latar luar':'Outer background','Lanjut ke Preview & tes →':'Continue to Preview & test →',
+'Ganti latar isi email (semua baris sekaligus)':'Change the email body background (all rows at once)','Warna di sekeliling badan email':'Color around the email body',
+'Ukuran frame':'Frame size','Gambar asli':'Original image','Maks. kolom':'Column max','membaca…':'reading…','Pakai ukuran asli':'Use original size','Sudah ukuran asli':'Already original size',
+'Gambar asli lebih lebar dari kolom, jadi dikecilkan dengan rasio yang sama agar muat.':'The original image is wider than the column, so it is scaled down with the same ratio to fit.',
+'Kecilkan agar muat':'Shrink to fit','Frame memakai ukuran asli gambar':'Frame now uses the original image size',
 'tampil':'shows at','Ukuran nyata di email':'Real size in the email','lebar kolom tersedia':'available column width','Kolom ini hanya muat':'This column only fits','Frame akan tampil':'The frame will show at','di email (rasio tetap).':'in the email (same ratio).','Pakai ukuran nyata':'Use real size',
 'Gambar tidak bisa dimuat. Cek URL-nya.':'The image could not be loaded. Check the URL.','Gambar dipotong pas frame':'Image cropped to the frame','Ukuran frame diubah ke ukuran nyata':'Frame size changed to the real size',
 'Gambar dari situs ini tidak bisa dipotong otomatis. Pakai gambar dengan ukuran yang sama dengan frame, atau upload gambarnya.':'Images from this site cannot be cropped automatically. Use an image with the same size as the frame, or upload it.',
