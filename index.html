@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>MailCraft</title>
+<title>Mailza Craft</title>
 <meta name="description" content="Desain email dengan drag & drop atau HTML, tes di inbox asli, lalu kirim langsung dari Gmail-mu.">
 <style>
 :root{--bb:#fff4d6;--bf:#92400e;--bd:#f59e0b;--bg:#fafafa;--panel:#fff;--text:#18181b;--muted:#71717a;--line:#e4e4e7;--acc:#0d9488;--acct:#fff;--soft:#e7f8f4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
@@ -169,7 +169,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <body>
 <div class="deco" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i><svg viewBox="0 0 1440 320" preserveAspectRatio="none"><path fill="#14b8a6" fill-opacity=".14" d="M0,224L60,208C120,192,240,160,360,165C480,171,600,213,720,213C840,213,960,171,1080,154C1200,139,1320,149,1380,154L1440,160L1440,320L0,320Z"/><path fill="#0ea5e9" fill-opacity=".12" d="M0,256L80,240C160,224,320,192,480,197C640,203,800,245,960,250C1120,256,1280,224,1360,208L1440,192L1440,320L0,320Z"/><path fill="#22c55e" fill-opacity=".10" d="M0,288L120,277C240,267,480,245,720,250C960,256,1200,288,1320,298L1440,309L1440,320L0,320Z"/></svg></div>
 <div class="top">
-  <div class="logo" id="logo">Mail<i>Craft</i></div>
+  <div class="logo" id="logo">Mailza <i>Craft</i></div>
   <div class="steps hid" id="steps"><button data-v="edit">1 · Desain</button><button data-v="prev">2 · Preview &amp; tes</button><button data-v="send">3 · Kirim</button></div>
   <div class="tools"><button class="ghost" id="langBtn" title="Bahasa"></button><button class="ghost" id="themeBtn" title="Tema"></button><button class="ghost" id="gear" title="Pengaturan">⚙ Pengaturan</button></div>
   <div class="card hid" id="settings"><h3>Pengaturan</h3>
@@ -760,7 +760,7 @@ $('#xlTpl').onclick=async()=>{
   const ws=XLSX.utils.aoa_to_sheet([['Nama','Email'],['Budi Santoso','budi@gmail.com'],['Siti Aminah','siti@yahoo.com']]);ws['!cols']=[{wch:26},{wch:34}];
   const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Penerima');
   const blob=new Blob([XLSX.write(wb,{bookType:'xlsx',type:'array'})],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='template-penerima-mailcraft.xlsx';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),10000);
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='template-penerima-mailza-craft.xlsx';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),10000);
   toast(L('Template Excel diunduh. Isi kolom Nama & Email, lalu klik Upload Excel.','Excel template downloaded. Fill in Name & Email, then click Upload Excel.'));
  }catch(e){toast('Template gagal dibuat')}
 };
