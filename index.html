@@ -126,9 +126,16 @@ main{padding:20px;max-width:1360px;margin:0 auto}
 code.k{background:var(--soft);color:var(--text);padding:2px 6px;border-radius:6px;word-break:break-all;font-size:12.5px}
 .foot{text-align:center;font-size:12px;color:var(--muted);margin:40px 0 0!important}.foot a{color:var(--muted)}
 button:disabled{opacity:.55;cursor:not-allowed}
+#gmPop .dlgbox{width:min(480px,100%);text-align:left}
+#gmPop h3{margin:0 0 4px;font-size:18px;color:var(--text);text-transform:none;letter-spacing:0}
+#gmPop ol{padding-left:20px;margin:12px 0;font-size:14px;line-height:1.7}
+#gmPop kbd{font:600 12px ui-monospace,Menlo,Consolas,monospace;background:var(--soft);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px}
+#gmPop .cp{font-size:13px;padding:8px 10px;border-radius:8px;margin:8px 0}
+#gmPop .cp.ok{background:rgba(34,197,94,.13);color:#15803d}#gmPop .cp.no{background:rgba(220,38,38,.12);color:#dc2626}
+#gmPop .meta{font-size:12.5px;color:var(--muted);word-break:break-word;margin:0 0 4px}
 </style>
 <script src="config.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="xlsx.full.min.js" defer></script>
 </head>
 <body>
 <div class="deco" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i><svg viewBox="0 0 1440 320" preserveAspectRatio="none"><path fill="#14b8a6" fill-opacity=".14" d="M0,224L60,208C120,192,240,160,360,165C480,171,600,213,720,213C840,213,960,171,1080,154C1200,139,1320,149,1380,154L1440,160L1440,320L0,320Z"/><path fill="#0ea5e9" fill-opacity=".12" d="M0,256L80,240C160,224,320,192,480,197C640,203,800,245,960,250C1120,256,1280,224,1360,208L1440,192L1440,320L0,320Z"/><path fill="#22c55e" fill-opacity=".10" d="M0,288L120,277C240,267,480,245,720,250C960,256,1200,288,1320,298L1440,309L1440,320L0,320Z"/></svg></div>
@@ -242,7 +249,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
   <div class="two">
     <div class="card">
       <h3>Detail email</h3>
-      <label>Metode kirim</label><div class="seg" id="method"><button data-m="api">⚡ Langsung via Gmail</button><button data-m="manual">📋 Buka Gmail &amp; tempel</button></div>
+      <label id="methodLbl">Metode kirim</label><div class="seg" id="method"><button data-m="api">⚡ Langsung via Gmail</button><button data-m="manual">📋 Buka Gmail &amp; tempel</button></div>
       <div id="gconn" class="gconn"></div>
       <div id="fromWrap"><label>From (akun Gmail pengirim)</label><input id="from" type="email" list="accList" placeholder="kamu@gmail.com" autocomplete="email"><div class="hint" id="fromHint"></div></div><datalist id="accList"></datalist>
       <label>To (pisahkan dengan koma)</label><textarea id="to" rows="3" placeholder="budi@gmail.com, Siti &lt;siti@yahoo.com&gt;"></textarea>
@@ -354,7 +361,7 @@ const pz=(s,n)=>s.replace(/\{\{\s*(nama|name)\s*\}\}/gi,n||'teman');
 /* ---------- views + router (tombol back/forward browser) ---------- */
 const ROUTE={home:'',choose:'pilih',tpl:'template',dnd:'desain',html:'kode',prev:'preview',send:'kirim'};
 function routeView(){const m=location.hash.match(/^#\/?([\w-]*)/),k=m?m[1]:'';return Object.keys(ROUTE).find(v=>ROUTE[v]===k)||'home'}
-function closeOverlays(){$('#settings').classList.add('hid');$('#dlg').classList.add('hid');closeSetup()}
+function closeOverlays(){$('#settings').classList.add('hid');$('#dlg').classList.add('hid');closeSetup();const g=$('#gmPop');if(g)g.remove()}
 function go(v,o={}){
  if(v==='edit')v=S.mode==='html'?'html':'dnd';
  if(['dnd','html','prev','send'].includes(v)&&!S.mode){v='choose';o.fix=true}
@@ -648,11 +655,12 @@ $('#xlBtn').onclick=()=>$('#xlIn').click();
 $('#xlTpl').onclick=async()=>{
  if(typeof XLSX==='undefined'){toast('Modul Excel gagal dimuat. Muat ulang halaman.');return}
  try{
-  const dl=await claude.use('downloads');if(!dl){toast('Unduhan tidak tersedia di tampilan ini.');return}
   const ws=XLSX.utils.aoa_to_sheet([['Nama','Email'],['Budi Santoso','budi@gmail.com'],['Siti Aminah','siti@yahoo.com']]);ws['!cols']=[{wch:26},{wch:34}];
   const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Penerima');
-  await dl.save({filename:'template-penerima.xlsx',data:XLSX.write(wb,{bookType:'xlsx',type:'array'})});
- }catch(e){if(!e||e.code!=='declined')toast('Template gagal dibuat')}
+  const blob=new Blob([XLSX.write(wb,{bookType:'xlsx',type:'array'})],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='template-penerima-mailcraft.xlsx';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),10000);
+  toast(L('Template Excel diunduh. Isi kolom Nama & Email, lalu klik Upload Excel.','Excel template downloaded. Fill in Name & Email, then click Upload Excel.'));
+ }catch(e){toast('Template gagal dibuat')}
 };
 $('#xlClr').onclick=()=>{S.upl=[];renderRcpt();save()};
 $('#xlIn').onchange=async e=>{
@@ -691,9 +699,29 @@ function copyRich(html){
  try{return navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([body],{type:'text/html'}),'text/plain':new Blob([body.replace(/<[^>]+>/g,' ')],{type:'text/plain'})})]).then(()=>true,()=>fb())}catch(e){return Promise.resolve(fb())}
 }
 function gmail({to,bcc,subj,html}){
- const f=S.from.trim();
- window.open('https://mail.google.com/mail/?view=cm&fs=1&to='+enc(to)+(bcc?'&bcc='+enc(bcc):'')+'&su='+enc(subj)+(f?'&authuser='+enc(f):''),'_blank','noopener');
- copyRich(html).then(ok=>toast(ok?'Desain disalin. Tempel (Ctrl+V) di badan email Gmail.':'Gagal menyalin otomatis. Salin dari tab preview lalu tempel.'));
+ // 1) salin desain saat halaman masih fokus, 2) tampilkan popup panduan, 3) buka Gmail saat pengguna klik "Buka Gmail"
+ const f=S.from.trim(),url='https://mail.google.com/mail/?view=cm&fs=1&to='+enc(to)+(bcc?'&bcc='+enc(bcc):'')+'&su='+enc(subj)+(f?'&authuser='+enc(f):'');
+ const mac=/Mac|iPhone|iPad/.test(navigator.platform||navigator.userAgent),K=mac?'⌘':'Ctrl';
+ const old=$('#gmPop');if(old)old.remove();
+ const d=document.createElement('div');d.id='gmPop';d.className='ovl';
+ d.innerHTML=`<div class="dlgbox" role="dialog" aria-modal="true" aria-labelledby="gmT"><h3 id="gmT">${L('Kamu akan diarahkan ke Gmail','You will be taken to Gmail')}</h3>
+ <p class="meta">${L('To','To')}: <b>${esc(bcc?f+' (+ '+bcc.split(',').length+' BCC)':to)}</b><br>Subject: <b>${esc(subj)}</b>${f?`<br>From: <b>${esc(f)}</b>`:''}</p>
+ <div class="cp" id="gmCp">${L('Menyalin desain email…','Copying the email design…')}</div>
+ <ol>
+ <li>${L('Gmail terbuka di tab baru, kolom To dan Subject sudah terisi.','Gmail opens in a new tab with To and Subject already filled in.')}</li>
+ <li>${L('Klik di bagian isi (badan) email, lalu tekan','Click inside the email body, then press')} <kbd>${K}</kbd> + <kbd>V</kbd> ${L('untuk menempel desain email yang sudah kamu buat.','to paste the email design you made.')}</li>
+ <li>${L('Cek tampilannya, lalu klik','Check how it looks, then click')} <b>${L('Kirim','Send')}</b> ${L('di Gmail.','in Gmail.')}</li>
+ </ol>
+ ${f?'':`<div class="hint">${L('Email terkirim dari akun Gmail yang sedang login di browser ini.','The email is sent from the Gmail account signed in to this browser.')}</div>`}
+ <div class="row2" style="justify-content:flex-end"><button class="ghost" data-x="1">${L('Batal','Cancel')}</button><button id="gmRe" class="hid">${L('Salin ulang','Copy again')}</button><button class="pri" id="gmGo">${L('Buka Gmail →','Open Gmail →')}</button></div></div>`;
+ document.body.appendChild(d);
+ const st=ok=>{const c=$('#gmCp');if(!c)return;c.className='cp '+(ok?'ok':'no');c.textContent=ok?L('✓ Desain email sudah disalin dan siap ditempel.','✓ The email design is copied and ready to paste.'):L('⚠ Desain belum tersalin. Klik “Salin ulang”.','⚠ The design was not copied. Click “Copy again”.');$('#gmRe').classList.toggle('hid',ok)};
+ copyRich(html).then(st);
+ $('#gmRe').onclick=()=>copyRich(html).then(st);
+ d.addEventListener('click',e=>{if(e.target===d||e.target.closest('[data-x]'))d.remove()});
+ d.addEventListener('keydown',e=>{if(e.key==='Escape')d.remove()});
+ $('#gmGo').onclick=()=>{window.open(url,'_blank','noopener');d.remove();toast(L(`Di Gmail: klik badan email lalu tekan ${K}+V.`,`In Gmail: click the email body, then press ${K}+V.`))};
+ $('#gmGo').focus();
 }
 
 /* ---------- Gmail API: login Google + kirim langsung ---------- */
@@ -708,7 +736,7 @@ const fromAcc=()=>String(S.from||'').trim().toLowerCase();
 const accOn=e=>!!(GA[e]&&GA[e].tok&&GA[e].exp>Date.now());
 const gOn=()=>accOn(fromAcc());
 const setFrom=v=>{S.from=v;$('#from').value=v;$('#testFrom').value=v;save()};
-const useApi=()=>(S.method||'api')==='api';
+const useApi=()=>!!gCid()&&(S.method||'manual')==='api';
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 function gSave(){try{sessionStorage.setItem(GK,JSON.stringify(GA))}catch(e){}}
 let gsiP=null,tc=null,tcCid='',tcCb=null;
@@ -836,6 +864,7 @@ const GICON='<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d=
 function renderConn(){
  const api=useApi(),on=gOn();
  document.querySelectorAll('#method button').forEach(b=>b.classList.toggle('on',(b.dataset.m==='api')===api));
+ ['#method','#methodLbl'].forEach(s=>$(s).classList.toggle('hid',!gCid()));
  let h;
  if(!api)h=`<div class="hint" style="margin:0">${L('Mode manual: Gmail terbuka di tab baru dengan penerima & subject terisi, desain disalin otomatis, lalu kamu tempel (Ctrl+V) dan klik Kirim di Gmail.','Manual mode: Gmail opens in a new tab with recipients & subject filled in, the design is copied automatically, then you paste (Ctrl+V) and click Send in Gmail.')}</div>`;
  else if(!gCid())h=`<div class="who">⚠ ${L('Koneksi Gmail belum disiapkan untuk situs ini.','The Gmail connection is not set up for this site yet.')}</div><div class="row2"><button class="pri" data-g="setup">${L('Siapkan koneksi Gmail','Set up Gmail connection')}</button></div>`;
