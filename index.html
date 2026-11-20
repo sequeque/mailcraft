@@ -68,8 +68,8 @@ main{padding:20px;max-width:1360px;margin:0 auto}
 .opt{width:260px;text-align:left;padding:24px;border-radius:14px;background:var(--panel);border:1px solid var(--line);cursor:pointer;transition:.15s}
 .opt:hover{border-color:var(--acc);transform:translateY(-2px)}
 .opt b{display:grid;place-items:center;width:50px;height:50px;border-radius:14px;background:#16a34a;margin-bottom:10px;box-shadow:0 6px 14px rgba(0,0,0,.2)}.opt:nth-child(2) b{background:#ea580c}.opt strong{font-size:16px}.opt span{display:block;color:var(--muted);margin-top:4px}
-.dnd{display:grid;grid-template-columns:210px 1fr 280px;gap:16px;align-items:start}
-@media(max-width:900px){.dnd{grid-template-columns:1fr}}
+.dnd{display:grid;grid-template-columns:210px minmax(0,1fr) 280px;gap:16px;align-items:start}
+@media(max-width:900px){.dnd{grid-template-columns:minmax(0,1fr)}}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
 .pal{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .pi{border:1px solid var(--line);border-radius:8px;padding:9px 4px;text-align:center;cursor:grab;font-size:12px;user-select:none;background:var(--bg)}
@@ -95,8 +95,8 @@ main{padding:20px;max-width:1360px;margin:0 auto}
 .lib img{width:100%;height:100%;object-fit:cover}
 .lib button{position:absolute;right:2px;bottom:2px;padding:0 5px;font-size:11px}
 .hint{font-size:12px;color:var(--muted);margin:6px 0}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:900px){.two{grid-template-columns:1fr}}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}.two>*,.dnd>*{min-width:0}
+@media(max-width:900px){.two{grid-template-columns:minmax(0,1fr)}}
 .code{font:12.5px/1.5 ui-monospace,Menlo,Consolas,monospace;min-height:520px;white-space:pre}
 :root{--cm-bg:#ffffff;--cm-fg:#1f1f1f;--cm-gut:#f8f8f8;--cm-num:#6e7681;--cm-sel:#add6ff;--cm-cur:#000;--cm-line:#f3f3f3;--cm-tag:#800000;--cm-attr:#e50000;--cm-str:#0000ff;--cm-com:#008000;--cm-br:#800000;--cm-prop:#e50000;--cm-num2:#098658;--cm-kw:#0000ff;--cm-val:#0451a5;--cm-match:rgba(0,0,0,.08)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--cm-bg:#1e1e1e;--cm-fg:#d4d4d4;--cm-gut:#1e1e1e;--cm-num:#858585;--cm-sel:#264f78;--cm-cur:#aeafad;--cm-line:#2a2d2e;--cm-tag:#569cd6;--cm-attr:#9cdcfe;--cm-str:#ce9178;--cm-com:#6a9955;--cm-br:#808080;--cm-prop:#9cdcfe;--cm-num2:#b5cea8;--cm-kw:#c586c0;--cm-val:#ce9178;--cm-match:rgba(255,255,255,.1)}}
@@ -115,6 +115,8 @@ main{padding:20px;max-width:1360px;margin:0 auto}
 .cm-s-vsc .CodeMirror-matchingtag{background:var(--cm-match)}
 .edhead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}.edhead h3{margin:0}
 .edhead .kbd{font-size:11.5px;color:var(--muted)}
+.cm-b64{display:inline-block;padding:0 8px;margin:0 1px;border-radius:5px;background:var(--soft);color:var(--acc);font:600 11.5px/1.6 system-ui,sans-serif;cursor:default;white-space:nowrap}
+@media(max-width:600px){main{padding:14px 12px}#v-html .CodeMirror{height:420px}.edhead .kbd{display:none}.pv iframe{height:520px}.top{gap:8px 12px;padding:10px 12px}.steps button{padding:6px 8px;font-size:13px}#settings{right:12px;left:12px;width:auto}}
 .pv{display:flex;justify-content:center}
 .pv iframe{border:1px solid var(--line);border-radius:10px;background:#fff;height:640px;width:100%;max-width:700px}
 .pv iframe.m{max-width:375px}
@@ -182,7 +184,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
   <div class="feat">
     <div><b><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></b><strong>Desain Tanpa Ribet</strong><span>Seret, lepas, selesai. Susun kolom, teks, tombol, dan frame gambar semudah main Canva.</span></div>
     <div><b><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 9"/></svg></b><strong>Gambar Langsung Tayang</strong><span>Upload gambar, otomatis ikut terkirim di dalam email.</span></div>
-    <div><b><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/></svg></b><strong>Kirim ke Banyak Orang</strong><span>Upload daftar Nama &amp; Email dari Excel, lalu sapa tiap orang dengan {{nama}}.</span></div>
+    <div><b><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/></svg></b><strong>Kirim ke Banyak Orang</strong><span>Upload daftar Nama &amp; Email dari Excel, lalu sapa tiap orang dengan &lt;&lt;nama&gt;&gt;.</span></div>
     <div><b><svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></b><strong>Tes Dulu, Kirim Yakin</strong><span>Cek tampilan di inbox asli, lalu kirim langsung dari Gmail-mu.</span></div>
   </div>
   <p class="foot"><a href="privacy.html">Kebijakan Privasi</a> · <a href="terms.html">Ketentuan</a></p>
@@ -260,11 +262,12 @@ button:disabled{opacity:.55;cursor:not-allowed}
     <div class="card">
       <h3>Detail email</h3>
       <div id="fromWrap"><label>From (akun Gmail pengirim)</label><input id="from" type="email" placeholder="kamu@gmail.com" autocomplete="email"><div class="hint">Opsional. Jika diisi, Gmail dibuka dengan akun ini (harus sudah login di browser).</div></div>
-      <label>To (pisahkan dengan koma)</label><textarea id="to" rows="3" placeholder="budi@gmail.com, Siti &lt;siti@yahoo.com&gt;"></textarea>
+      <label>To (pisahkan dengan koma)</label><textarea id="to" rows="3" placeholder="Budi &lt;budi@gmail.com&gt;, Siti &lt;siti@yahoo.com&gt;"></textarea>
+      <div class="hint">Agar &lt;&lt;nama&gt;&gt; terisi tanpa Excel, tulis: <b>Nama &lt;email&gt;</b>, contoh <i>Budi &lt;budi@gmail.com&gt;</i>. Tanpa nama, &lt;&lt;nama&gt;&gt; diganti “teman”.</div>
       <div class="row2"><button id="xlBtn">📄 Upload Excel</button><button id="xlTpl">⬇ Template Excel</button><button class="ghost" id="xlClr">Hapus hasil upload</button></div>
       <input type="file" id="xlIn" accept=".xlsx,.xls,.csv" class="hid">
       <label>Subject</label><input id="subj" placeholder="Judul email">
-      <div class="note">Tulis {{nama}} di teks atau subject untuk menyapa tiap penerima dengan namanya dari Excel. Kolom yang dibaca: Nama dan Email.</div>
+      <div class="note">Tulis &lt;&lt;nama&gt;&gt; di teks atau subject untuk menyapa tiap penerima dengan namanya dari Excel. Kolom yang dibaca: Nama dan Email.</div>
     </div>
     <div class="card">
       <h3>Penerima <span id="cnt" style="font-weight:400"></span></h3>
@@ -364,7 +367,8 @@ function toEmail(){
 }
 const sigHtml=()=>S.sig&&S.sig.trim()?`<div style="padding:16px 24px;font-size:12px;color:#888888;text-align:center;line-height:1.6;font-family:Arial,Helvetica,sans-serif">${fmt(S.sig,'#0d9488')}</div>`:'';
 const getHtml=()=>{if(S.mode!=='html')return toEmail();const g=sigHtml();return !g?S.html:/<\/body>/i.test(S.html)?S.html.replace(/<\/body>/i,()=>g+'</body>'):S.html+g};
-const pz=(s,n)=>s.replace(/\{\{\s*(nama|name)\s*\}\}/gi,n||'teman');
+// <<nama>> (juga bentuk ter-escape &lt;&lt;nama&gt;&gt; dan bentuk lama {{nama}}) diganti nama penerima
+const pz=(s,n)=>s.replace(/(?:<<|&lt;&lt;|\{\{)\s*(nama|name)\s*(?:>>|&gt;&gt;|\}\})/gi,()=>n||'teman');
 
 /* ---------- views + router (tombol back/forward browser) ---------- */
 const ROUTE={home:'',choose:'pilih',tpl:'template',dnd:'desain',html:'kode',prev:'preview',send:'kirim'};
@@ -400,11 +404,15 @@ document.querySelectorAll('.opt').forEach(o=>o.onclick=()=>{
  const m=o.dataset.m;if(m==='dnd'){showTpl();return}
  if(S.mode!==m){S.mode=m;S.sel=null}
  if(m==='dnd'&&!S.rows.length)seed();
- if(m==='html'&&!S.html)S.html=`<!DOCTYPE html>\n<html><body style="margin:0;background:#f4f4f5;font-family:Arial,sans-serif">\n<div style="max-width:600px;margin:24px auto;background:#fff;padding:32px;text-align:center">\n<h1>${tx('Halo {{nama}}!')}</h1>\n<p>${tx('Tulis isi emailmu di sini.')}</p>\n<a href="https://example.com" style="display:inline-block;background:#0d9488;color:#fff;padding:12px 28px;border-radius:6px;text-decoration:none">${tx('Klik di sini')}</a>\n</div></body></html>`;
+ if(m==='html'&&!S.html)S.html=`<!DOCTYPE html>\n<html><body style="margin:0;background:#f4f4f5;font-family:Arial,sans-serif">\n<div style="max-width:600px;margin:24px auto;background:#fff;padding:32px;text-align:center">\n<h1>${tx('Halo <<nama>>!')}</h1>\n<p>${tx('Tulis isi emailmu di sini.')}</p>\n<a href="https://example.com" style="display:inline-block;background:#0d9488;color:#fff;padding:12px 28px;border-radius:6px;text-decoration:none">${tx('Klik di sini')}</a>\n</div></body></html>`;
  renderAll();go('edit');
 });
 $('#resumeBtn').onclick=()=>go('edit');$('#start').onclick=()=>go('choose');$('#chooseBack').onclick=()=>navBack('home');
-function seed(){const r=newRow(1);r.cols[0]=[mk('heading',{text:tx('Halo {{nama}}!')}),mk('text',{text:tx('Ini contoh email buatanmu. Seret blok dari kiri, lalu ubah isinya di panel kanan. Blok sebagian teks untuk memberi [link](https://example.com).')}),mk('button',{text:tx('Baca selengkapnya')})];S.rows=[r]}
+function migrateTags(){
+ const f=v=>typeof v==='string'?v.replace(/\{\{\s*(nama|name)\s*\}\}/gi,'<<$1>>'):v;
+ S.html=f(S.html);S.subj=f(S.subj);S.rows.forEach(r=>r.cols.forEach(c=>c.forEach(b=>{for(const k in b.p)b.p[k]=f(b.p[k])})));
+}
+function seed(){const r=newRow(1);r.cols[0]=[mk('heading',{text:tx('Halo <<nama>>!')}),mk('text',{text:tx('Ini contoh email buatanmu. Seret blok dari kiri, lalu ubah isinya di panel kanan. Blok sebagian teks untuk memberi [link](https://example.com).')}),mk('button',{text:tx('Baca selengkapnya')})];S.rows=[r]}
 
 /* ---------- drag & drop builder ---------- */
 $('#pal').innerHTML=Object.entries(T).map(([k,v])=>`<div class="pi" draggable="true" data-new="${k}"><b>${v.i}</b>${v.n}</div>`).join('');
@@ -595,11 +603,21 @@ function copyText(t){navigator.clipboard.writeText(t).then(()=>toast('Link disal
 let apT,cm=null,fmtBusy=false;
 const onCode=v=>{S.html=v;save();if(S.autoPrev){clearTimeout(apT);apT=setTimeout(()=>{$('#hFrame').srcdoc=pz(S.html,'Nama')},300)}};
 const getCode=()=>cm?cm.getValue():$('#code').value;
-function setCode(v){if(cm){if(cm.getValue()!==v){cm.setValue(v);cm.clearHistory()}cm.refresh()}else $('#code').value=v}
+function setCode(v){if(cm){if(cm.getValue()!==v){cm.setValue(v);cm.clearHistory()}foldB64(true);cm.refresh()}else $('#code').value=v}
+// data gambar base64 yang sangat panjang ditampilkan sebagai label ringkas (isi kode tetap utuh)
+let b64T;
+function foldB64(now){
+ if(!cm)return;clearTimeout(b64T);
+ const run=()=>{const t=cm.getValue(),re=/data:image\/[a-z0-9.+-]+;base64,[a-z0-9+/=\s]{200,}/gi;let m;
+  cm.operation(()=>{cm.getAllMarks().forEach(k=>{if(k.b64)k.clear()});
+   while((m=re.exec(t))){const el=document.createElement('span');el.className='cm-b64';el.textContent='🖼 '+L('gambar base64','base64 image')+' · '+Math.round(m[0].length*.75/1024)+' KB';el.title=L('Data gambar diringkas agar kode mudah dibaca. Isinya tetap utuh.','Image data is collapsed for readability. The content is unchanged.');
+    const k=cm.markText(cm.posFromIndex(m.index),cm.posFromIndex(m.index+m[0].length),{replacedWith:el,atomic:true,handleMouseEvents:true});k.b64=1}})};
+ now===true?run():(b64T=setTimeout(run,250));
+}
 if(window.CodeMirror){
- cm=CodeMirror.fromTextArea($('#code'),{mode:'htmlmixed',theme:'vsc',lineNumbers:true,tabSize:2,indentUnit:2,smartIndent:true,autoCloseTags:true,matchTags:{bothTags:true},lineWrapping:false,viewportMargin:30,
+ cm=CodeMirror.fromTextArea($('#code'),{mode:'htmlmixed',theme:'vsc',lineNumbers:true,tabSize:2,indentUnit:2,smartIndent:true,autoCloseTags:{whenOpening:true,whenClosing:true,dontCloseTags:['area','base','br','col','command','embed','hr','img','input','keygen','link','meta','param','source','track','wbr','nama','name']},matchTags:{bothTags:true},lineWrapping:false,viewportMargin:30,
   extraKeys:{'Shift-Alt-F':()=>formatCode(),'Ctrl-Space':false,Tab:c=>c.somethingSelected()?c.indentSelection('add'):c.replaceSelection('  ','end')}});
- cm.on('change',(c,ch)=>{onCode(c.getValue());if(ch.origin==='paste'&&!fmtBusy&&/<(!doctype|html|body|table|div)\b/i.test(ch.text.join('\n'))&&c.getValue().length===ch.text.join('\n').length)formatCode(true)});
+ cm.on('change',(c,ch)=>{onCode(c.getValue());foldB64();if(ch.origin==='paste'&&!fmtBusy&&/<(!doctype|html|body|table|div)\b/i.test(ch.text.join('\n'))&&c.getValue().length===ch.text.join('\n').length)formatCode(true)});
 }else $('#code').oninput=e=>onCode(e.target.value);
 let prP=null;
 function loadPrettier(){
@@ -611,8 +629,12 @@ async function formatCode(quiet){
  fmtBusy=true;const b=$('#hFmt');b.disabled=true;
  try{
   await loadPrettier();
-  const out=await prettier.format(src,{parser:'html',plugins:Object.values(prettierPlugins),printWidth:100,tabWidth:2,htmlWhitespaceSensitivity:'css',bracketSameLine:false});
-  if(out!==src){if(cm){const sc=cm.getScrollInfo();cm.operation(()=>{cm.setValue(out)});cm.scrollTo(null,Math.min(sc.top,cm.getScrollInfo().height))}else $('#code').value=out;onCode(out)}
+  // blok khusus Outlook (<!--[if mso]> ... <![endif]-->) disimpan utuh agar tidak rusak saat dirapikan
+  const keep=[],MT=/<<\s*(nama|name)\s*>>/gi;
+  const safe=src.replace(/<!--\[if[^\]]*\]>[\s\S]*?<!\[endif\]-->/gi,m=>'<!--MC_KEEP_'+(keep.push(m)-1)+'-->').replace(MT,(m,k)=>'__MC_TAG_'+k+'__');
+  let out=await prettier.format(safe,{parser:'html',plugins:Object.values(prettierPlugins),printWidth:100,tabWidth:2,htmlWhitespaceSensitivity:'css',bracketSameLine:false});
+  out=out.replace(/__MC_TAG_(nama|name)__/gi,'<<$1>>').replace(/<!--MC_KEEP_(\d+)-->/g,(m,i)=>keep[+i]);
+  if(out!==src){if(cm){const sc=cm.getScrollInfo();cm.operation(()=>{cm.setValue(out)});foldB64(true);cm.scrollTo(null,Math.min(sc.top,cm.getScrollInfo().height))}else $('#code').value=out;onCode(out)}
   if(!quiet)toast(L('Kode dirapikan. Ctrl+Z untuk membatalkan.','Code formatted. Ctrl+Z to undo.'));
  }catch(e){toast(e&&e.loc?L(`Kode belum bisa dirapikan: ada tag yang salah di baris ${e.loc.start.line}.`,`Could not format: invalid tag at line ${e.loc.start.line}.`):L('Kode belum bisa dirapikan. Cek tag yang belum ditutup.','Could not format the code. Check for unclosed tags.'))}
  finally{fmtBusy=false;b.disabled=false}
@@ -656,8 +678,8 @@ function renderRcpt(){
  const c=contacts();$('#cnt').textContent=c.length?`(${c.length})`:'';
  $('#sendActs').innerHTML=`<button class="pri" id="oneBtn"${!c.length?' disabled':''}>✉ ${L('Buka di Gmail','Open in Gmail')}</button>`+(c.length>1?`<button id="bccBtn">${L('Sekaligus (BCC)','All at once (BCC)')}</button>`:'');
  $('#sendProg').innerHTML='';
- $('#rcpt').innerHTML=c.length?c.map((x,i)=>`<div class="rc"><span>${esc(x.name||'—')} <small>${esc(x.email)}</small></span><span class="acts"><button data-i="${i}">${L('Buka di Gmail','Open in Gmail')}</button></span></div>`).join(''):`<div class="hint">${L('Isi kolom To atau upload Excel.','Fill in the To field or upload Excel.')}</div>`;
- $('#sendNote').textContent=L('“Buka di Gmail” (atas) membuka 1 email ke semua alamat di To. Tombol per orang membuka email terpisah yang menyapa namanya ({{nama}}). “Sekaligus (BCC)” membuka 1 email tanpa penerima saling melihat. Desain disalin otomatis, lalu tempel dengan Ctrl+V di badan email Gmail.','“Open in Gmail” (top) opens 1 email to every address in To. The per-person button opens a separate email greeting them by name ({{nama}}). “All at once (BCC)” opens 1 email where recipients cannot see each other. The design is copied automatically; paste it with Ctrl+V into the Gmail body.');
+ $('#rcpt').innerHTML=c.length?c.map((x,i)=>`<div class="rc"><span>${x.name?esc(x.name):`<i style="color:var(--muted)">${L('tanpa nama → “teman”','no name → “teman”')}</i>`} <small>${esc(x.email)}</small></span><span class="acts"><button data-i="${i}">${L('Buka di Gmail','Open in Gmail')}</button></span></div>`).join(''):`<div class="hint">${L('Isi kolom To atau upload Excel.','Fill in the To field or upload Excel.')}</div>`;
+ $('#sendNote').textContent=L('“Buka di Gmail” (atas) membuka 1 email ke semua alamat di To. Tombol per orang membuka email terpisah yang menyapa namanya (<<nama>>). “Sekaligus (BCC)” membuka 1 email tanpa penerima saling melihat. Desain disalin otomatis, lalu tempel dengan Ctrl+V di badan email Gmail.','“Open in Gmail” (top) opens 1 email to every address in To. The per-person button opens a separate email greeting them by name (<<nama>>). “All at once (BCC)” opens 1 email where recipients cannot see each other. The design is copied automatically; paste it with Ctrl+V into the Gmail body.');
 }
 $('#xlBtn').onclick=()=>$('#xlIn').click();
 $('#xlTpl').onclick=async()=>{
@@ -731,7 +753,7 @@ const SOC=()=>mk('social',{text:'Instagram|https://instagram.com\nWebsite|https:
 const TPL={
  blank:()=>[newRow(1)],
  promo:()=>[
-  RW([[P(L('Halo {{nama}},','Hi {{nama}},'),{color:'#d1fae5',align:'center',size:15,py:4}),H(L('Diskon 50% Akhir Pekan Ini!','50% Off This Weekend!'),{color:'#ffffff',size:36,py:6}),P(L('Berlaku sampai Minggu malam. Stok terbatas, jangan sampai kehabisan.','Valid until Sunday night. Limited stock, do not miss out.'),{color:'#ecfeff',align:'center',size:16}),BT(L('Belanja Sekarang','Shop Now'),{bg:'#ffffff',color:'#0f766e',radius:999,bpx:34,py:18})]],{bg:'#0d9488',g2:'#0ea5e9',pad:28}),
+  RW([[P(L('Halo <<nama>>,','Hi <<nama>>,'),{color:'#d1fae5',align:'center',size:15,py:4}),H(L('Diskon 50% Akhir Pekan Ini!','50% Off This Weekend!'),{color:'#ffffff',size:36,py:6}),P(L('Berlaku sampai Minggu malam. Stok terbatas, jangan sampai kehabisan.','Valid until Sunday night. Limited stock, do not miss out.'),{color:'#ecfeff',align:'center',size:16}),BT(L('Belanja Sekarang','Shop Now'),{bg:'#ffffff',color:'#0f766e',radius:999,bpx:34,py:18})]],{bg:'#0d9488',g2:'#0ea5e9',pad:28}),
   RW([[FR(600,300,{px:0,py:0})]],{pad:0}),
   RW([[H(L('Gratis Ongkir','Free Shipping'),{size:18,py:6}),P(L('Untuk semua pesanan di atas Rp100.000.','On all orders over $10.'),{align:'center',size:14})],[H(L('Garansi 30 Hari','30-Day Guarantee'),{size:18,py:6}),P(L('Tidak puas? Uang kembali, tanpa ribet.','Not happy? Money back, no hassle.'),{align:'center',size:14})],[H(L('Bayar di Tempat','Cash on Delivery'),{size:18,py:6}),P(L('Pilih metode bayar yang paling nyaman.','Pick the payment method that suits you.'),{align:'center',size:14})]],{pad:20}),
   RW([[BT(L('Lihat Semua Produk','See All Products'),{bg:'#0d9488',bg2:'#0ea5e9'})]],{pad:8}),
@@ -740,7 +762,7 @@ const TPL={
  news:()=>[
   RW([[H('Newsletter',{size:22,align:'left',color:'#0d9488'})],[P(L('Edisi bulan ini','This month’s edition'),{align:'right',size:13,color:'#71717a',py:22})]],{pad:6}),
   RW([[FR(600,260,{px:0,py:0})]],{pad:0}),
-  RW([[H(L('Halo {{nama}}, ini kabar terbaru kami','Hi {{nama}}, here is our latest news'),{size:26,align:'left'}),P(L('Tulis pembuka singkat di sini: apa yang baru bulan ini dan kenapa perlu dibaca. [Lihat ringkasannya](https://example.com).','Write a short intro here: what is new this month and why it is worth reading. [See the summary](https://example.com).'))]],{pad:12}),
+  RW([[H(L('Halo <<nama>>, ini kabar terbaru kami','Hi <<nama>>, here is our latest news'),{size:26,align:'left'}),P(L('Tulis pembuka singkat di sini: apa yang baru bulan ini dan kenapa perlu dibaca. [Lihat ringkasannya](https://example.com).','Write a short intro here: what is new this month and why it is worth reading. [See the summary](https://example.com).'))]],{pad:12}),
   RW([[FR(280,190,{px:12})],[H(L('Artikel Pilihan #1','Featured Story #1'),{size:18,align:'left',py:6}),P(L('Ringkasan dua kalimat tentang artikel ini. [Baca selengkapnya →](https://example.com)','A two-sentence summary of this story. [Read more →](https://example.com)'),{size:14})]],{pad:8}),
   RW([[H(L('Artikel Pilihan #2','Featured Story #2'),{size:18,align:'left',py:6}),P(L('Ringkasan dua kalimat tentang artikel kedua. [Baca selengkapnya →](https://example.com)','A two-sentence summary of the second story. [Read more →](https://example.com)'),{size:14})],[FR(280,190,{px:12})]],{pad:8}),
   RW([[H(L('Punya cerita untuk dibagikan?','Have a story to share?'),{size:20}),P(L('Balas email ini dan ceritakan padaku.','Reply to this email and tell me about it.'),{align:'center'}),BT(L('Balas Sekarang','Reply Now'),{bg:'#ea580c'})]],{bg:'#fef3c7',pad:16}),
@@ -779,6 +801,8 @@ $('#tplBack').onclick=()=>navBack('choose');
 $('#tplResumeBtn').onclick=()=>{S.mode='dnd';renderAll();go('edit')};
 /* i18n + settings */
 const EN={
+'Agar <<nama>> terisi tanpa Excel, tulis: Nama <email>, contoh Budi <budi@gmail.com>. Tanpa nama, <<nama>> diganti “teman”.':'To fill <<nama>> without Excel, write: Name <email>, e.g. Budi <budi@gmail.com>. Without a name, <<nama>> becomes “teman”.',
+'Agar <<nama>> terisi tanpa Excel, tulis: ':'To fill <<nama>> without Excel, write: ',', contoh ':', e.g. ','. Tanpa nama, <<nama>> diganti “teman”.':'. Without a name, <<nama>> becomes “teman”.',
 '✨ Rapikan':'✨ Format','Rapikan kode seperti Prettier di VS Code':'Format the code like Prettier in VS Code','🧪 Buka tes di Gmail':'🧪 Open test in Gmail',
 'Opsional. Jika diisi, Gmail dibuka dengan akun ini (harus sudah login di browser).':'Optional. If filled in, Gmail opens with this account (it must be signed in to the browser).',
 '⛶ Preview penuh membuka HTML apa adanya di tab baru. Edit dengan klik kanan → Inspect, lalu salin outerHTML dari tag <html> dan tempel di sini. Kode yang ditempel otomatis dirapikan.':'⛶ Full preview opens the HTML as-is in a new tab. Edit it with right-click → Inspect, then copy the outerHTML of the <html> tag and paste it here. Pasted code is formatted automatically.',
@@ -806,7 +830,7 @@ const EN={
 'Buat Email Sekarang →':'Create Email Now →',
 'Desain Tanpa Ribet':'Effortless Design','Seret, lepas, selesai. Susun kolom, teks, tombol, dan frame gambar semudah main Canva.':'Drag, drop, done. Build columns, text, buttons, and image frames as easily as in Canva.',
 'Gambar Langsung Tayang':'Images Go Live Instantly','Upload gambar, otomatis ikut terkirim di dalam email.':'Upload images and they are sent right inside your email.',
-'Kirim ke Banyak Orang':'Reach Many People','Upload daftar Nama & Email dari Excel, lalu sapa tiap orang dengan {{nama}}.':'Upload a Name & Email list from Excel, then greet everyone with {{nama}}.',
+'Kirim ke Banyak Orang':'Reach Many People','Upload daftar Nama & Email dari Excel, lalu sapa tiap orang dengan <<nama>>.':'Upload a Name & Email list from Excel, then greet everyone with <<nama>>.',
 'Tes Dulu, Kirim Yakin':'Test First, Send With Confidence','Cek tampilan di inbox asli, lalu kirim langsung dari Gmail-mu.':'Check how it looks in a real inbox, then send straight from your Gmail.',
 '← Kembali':'← Back','⠿ Seret':'⠿ Drag','Seret untuk memindah baris':'Drag to move row','Hapus gambar ini?':'Delete this image?','Gambar akan dihapus dari “Gambar saya” dan tidak bisa dikembalikan.':'The image will be removed from “My images” and cannot be restored.','Gambar ini masih dipakai di desain. Jika dihapus, gambar tersebut juga hilang dari email.':'This image is still used in your design. If deleted, it will also disappear from the email.','Batal':'Cancel','Cara gambar mengisi frame':'How the image fills the frame','Potong agar penuh (crop)':'Crop to fill','Tampilkan utuh':'Show whole image','Panjang garis (%)':'Line length (%)','Jenis garis':'Line style','↔ Penuhi lebar email':'↔ Fill email width','Mulai dari mana?':'Where do you want to start?','Pilih template email marketing, atau mulai dari kanvas kosong.':'Pick a marketing email template, or start from a blank canvas.','Mau buat dengan cara apa?':'How do you want to build it?','Pilih cara membuat emailmu.':'Pick how you want to create your email.',
 'Desain Visual':'Visual Designer','Susun layout, gambar, teks, dan tombol dengan seret & lepas. Hasilnya langsung terlihat.':'Arrange layouts, images, text, and buttons by dragging and dropping. See the result instantly.',
@@ -837,10 +861,10 @@ const EN={
 'Kirim email tes':'Send a test email','Lihat hasil wireframe di inbox asli sebelum dikirim ke penerima.':'See your layout in a real inbox before sending to recipients.','Email tujuan tes':'Test recipient email',
 '🧪 Kirim tes via Gmail':'🧪 Send test via Gmail','← Edit lagi':'← Edit again','Lanjut ke pengiriman →':'Continue to sending →',
 'Detail email':'Email details','From (akun Gmail pengirim)':'From (sender Gmail account)','To (pisahkan dengan koma)':'To (separate with commas)','⬇ Template Excel':'⬇ Excel template','Hapus hasil upload':'Clear uploaded list',
-'Tulis {{nama}} di teks atau subject untuk menyapa tiap penerima dengan namanya dari Excel. Kolom yang dibaca: Nama dan Email.':'Write {{nama}} in the text or subject to greet each recipient by the name in your Excel file. Columns read: Nama and Email.',
+'Tulis <<nama>> di teks atau subject untuk menyapa tiap penerima dengan namanya dari Excel. Kolom yang dibaca: Nama dan Email.':'Write <<nama>> in the text or subject to greet each recipient by the name in your Excel file. Columns read: Nama and Email.',
 'Penerima':'Recipients','Kirim sekaligus (BCC)':'Send all at once (BCC)','Satu per satu':'One by one','Isi kolom To atau upload Excel.':'Fill in the To field or upload Excel.','✓ Dibuka':'✓ Opened',
 'Gmail terbuka dengan penerima dan subject terisi, dan desain sudah disalin otomatis. Tempel dengan Ctrl+V di badan email, lalu kirim. Pastikan sudah login ke akun From. “Satu per satu” menyapa dengan nama tiap orang.':'Gmail opens with the recipients and subject filled in, and the design is copied automatically. Paste it with Ctrl+V in the email body, then send. Make sure you are logged in to the From account. “One by one” greets each person by name.',
-'Judul email':'Email title','Tulis isi emailmu di sini.':'Write your email content here.','Klik di sini':'Click here','Halo {{nama}}!':'Hello {{nama}}!','Baca selengkapnya':'Read more',
+'Judul email':'Email title','Tulis isi emailmu di sini.':'Write your email content here.','Klik di sini':'Click here','Halo <<nama>>!':'Hello <<nama>>!','Baca selengkapnya':'Read more',
 'Ini contoh email buatanmu. Seret blok dari kiri, lalu ubah isinya di panel kanan. Blok sebagian teks untuk memberi [link](https://example.com).':'This is a sample email. Drag blocks from the left, then edit them in the right panel. Select part of the text to add a [link](https://example.com).',
 'Hapus gambar':'Delete image','Salin link':'Copy link',
 'Link disalin':'Link copied','Gambar dihapus':'Image deleted','Gambar masih dipakai di desain. Lepas dulu dari desain.':'This image is still used in your design. Remove it from the design first.',
@@ -896,7 +920,7 @@ function initSettings(){
 }
 /* init */
 load();
-['from','to','subj','testTo'].forEach(k=>{const el=$('#'+k);if(el)el.value=S[k]||''});$('#testFrom').value=S.from||'';delete S.gcid;delete S.method;
+['from','to','subj','testTo'].forEach(k=>{const el=$('#'+k);if(el)el.value=S[k]||''});$('#testFrom').value=S.from||'';delete S.gcid;delete S.method;migrateTags();
 if(S.mode&&(S.rows.length||S.html))$('#resume').classList.remove('hid');
 initSettings();
 $('#gear').onclick=e=>{e.stopPropagation();$('#settings').classList.toggle('hid')};
